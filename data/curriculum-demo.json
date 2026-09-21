@@ -1,0 +1,1600 @@
+{
+  "meta": {
+    "id": "zh-curriculum-demo",
+    "title": "體驗版・生活主題國語生字練習庫",
+    "sourceType": "demo_exercise",
+    "editionNote": "自編日常情境體驗資料（非出版社正式進度）",
+    "themeCount": 12,
+    "uniqueCharCount": 159,
+    "totalWordCount": 49,
+    "licenseNotes": "自編教學體驗題庫，供家長在正式開學前或自修練習使用，不代表任何出版商教材順序。"
+  },
+  "themes": [
+    {
+      "lessonNo": 1,
+      "title": "校園生活與學習",
+      "characters": [
+        {
+          "char": "年",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "希",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "望",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "座",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "位",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "本",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "書",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "老",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "師",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "以",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "為",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "故",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "事",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "用",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "力",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "只",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "靜",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "現",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "學年",
+          "bopomofoArray": [
+            "ㄒㄩㄝˊ",
+            "ㄋㄧㄢˊ"
+          ]
+        },
+        {
+          "word": "希望",
+          "bopomofoArray": [
+            "ㄒㄧ",
+            "ㄨㄤˋ"
+          ]
+        },
+        {
+          "word": "老師",
+          "bopomofoArray": [
+            "ㄌㄠˇ",
+            "ㄕ"
+          ]
+        },
+        {
+          "word": "故事",
+          "bopomofoArray": [
+            "ㄍㄨˋ",
+            "ㄕˋ"
+          ]
+        },
+        {
+          "word": "以前",
+          "bopomofoArray": [
+            "ㄧˇ",
+            "ㄑㄧㄢˊ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "新的學年開始了，每個人都懷著新的希望。",
+          "target": "希望",
+          "bopomofoArray": [
+            "ㄒㄧ",
+            "ㄨㄤˋ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 2,
+      "title": "美味早餐與健康",
+      "characters": [
+        {
+          "char": "番",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "畫",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "司",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "吐",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "蛋",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "抹",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "起",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "火",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "香",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "氣",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "飽",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "健",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "康",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "早餐",
+          "bopomofoArray": [
+            "ㄗㄠˇ",
+            "ㄘㄢ"
+          ]
+        },
+        {
+          "word": "吐司",
+          "bopomofoArray": [
+            "ㄊㄨˇ",
+            "ㄙ"
+          ]
+        },
+        {
+          "word": "健康",
+          "bopomofoArray": [
+            "ㄐㄧㄢˋ",
+            "ㄎㄤ"
+          ]
+        },
+        {
+          "word": "抹醬",
+          "bopomofoArray": [
+            "ㄇㄛˇ",
+            "ㄐㄧㄤˋ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "每天早晨吃一份美味吐司，身體好健康。",
+          "target": "吐司",
+          "bopomofoArray": [
+            "ㄊㄨˇ",
+            "ㄙ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 3,
+      "title": "海洋探險與航行",
+      "characters": [
+        {
+          "char": "舟",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "灑",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "載",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "航",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "忌",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "妒",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "失",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "讓",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "浪",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "潮",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "波",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "海",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "沉",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "帆",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "航行",
+          "bopomofoArray": [
+            "ㄏㄤˊ",
+            "ㄒㄧㄥˊ"
+          ]
+        },
+        {
+          "word": "消失",
+          "bopomofoArray": [
+            "ㄒㄧㄠ",
+            "ㄕ"
+          ]
+        },
+        {
+          "word": "波浪",
+          "bopomofoArray": [
+            "ㄅㄛ",
+            "ㄌㄤˋ"
+          ]
+        },
+        {
+          "word": "帆船",
+          "bopomofoArray": [
+            "ㄈㄢˊ",
+            "ㄔㄨㄢˊ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "輪船在平靜的海上航行，汽笛聲好響亮。",
+          "target": "航行",
+          "bopomofoArray": [
+            "ㄏㄤˊ",
+            "ㄒㄧㄥˊ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 4,
+      "title": "大自然四季變化",
+      "characters": [
+        {
+          "char": "春",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "夏",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "秋",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "冬",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "風",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "雨",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "雷",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "電",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "冰",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "雪",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "暖",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "涼",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "冷",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "霜",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "春夏",
+          "bopomofoArray": [
+            "ㄔㄨㄣ",
+            "ㄒㄧㄚˋ"
+          ]
+        },
+        {
+          "word": "溫暖",
+          "bopomofoArray": [
+            "ㄨㄣ",
+            "ㄋㄨㄢˇ"
+          ]
+        },
+        {
+          "word": "冰雪",
+          "bopomofoArray": [
+            "ㄅㄧㄥ",
+            "ㄒㄩㄝˇ"
+          ]
+        },
+        {
+          "word": "寒冷",
+          "bopomofoArray": [
+            "ㄏㄢˊ",
+            "ㄌㄥˇ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "春天到了微風溫暖，大地換上綠色的新衣。",
+          "target": "溫暖",
+          "bopomofoArray": [
+            "ㄨㄣ",
+            "ㄋㄨㄢˇ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 5,
+      "title": "家庭親情與陪伴",
+      "characters": [
+        {
+          "char": "爸",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "媽",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "哥",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "姐",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "弟",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "妹",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "祖",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "親",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "慈",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "愛",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "伴",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "護",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "溫",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "暖",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "父母",
+          "bopomofoArray": [
+            "ㄈㄨˋ",
+            "ㄇㄨˇ"
+          ]
+        },
+        {
+          "word": "照顧",
+          "bopomofoArray": [
+            "ㄓㄠˋ",
+            "ㄍㄨˋ"
+          ]
+        },
+        {
+          "word": "溫暖",
+          "bopomofoArray": [
+            "ㄨㄣ",
+            "ㄋㄨㄢˇ"
+          ]
+        },
+        {
+          "word": "親切",
+          "bopomofoArray": [
+            "ㄑㄧㄣ",
+            "ㄑㄧㄝˋ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "全家人聚在一起吃晚餐，心裡感到無比溫暖。",
+          "target": "溫暖",
+          "bopomofoArray": [
+            "ㄨㄣ",
+            "ㄋㄨㄢˇ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 6,
+      "title": "動物朋友好夥伴",
+      "characters": [
+        {
+          "char": "鳥",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "獸",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "貓",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "狗",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "牛",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "羊",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "馬",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "兔",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "鹿",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "熊",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "獅",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "虎",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "象",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "猴",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "朋友",
+          "bopomofoArray": [
+            "ㄆㄥˊ",
+            "ㄧㄡˇ"
+          ]
+        },
+        {
+          "word": "小兔",
+          "bopomofoArray": [
+            "ㄒㄧㄠˇ",
+            "ㄊㄨˋ"
+          ]
+        },
+        {
+          "word": "森林",
+          "bopomofoArray": [
+            "ㄙㄣ",
+            "ㄌㄧㄣˊ"
+          ]
+        },
+        {
+          "word": "奔跑",
+          "bopomofoArray": [
+            "ㄅㄣ",
+            "ㄆㄠˇ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "森林裡的小鹿在草地上奔跑，姿態真優雅。",
+          "target": "奔跑",
+          "bopomofoArray": [
+            "ㄅㄣ",
+            "ㄆㄠˇ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 7,
+      "title": "城鎮交通與旅行",
+      "characters": [
+        {
+          "char": "車",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "輪",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "路",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "街",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "市",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "巷",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "道",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "軌",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "站",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "牌",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "橋",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "站",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "遠",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "近",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "交通",
+          "bopomofoArray": [
+            "ㄐㄧㄠ",
+            "ㄊㄨㄥ"
+          ]
+        },
+        {
+          "word": "街道",
+          "bopomofoArray": [
+            "ㄐㄧㄝ",
+            "ㄉㄠˋ"
+          ]
+        },
+        {
+          "word": "站牌",
+          "bopomofoArray": [
+            "ㄓㄢˋ",
+            "ㄆㄞˊ"
+          ]
+        },
+        {
+          "word": "安全",
+          "bopomofoArray": [
+            "ㄢ",
+            "ㄑㄩㄢˊ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "過馬路要走斑馬線，注意交通安全。",
+          "target": "交通",
+          "bopomofoArray": [
+            "ㄐㄧㄠ",
+            "ㄊㄨㄥ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 8,
+      "title": "時間時鐘與日月",
+      "characters": [
+        {
+          "char": "秒",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "分",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "時",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "晨",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "暮",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "夜",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "晚",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "早",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "晨",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "光",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "陰",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "晨",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "昏",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "鐘",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "時間",
+          "bopomofoArray": [
+            "ㄕˊ",
+            "ㄐㄧㄢ"
+          ]
+        },
+        {
+          "word": "夜晚",
+          "bopomofoArray": [
+            "ㄧㄝˋ",
+            "ㄨㄢˇ"
+          ]
+        },
+        {
+          "word": "光陰",
+          "bopomofoArray": [
+            "ㄍㄨㄤ",
+            "ㄧㄣ"
+          ]
+        },
+        {
+          "word": "珍惜",
+          "bopomofoArray": [
+            "ㄓㄣ",
+            "ㄒㄧˊ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "時間像流水一樣過去，我們要珍惜每一天。",
+          "target": "時間",
+          "bopomofoArray": [
+            "ㄕˊ",
+            "ㄐㄧㄢ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 9,
+      "title": "友誼互助與禮貌",
+      "characters": [
+        {
+          "char": "請",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "謝",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "對",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "不",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "起",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "客",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "謙",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "互",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "助",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "誠",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "信",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "友",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "信",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "和",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "禮貌",
+          "bopomofoArray": [
+            "ㄌㄧˇ",
+            "ㄇㄠˋ"
+          ]
+        },
+        {
+          "word": "互相",
+          "bopomofoArray": [
+            "ㄏㄨˋ",
+            "ㄒㄧㄤ"
+          ]
+        },
+        {
+          "word": "感謝",
+          "bopomofoArray": [
+            "ㄍㄢˇ",
+            "ㄒㄧㄝˋ"
+          ]
+        },
+        {
+          "word": "誠實",
+          "bopomofoArray": [
+            "ㄔㄥˊ",
+            "ㄕˊ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "常說請和謝謝，做一個有禮貌的好孩子。",
+          "target": "禮貌",
+          "bopomofoArray": [
+            "ㄌㄧˇ",
+            "ㄇㄠˋ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 10,
+      "title": "藝術創作與色彩",
+      "characters": [
+        {
+          "char": "紅",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "黃",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "藍",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "綠",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "黑",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "白",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "彩",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "色",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "畫",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "筆",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "紙",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "墨",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "塗",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "抹",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "彩色",
+          "bopomofoArray": [
+            "ㄘㄞˇ",
+            "ㄙㄜˋ"
+          ]
+        },
+        {
+          "word": "圖畫",
+          "bopomofoArray": [
+            "ㄊㄨˊ",
+            "ㄏㄨㄚˋ"
+          ]
+        },
+        {
+          "word": "美麗",
+          "bopomofoArray": [
+            "ㄇㄟˇ",
+            "ㄌㄧˋ"
+          ]
+        },
+        {
+          "word": "創作",
+          "bopomofoArray": [
+            "ㄔㄨㄤˋ",
+            "ㄗㄨㄛˋ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "拿起彩色筆在畫紙上創作，畫出美麗彩虹。",
+          "target": "創作",
+          "bopomofoArray": [
+            "ㄔㄨㄤˋ",
+            "ㄗㄨㄛˋ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 11,
+      "title": "閱讀探索奇妙書",
+      "characters": [
+        {
+          "char": "頁",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "冊",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "篇",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "章",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "讀",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "寫",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "翻",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "閱",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "閱",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "圖",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "書",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "館",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "智",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "識",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "讀書",
+          "bopomofoArray": [
+            "ㄉㄨˊ",
+            "ㄕㄨ"
+          ]
+        },
+        {
+          "word": "閱讀",
+          "bopomofoArray": [
+            "ㄩㄝˋ",
+            "ㄉㄨˊ"
+          ]
+        },
+        {
+          "word": "圖書館",
+          "bopomofoArray": [
+            "ㄊㄨˊ",
+            "ㄕㄨ",
+            "ㄍㄨㄢˇ"
+          ]
+        },
+        {
+          "word": "知識",
+          "bopomofoArray": [
+            "ㄓ",
+            "ㄕˋ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "在圖書館裡安靜閱讀，能學到豐富的知識。",
+          "target": "閱讀",
+          "bopomofoArray": [
+            "ㄩㄝˋ",
+            "ㄉㄨˊ"
+          ]
+        }
+      ]
+    },
+    {
+      "lessonNo": 12,
+      "title": "戶外運動愛健康",
+      "characters": [
+        {
+          "char": "跑",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "跳",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "走",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "投",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "踢",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "攀",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "泳",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "球",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "操",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "場",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "健",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "力",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "身",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        },
+        {
+          "char": "心",
+          "bopomofo": "",
+          "radical": "",
+          "strokes": 0
+        }
+      ],
+      "words": [
+        {
+          "word": "跑步",
+          "bopomofoArray": [
+            "ㄆㄠˇ",
+            "ㄅㄨˋ"
+          ]
+        },
+        {
+          "word": "運動",
+          "bopomofoArray": [
+            "ㄩㄣˋ",
+            "ㄉㄨㄥˋ"
+          ]
+        },
+        {
+          "word": "操場",
+          "bopomofoArray": [
+            "ㄘㄠ",
+            "ㄔㄤˊ"
+          ]
+        },
+        {
+          "word": "健康",
+          "bopomofoArray": [
+            "ㄐㄧㄢˋ",
+            "ㄎㄤ"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "text": "放學後在操場運動，鍛鍊強壯的身心。",
+          "target": "運動",
+          "bopomofoArray": [
+            "ㄩㄣˋ",
+            "ㄉㄨㄥˋ"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+/* ============================================================
+   print.css — A4 考卷框架
+   用法：考卷內容包在 <section class="tp-sheet">…</section>
+   ・答案卷另起新頁：class 加 tp-sheet--answer（螢幕與列印都分頁）
+   ・列印時所有介面（頁首、設定面板、按鈕）加 .tp-no-print
+   ・列印按鈕行為：window.print()；建議 body 加 class tp-printing
+   ============================================================ */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+/* ---------- 考卷紙張 ---------- */
+.tp-sheet {
+  width: 210mm;
+  min-height: 297mm;
+  margin-inline: auto;
+  background: var(--tp-surface);
+  color: #1F1B14;                    /* 列印用深墨，節省墨水仍清晰 */
+  padding: 15mm 16mm 14mm;
+  font-family: var(--tp-font-sans);
+  font-size: 11pt;
+  line-height: 1.9;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5mm;
+}
+
+/* 螢幕預覽：紙張浮在書桌上 */
+.tp-sheet-viewer {
+  background: var(--tp-paper-deep);
+  border: 1px solid var(--tp-line);
+  border-radius: var(--tp-radius-l);
+  padding: var(--tp-space-6) var(--tp-space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tp-space-6);
+  overflow-x: auto;
+}
+
+@media (min-width: 900px) {
+  .tp-sheet-viewer {
+    padding: var(--tp-space-10) var(--tp-space-6);
+  }
+}
+
+.tp-sheet-viewer .tp-sheet {
+  box-shadow: var(--tp-shadow-3);
+  outline: 1px solid var(--tp-line);
+  flex-shrink: 0;
+}
+
+/* 縮放預覽（設定區太窄時整張縮小，列印仍是實體 A4） */
+.tp-sheet-viewer--fit .tp-sheet {
+  transform-origin: top center;
+}
+
+/* ---------- 卷首 ---------- */
+.tp-sheet__head {
+  border-bottom: 2px solid #1F1B14;
+  padding-bottom: 4mm;
+}
+
+.tp-sheet__title {
+  font-family: var(--tp-font-serif);
+  font-weight: var(--tp-fw-black);
+  font-size: 20pt;
+  text-align: center;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+}
+
+.tp-sheet__subtitle {
+  text-align: center;
+  font-size: 10pt;
+  color: #55503F;
+  margin-top: 1mm;
+  letter-spacing: 0.05em;
+}
+
+/* 姓名／日期／得分 欄位列 */
+.tp-sheet__fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4mm 8mm;
+  margin-top: 4mm;
+  font-size: 11pt;
+}
+
+.tp-sheet__field {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2mm;
+  min-width: 0;
+}
+
+.tp-sheet__field > span:first-child {
+  font-weight: var(--tp-fw-bold);
+  flex-shrink: 0;
+}
+
+/* 填寫底線 */
+.tp-sheet__line {
+  display: inline-block;
+  min-width: 26mm;
+  height: 7mm;
+  border-bottom: 1.2px solid #1F1B14;
+}
+
+.tp-sheet__line--score { min-width: 16mm; }
+
+/* 右上卷號 */
+.tp-sheet__serial {
+  position: absolute;
+  top: 8mm;
+  right: 16mm;
+  font-size: 8.5pt;
+  color: #55503F;
+  letter-spacing: 0.08em;
+  text-align: right;
+  line-height: 1.7;
+}
+
+/* ---------- 大題 ---------- */
+.tp-sheet__section {
+  break-inside: avoid;
+}
+
+.tp-sheet__section-title {
+  font-family: var(--tp-font-serif);
+  font-weight: var(--tp-fw-black);
+  font-size: 13pt;
+  margin-bottom: 2mm;
+  display: flex;
+  align-items: baseline;
+  gap: 2mm;
+}
+
+.tp-sheet__section-hint {
+  font-size: 9.5pt;
+  color: #55503F;
+  font-family: var(--tp-font-kai);
+}
+
+/* ---------- 題目網格（2／3／4 欄） ---------- */
+.tp-sheet__grid {
+  display: grid;
+  gap: 6mm 8mm;
+}
+
+.tp-sheet__grid--2 { grid-template-columns: repeat(2, 1fr); }
+.tp-sheet__grid--3 { grid-template-columns: repeat(3, 1fr); }
+.tp-sheet__grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+/* 題目清單（單欄） */
+.tp-sheet__list {
+  display: flex;
+  flex-direction: column;
+  gap: 7mm;
+}
+
+/* 直式書寫卷（國字直書欄） */
+.tp-sheet__grid--v {
+  writing-mode: vertical-rl;
+  max-height: 200mm;
+}
+
+/* 題目列（題號＋內容） */
+.tp-item {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  break-inside: avoid;
+}
+
+.tp-item__no {
+  font-family: var(--tp-font-serif);
+  font-weight: var(--tp-fw-bold);
+  font-size: 10.5pt;
+  flex-shrink: 0;
+  min-width: 2.2em;
+}
+
+.tp-item__body {
+  flex: 1;
+}
+
+/* ---------- 答案卷 ---------- */
+.tp-sheet--answer {
+  break-before: page;
+  page-break-before: always;
+}
+
+.tp-sheet-viewer .tp-sheet--answer {
+  margin-top: var(--tp-space-2);   /* 螢幕上視覺分頁（列印走 break-before） */
+}
+
+/* 答案字：朱砂楷書 */
+.tp-sheet .tpz-cell--answer .tpz-cell__char {
+  color: var(--tp-cinnabar-dark);
+}
+
+/* 卷尾 */
+.tp-sheet__foot {
+  margin-top: auto;
+  padding-top: 3mm;
+  border-top: 1px solid #CFC6B2;
+  font-size: 8.5pt;
+  color: #55503F;
+  display: flex;
+  justify-content: space-between;
+  gap: 4mm;
+}
+
+/* ---------- 列印 ---------- */
+@media print {
+  body {
+    background: none;
+  }
+
+  .tp-no-print {
+    display: none !important;
+  }
+
+  .tp-sheet-viewer {
+    background: none;
+    border: none;
+    padding: 0;
+    overflow: visible;
+    display: block;
+  }
+
+  .tp-sheet-viewer .tp-sheet {
+    box-shadow: none;
+    outline: none;
+    margin: 0;
+  }
+
+  .tp-sheet {
+    width: 210mm;
+    min-height: 297mm;
+  }
+
+  /* 直排注音在列印時維持相同版位 */
+  .tpz-sentence {
+    line-height: 2.7;
+  }
+}

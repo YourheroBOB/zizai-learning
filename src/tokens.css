@@ -1,0 +1,136 @@
+/* ============================================================
+   土砲 toopower 小學學習站 — 設計權杖（Design Tokens）
+   所有模組必須引用本檔，禁止自行硬編色碼、字級或間距。
+   命名一律 tp- 前綴（toopower）。
+   ============================================================ */
+
+:root {
+  /* ---------- 色彩：基底 ---------- */
+  --tp-paper: #FAF6EE;        /* 紙色：全站背景 */
+  --tp-paper-deep: #F3EDE0;   /* 深一階的紙：區塊底色、凹陷面 */
+  --tp-surface: #FFFFFF;      /* 卡片、輸入框表面 */
+
+  /* ---------- 色彩：墨階（文字） ---------- */
+  --tp-ink: #3B352C;          /* 墨色：標題、內文主色 */
+  --tp-ink-soft: #6E6558;     /* 次要文字、圖框線 */
+  --tp-ink-faint: #A79B8A;    /* 輔助、caption、未來狀態 */
+  --tp-ink-blue: #5B7183;     /* 墨藍：連結、資訊 */
+
+  /* ---------- 色彩：線 ---------- */
+  --tp-line: #E7DECD;         /* 卡片邊、分隔線 */
+  --tp-grid-line: #E0D4BE;    /* 田字格米字輔助線 */
+
+  /* ---------- 色彩：主色朱砂（重點、主按鈕、答錯） ---------- */
+  --tp-cinnabar: #C05B4B;
+  --tp-cinnabar-dark: #A94A3C;   /* 主按鈕底色（白字對比 5.6:1） */
+  --tp-cinnabar-soft: #F6E4DF;   /* 淺底：標記、選取區 */
+
+  /* ---------- 色彩：鼠尾草綠（成功、已學會） ---------- */
+  --tp-sage: #7C8B6F;
+  --tp-sage-deep: #5E6E52;       /* 綠字用（對紙 6.2:1） */
+  --tp-sage-soft: #E9EDE2;
+
+  /* ---------- 色彩：琥珀（進行中、提示） ---------- */
+  --tp-amber: #C99A4B;
+  --tp-amber-deep: #A87A2E;      /* 琥珀色文字（大標等級） */
+  --tp-amber-soft: #F6ECDA;
+
+  /* ---------- 色彩：狀態語意 ---------- */
+  --tp-success: var(--tp-sage-deep);
+  --tp-success-soft: var(--tp-sage-soft);
+  --tp-warning: var(--tp-amber-deep);
+  --tp-warning-soft: var(--tp-amber-soft);
+  --tp-error: var(--tp-cinnabar-dark);
+  --tp-error-soft: var(--tp-cinnabar-soft);
+  --tp-info: var(--tp-ink-blue);
+
+  /* ---------- 色彩：專科目識別（僅用於圖示底、細節點綴） ---------- */
+  --tp-subject-zh: #C05B4B;       /* 國語：朱砂 */
+  --tp-subject-zh-soft: #F6E4DF;
+  --tp-subject-math: #5B7183;     /* 數學：墨藍 */
+  --tp-subject-math-soft: #E4EAF0;
+  --tp-subject-life: #7C8B6F;     /* 生活：鼠尾草 */
+  --tp-subject-life-soft: #E9EDE2;
+
+  /* ---------- 聚焦環 ---------- */
+  --tp-focus-ring: #A94A3C;
+  --tp-focus-ring-soft: rgba(169, 74, 60, 0.35);
+
+  /* ---------- 字體 ---------- */
+  --tp-font-serif: "Noto Serif TC", "Songti TC", serif;      /* 大標：900 */
+  --tp-font-sans: "Noto Sans TC", -apple-system, "PingFang TC", sans-serif; /* 內文 */
+  --tp-font-kai: "LXGW WenKai TC", "Kaiti TC", "Noto Serif TC", serif;      /* 手寫感：注音、例句 */
+
+  /* ---------- 字級刻度（手機優先，大螢幕微放大） ---------- */
+  --tp-fs-caption: 0.8125rem;   /* 13px：輔助說明 */
+  --tp-fs-small: 0.875rem;      /* 14px：次要內文 */
+  --tp-fs-body: 1rem;           /* 16px：內文基準 */
+  --tp-fs-lead: 1.125rem;       /* 18px：強調段落 */
+  --tp-fs-h4: 1.125rem;         /* 18px：小標 */
+  --tp-fs-h3: 1.25rem;          /* 20px：區塊標題 */
+  --tp-fs-h2: clamp(1.375rem, 1.2rem + 0.9vw, 1.625rem);  /* 22→26px */
+  --tp-fs-h1: clamp(1.75rem, 1.4rem + 1.8vw, 2.25rem);    /* 28→36px */
+  --tp-fs-display: clamp(2rem, 1.5rem + 2.8vw, 2.75rem);  /* 32→44px 首頁大標 */
+
+  /* ---------- 行高 ---------- */
+  --tp-lh-tight: 1.35;
+  --tp-lh-title: 1.25;
+  --tp-lh-body: 1.9;            /* 中文內文疏一點，孩子好讀 */
+  --tp-lh-zhuyin: 1.05;         /* 直排注音逐字緊貼 */
+
+  /* ---------- 字重 ---------- */
+  --tp-fw-regular: 400;
+  --tp-fw-medium: 500;
+  --tp-fw-bold: 700;
+  --tp-fw-black: 900;
+
+  /* ---------- 間距刻度（4px 基準） ---------- */
+  --tp-space-1: 0.25rem;   /* 4 */
+  --tp-space-2: 0.5rem;    /* 8 */
+  --tp-space-3: 0.75rem;   /* 12 */
+  --tp-space-4: 1rem;      /* 16 */
+  --tp-space-5: 1.25rem;   /* 20 */
+  --tp-space-6: 1.5rem;    /* 24 */
+  --tp-space-8: 2rem;      /* 32 */
+  --tp-space-10: 2.5rem;   /* 40 */
+  --tp-space-12: 3rem;     /* 48 */
+  --tp-space-16: 4rem;     /* 64 */
+
+  /* ---------- 圓角 ---------- */
+  --tp-radius-s: 6px;      /* 田字格、小元件 */
+  --tp-radius-m: 10px;     /* 按鈕、輸入框 */
+  --tp-radius-l: 16px;     /* 卡片 */
+  --tp-radius-xl: 24px;    /* 大面板 */
+  --tp-radius-pill: 999px; /* chip、膠囊 */
+
+  /* ---------- 陰影（紙感、柔和） ---------- */
+  --tp-shadow-1: 0 1px 2px rgba(59, 53, 44, 0.06), 0 1px 6px rgba(59, 53, 44, 0.05);
+  --tp-shadow-2: 0 2px 6px rgba(59, 53, 44, 0.07), 0 6px 18px rgba(59, 53, 44, 0.07);
+  --tp-shadow-3: 0 6px 14px rgba(59, 53, 44, 0.09), 0 16px 40px rgba(59, 53, 44, 0.11);
+  --tp-shadow-lift: 0 4px 10px rgba(59, 53, 44, 0.10), 0 12px 28px rgba(59, 53, 44, 0.12);
+  --tp-shadow-pop: 0 8px 20px rgba(59, 53, 44, 0.14), 0 20px 48px rgba(59, 53, 44, 0.16);
+
+  /* ---------- 動效 ---------- */
+  --tp-time-fast: 150ms;
+  --tp-time-base: 250ms;
+  --tp-time-slow: 450ms;
+  --tp-ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --tp-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);  /* 孩子向：回彈 */
+  --tp-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ---------- 布局 ---------- */
+  --tp-container: 72rem;        /* 1152px 最大版心 */
+  --tp-header-h: 60px;
+  --tp-touch-min: 48px;         /* 一般觸控下限 */
+  --tp-touch-kid: 56px;         /* 孩子操作下限 */
+
+  /* ---------- 層級 ---------- */
+  --tp-z-header: 100;
+  --tp-z-toast: 400;
+  --tp-z-dialog: 500;
+
+  /* ---------- 字格（注音元件用，zhuyin.css 讀取） ---------- */
+  --tpz-size: 56px;                 /* 字格邊長，JS 可覆寫 */
+  --tpz-cell-border: var(--tp-ink-soft);
+  --tpz-grid: var(--tp-grid-line);
+}

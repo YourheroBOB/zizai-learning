@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TaiwanGrade2CurriculumSchema",
+  "type": "object",
+  "required": ["meta", "publishers"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["id", "title", "sourceType", "editionNote", "licenseNotes"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "academicYear": { "type": "integer" },
+        "grade": { "type": "string" },
+        "semester": { "type": "string" },
+        "semesterCode": { "type": "string", "enum": ["2a", "2b"] },
+        "semesterStart": { "type": "string" },
+        "sourceType": { "type": "string", "enum": ["official_curriculum", "historical_curriculum", "demo_exercise"] },
+        "editionNote": { "type": "string" },
+        "licenseNotes": { "type": "string" },
+        "moeDictUrlTemplate": { "type": "string" },
+        "moeStrokeUrlTemplate": { "type": "string" },
+        "eduCloudPediaTemplate": { "type": "string" }
+      }
+    },
+    "publishers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "totalLessons", "lessons"],
+        "properties": {
+          "name": { "type": "string" },
+          "totalLessons": { "type": "integer" },
+          "lessons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["lessonNo", "title", "characters", "words"],
+              "properties": {
+                "lessonNo": { "type": "integer" },
+                "title": { "type": "string" },
+                "estimatedWeeks": { "type": "number" },
+                "characters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["char", "bopomofo", "radical", "strokes"],
+                    "properties": {
+                      "char": { "type": "string", "minLength": 1, "maxLength": 1 },
+                      "bopomofo": { "type": "string" },
+                      "radical": { "type": "string" },
+                      "strokes": { "type": "integer" },
+                      "def": { "type": "string" },
+                      "strokeImg": { "type": "string" },
+                      "moeDictUrl": { "type": "string" },
+                      "moeStrokeUrl": { "type": "string" }
+                    }
+                  }
+                },
+                "words": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["word", "bopomofoArray"],
+                    "properties": {
+                      "word": { "type": "string" },
+                      "bopomofo": { "type": "string" },
+                      "bopomofoArray": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                      },
+                      "def": { "type": "string" }
+                    }
+                  }
+                },
+                "sentences": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["text", "target", "bopomofoArray"],
+                    "properties": {
+                      "text": { "type": "string" },
+                      "target": { "type": "string" },
+                      "bopomofoArray": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

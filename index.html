@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>字在｜國小二年級國語生字學習與測驗系統</title>
+  <meta name="description" content="專為台灣國小二年級學生與家長設計：支援康軒、南一、翰林教科書逐課進度、直式注音田字格、官方教育部辭典與筆順連結、線上互動練習與A4測驗卷列印。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="src/tokens.css">
+  <link rel="stylesheet" href="src/base.css">
+  <link rel="stylesheet" href="src/components.css">
+  <link rel="stylesheet" href="src/zhuyin.css">
+  <link rel="stylesheet" href="src/print.css">
+
+  <style>
+    /* 專案特定手作美化與自適應微調 */
+    :root {
+      --tp-bg-subtle: #F6EFE3;
+    }
+    body {
+      background-color: var(--tp-paper, #FAF6EE);
+      color: var(--tp-ink, #1E3A5F);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .tp-app-header {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--tp-line, #E8DFCE);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 3px rgba(30, 58, 95, 0.05);
+    }
+    .tp-app-header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .tp-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .tp-brand-logo {
+      width: 38px;
+      height: 38px;
+      background: var(--tp-cinnabar-dark, #C05B4B);
+      color: #fff;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-family: var(--tp-font-serif);
+      font-weight: 900;
+      font-size: 1.3rem;
+      box-shadow: 0 2px 4px rgba(192, 91, 75, 0.2);
+    }
+    .tp-brand-title {
+      font-family: var(--tp-font-serif);
+      font-weight: 900;
+      font-size: 1.35rem;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+      color: var(--tp-ink, #1E3A5F);
+    }
+    .tp-brand-sub {
+      font-size: 0.75rem;
+      color: var(--tp-ink-soft, #41618A);
+      display: block;
+      font-weight: 500;
+    }
+    .tp-header-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tp-nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--tp-paper-deep, #F4ECE1);
+      padding: 4px;
+      border-radius: 30px;
+      overflow-x: auto;
+    }
+    .tp-nav-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--tp-ink-soft, #41618A);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tp-nav-btn.on {
+      background: #FFFFFF;
+      color: var(--tp-ink, #1E3A5F);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    }
+    .tp-container-main {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 16px 60px;
+      flex: 1;
+    }
+    .tp-tab-page {
+      display: none;
+    }
+    .tp-tab-page.on {
+      display: block;
+    }
+    
+    /* 進度總覽橫幅 */
+    .tp-hero-banner {
+      background: #FFFFFF;
+      border: 1px solid var(--tp-line, #E8DFCE);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 6px rgba(30, 58, 95, 0.04);
+    }
+    .tp-stat-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .tp-stat-item {
+      background: var(--tp-paper, #FAF6EE);
+      border: 1px solid var(--tp-line, #E8DFCE);
+      border-radius: 12px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+    .tp-stat-num {
+      font-family: var(--tp-font-serif);
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--tp-cinnabar-dark, #C05B4B);
+      line-height: 1.1;
+    }
+
+    /* 生字卡清單網格 */
+    .tp-char-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .tp-char-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--tp-line, #E8DFCE);
+      border-radius: 14px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tp-char-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(30, 58, 95, 0.08);
+      border-color: var(--tp-amber, #F0A860);
+    }
+    .tp-char-card--current {
+      border-color: var(--tp-amber, #F0A860);
+      background: #FFFDF9;
+    }
+    .tp-char-card--mastered {
+      border-color: #A3B995;
+      background: #F8FAF6;
+    }
+    .tp-char-card__meta {
+      display: flex;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--tp-ink-soft);
+    }
+    .tp-btn-star {
+      border: none;
+      background: transparent;
+      font-size: 0.78rem;
+      color: var(--tp-ink-faint, #8A94A3);
+      cursor: pointer;
+      border-radius: 12px;
+      padding: 2px 8px;
+      font-weight: 600;
+    }
+    .tp-btn-star.is-active {
+      color: #3e624a;
+      background: #EAF2E8;
+    }
+
+    /* 生字詳情彈窗 */
+    .tp-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 58, 95, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .tp-modal.is-open {
+      display: flex;
+    }
+    .tp-modal__content {
+      background: #FFFFFF;
+      border-radius: 20px;
+      max-width: 540px;
+      width: 100%;
+      padding: 24px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .tp-modal__close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      border: none;
+      background: var(--tp-paper, #FAF6EE);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    /* 篩選膠囊列 */
+    .tp-filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tp-filter-chip {
+      border: 1px solid var(--tp-line);
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--tp-ink-soft);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tp-filter-chip.is-active {
+      background: var(--tp-ink, #1E3A5F);
+      color: #FFFFFF;
+      border-color: var(--tp-ink);
+    }
+
+    /* 手機寬度適應 */
+    @media (max-width: 600px) {
+      .tp-app-header__inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .tp-nav-tabs {
+        width: 100%;
+        justify-content: space-around;
+      }
+      .tp-char-grid {
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+        gap: 8px;
+      }
+      .tp-sheet-viewer {
+        padding: 8px 0;
+      }
+      .tp-sheet {
+        transform: scale(0.48);
+        transform-origin: top center;
+        margin-bottom: -150mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部主列 -->
+  <header class="tp-app-header tp-no-print">
+    <div class="tp-app-header__inner">
+      <div class="tp-brand-group">
+        <div class="tp-brand-logo">字</div>
+        <div>
+          <h1 class="tp-brand-title">字在</h1>
+          <span class="tp-brand-sub">國小二年級國語生字學習小幫手</span>
+        </div>
+      </div>
+
+      <!-- 教材版本與學期選單 -->
+      <div class="tp-header-controls">
+        <select id="curriculum-type-select" class="tp-select" style="min-height:38px;padding:4px 10px;font-size:0.88rem;">
+          <option value="115-1" selected>115 學年度（最新課綱）</option>
+          <option value="110">110 學年度（歷史完整版）</option>
+          <option value="demo">生活情境自編體驗版</option>
+        </select>
+
+        <select id="pub-select" class="tp-select" style="min-height:38px;padding:4px 10px;font-size:0.88rem;">
+          <option value="kangxuan" selected>康軒版</option>
+          <option value="hanlin">翰林版</option>
+          <option value="nanyi">南一版</option>
+        </select>
+
+        <!-- 導覽切換分頁 -->
+        <nav class="tp-nav-tabs" aria-label="功能分頁切換">
+          <button class="tp-nav-btn on" data-tab="progress">📚 生字進度</button>
+          <button class="tp-nav-btn" data-tab="interactive">📝 線上練習</button>
+          <button class="tp-nav-btn" data-tab="worksheet">🖨️ A4 測驗卷</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主內容區 -->
+  <main class="tp-container-main" id="main">
+
+    <!-- ==================== 分頁 1：生字進度與字卡 ==================== -->
+    <section id="page-progress" class="tp-tab-page on">
+      <div class="tp-hero-banner">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span id="curriculum-title-badge" class="tp-badge tp-badge--blue" style="font-size:0.85rem;padding:3px 12px;">康軒版・115學年度上學期</span>
+              <span id="stat-lesson-badge" class="tp-badge tp-badge--green">系統自動預估</span>
+            </div>
+            <h2 style="font-size:1.5rem;font-weight:900;margin:10px 0 4px;font-family:var(--tp-font-serif);">學習進度小書桌</h2>
+            <p id="source-license-note" style="font-size:0.8rem;color:var(--tp-ink-soft);max-width:700px;line-height:1.5;"></p>
+          </div>
+
+          <!-- 家長手動覆寫控制器 -->
+          <div style="background:var(--tp-paper);padding:10px 14px;border-radius:12px;border:1px solid var(--tp-line);min-width:240px;">
+            <label for="manual-lesson-select" style="font-size:0.82rem;font-weight:700;display:block;margin-bottom:6px;color:var(--tp-cinnabar-dark);">
+              ✍️ 家長自訂教學進度（可手動覆寫）：
+            </label>
+            <select id="manual-lesson-select" class="tp-select" style="width:100%;min-height:36px;font-size:0.88rem;">
+              <option value="">自動預估進度</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 統計數據列 -->
+        <div class="tp-stat-cards">
+          <div class="tp-stat-item">
+            <div class="tp-caption">開學週次</div>
+            <div class="tp-stat-num" id="stat-week-val">—</div>
+          </div>
+          <div class="tp-stat-item">
+            <div class="tp-caption">目前教學進度</div>
+            <div class="tp-stat-num" id="stat-lesson-val" style="color:var(--tp-amber-deep);">—</div>
+          </div>
+          <div class="tp-stat-item">
+            <div class="tp-caption">已教學字數</div>
+            <div class="tp-stat-num" id="stat-taught-count" style="color:var(--tp-ink);">0</div>
+          </div>
+          <div class="tp-stat-item">
+            <div class="tp-caption">本週目標字數</div>
+            <div class="tp-stat-num" id="stat-current-count" style="color:var(--tp-cinnabar-dark);">0</div>
+          </div>
+          <div class="tp-stat-item">
+            <div class="tp-caption">孩子已精熟 ⭐</div>
+            <div class="tp-stat-num" id="stat-mastered-count" style="color:#3e624a;">0</div>
+          </div>
+          <div class="tp-stat-item">
+            <div class="tp-caption">待加強複習 ⚠️</div>
+            <div class="tp-stat-num" id="stat-unfamiliar-count" style="color:#A94A3C;">0</div>
+          </div>
+        </div>
+
+        <!-- 篩選列 -->
+        <div class="tp-filter-row">
+          <button class="tp-filter-chip is-active" data-filter="all">全部生字</button>
+          <button class="tp-filter-chip" data-filter="current">本週目標字</button>
+          <button class="tp-filter-chip" data-filter="unfamiliar">⚠️ 待加強複習（未熟）</button>
+          <button class="tp-filter-chip" data-filter="mastered">⭐ 已精熟</button>
+        </div>
+      </div>
+
+      <!-- 生字網格 -->
+      <section aria-label="生字清單">
+        <div class="tp-char-grid" id="char-grid"></div>
+      </section>
+    </section>
+
+    <!-- ==================== 分頁 2：線上互動練習 ==================== -->
+    <section id="page-interactive" class="tp-tab-page">
+      <div class="tp-card" style="padding:20px;margin-bottom:20px;">
+        <h2 style="font-family:var(--tp-font-serif);font-size:1.3rem;margin-bottom:12px;">線上互動答題練習</h2>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+          <label style="font-size:0.9rem;font-weight:600;">
+            出題範圍：
+            <select id="quiz-scope" class="tp-select" style="min-height:36px;">
+              <option value="current" selected>本週課次</option>
+              <option value="all-taught">已教累計範圍（第 1 課至目前）</option>
+              <option value="unfamiliar">加強不熟生字</option>
+            </select>
+          </label>
+          <label style="font-size:0.9rem;font-weight:600;">
+            題數：
+            <select id="quiz-count" class="tp-select" style="min-height:36px;">
+              <option value="5" selected>5 題</option>
+              <option value="10">10 題</option>
+              <option value="15">15 題</option>
+            </select>
+          </label>
+          <button class="tp-btn tp-btn--primary" id="btn-start-interactive">重新抽題開始</button>
+        </div>
+      </div>
+
+      <div id="interactive-quiz-container"></div>
+    </section>
+
+    <!-- ==================== 分頁 3：A4 測驗卷列印 ==================== -->
+    <section id="page-worksheet" class="tp-tab-page">
+      <div class="tp-workspace">
+        <!-- 左側設定面板（列印時自動隱藏） -->
+        <aside class="tp-panel tp-no-print" style="max-width:320px;width:100%;" aria-label="測驗卷設定">
+          <p class="tp-panel__title" style="font-size:1.1rem;font-weight:900;">考卷列印設定</p>
+
+          <div class="tp-panel__section tp-stack" style="--tp-stack-gap:10px;">
+            <label class="tp-field" for="ws-title">
+              <span class="tp-field__label">卷首大標題</span>
+              <input class="tp-input" id="ws-title" value="國語生字小考" maxlength="20">
+            </label>
+            <label class="tp-field" for="ws-count">
+              <span class="tp-field__label">句子填空題數</span>
+              <input type="number" id="ws-count" class="tp-input" min="4" max="12" value="8">
+            </label>
+            <label class="tp-switch">
+              <input type="checkbox" id="ws-sw-zhuyin" role="switch" checked>
+              <span class="tp-switch__track"><span class="tp-switch__thumb"></span></span>
+              <span class="tp-switch__text">題目附直排注音</span>
+            </label>
+          </div>
+
+          <div class="tp-panel__section tp-stack" style="--tp-stack-gap:8px;">
+            <span class="tp-field__label">卷首顯示欄位</span>
+            <label class="tp-switch">
+              <input type="checkbox" id="ws-sw-name" role="switch" checked>
+              <span class="tp-switch__track"><span class="tp-switch__thumb"></span></span>
+              <span class="tp-switch__text">姓名欄位</span>
+            </label>
+            <label class="tp-switch">
+              <input type="checkbox" id="ws-sw-date" role="switch" checked>
+              <span class="tp-switch__track"><span class="tp-switch__thumb"></span></span>
+              <span class="tp-switch__text">日期欄位</span>
+            </label>
+            <label class="tp-switch">
+              <input type="checkbox" id="ws-sw-score" role="switch" checked>
+              <span class="tp-switch__track"><span class="tp-switch__thumb"></span></span>
+              <span class="tp-switch__text">得分欄位</span>
+            </label>
+          </div>
+
+          <div class="tp-panel__section tp-stack" style="--tp-stack-gap:10px;">
+            <button class="tp-btn tp-btn--primary tp-btn--block" id="btn-generate-ws">🎲 重新出題</button>
+            <button class="tp-btn tp-btn--secondary tp-btn--block tp-btn--lg" id="btn-print-ws">
+              🖨️ 列印 / 存為 PDF
+            </button>
+            <span class="tp-field__hint">提示：列印時會自動排版為兩頁 A4（第一頁學生試題卷、第二頁朱砂紅字答案卷），所有控制按鈕自動隱藏。</span>
+          </div>
+        </aside>
+
+        <!-- 右側 A4 雙頁預覽區 -->
+        <div class="tp-sheet-viewer" aria-label="考卷與答案卷雙頁預覽">
+          <!-- 頁 1：學生試題卷 -->
+          <section class="tp-sheet" aria-label="學生測驗卷">
+            <div class="tp-sheet__serial">字在學習・二年級國語<br>卷號：<span id="ws-serial">2A-L01</span></div>
+            <header class="tp-sheet__head">
+              <h2 class="tp-sheet__title" id="sheet-title">國語生字小考</h2>
+              <p class="tp-sheet__subtitle" id="sheet-sub">康軒版・第 1 課測驗</p>
+              <div class="tp-sheet__fields">
+                <span class="tp-sheet__field" data-field="name"><span>姓　名</span><span class="tp-sheet__line"></span></span>
+                <span class="tp-sheet__field" data-field="date"><span>日　期</span><span class="tp-sheet__line"></span></span>
+                <span class="tp-sheet__field" data-field="score"><span>得　分</span><span class="tp-sheet__line tp-sheet__line--score"></span></span>
+              </div>
+            </header>
+
+            <section class="tp-sheet__section">
+              <h3 class="tp-sheet__section-title">一、看注音寫國字<span class="tp-sheet__section-hint">（讀一讀句子，把正確國字寫在田字格中）</span></h3>
+              <div class="tp-sheet__list" id="sheet-items"></div>
+            </section>
+
+            <section class="tp-sheet__section" style="margin-top:10px;">
+              <h3 class="tp-sheet__section-title">二、看注音寫詞語<span class="tp-sheet__section-hint">（把詞語寫在相連的格子裡）</span></h3>
+              <div class="tp-sheet__grid tp-sheet__grid--2" id="sheet-words"></div>
+            </section>
+
+            <footer class="tp-sheet__foot">
+              <span>「字在」台灣國小二年級國語生字學習站・免費教學分享</span>
+              <span>寫完請仔細檢查筆畫喔！</span>
+            </footer>
+          </section>
+
+          <!-- 頁 2：答案卷（另起新頁） -->
+          <section class="tp-sheet tp-sheet--answer" aria-label="答案卷">
+            <header class="tp-sheet__head">
+              <h2 class="tp-sheet__title" id="answer-title">國語生字小考・答案卷</h2>
+              <p class="tp-sheet__subtitle" id="answer-sub">康軒版・第 1 課解答</p>
+            </header>
+
+            <section class="tp-sheet__section">
+              <h3 class="tp-sheet__section-title">一、看注音寫國字解答</h3>
+              <div class="tp-sheet__list" id="answer-items"></div>
+            </section>
+
+            <section class="tp-sheet__section" style="margin-top:10px;">
+              <h3 class="tp-sheet__section-title">二、看注音寫詞語解答</h3>
+              <div class="tp-sheet__grid tp-sheet__grid--2" id="answer-words"></div>
+            </section>
+
+            <footer class="tp-sheet__foot">
+              <span>「字在」生字學習站自動出題</span>
+              <span>紅字為標準字體參考解答</span>
+            </footer>
+          </section>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 生字詳情彈窗 Modal -->
+  <div class="tp-modal" id="char-modal" role="dialog" aria-modal="true" aria-labelledby="modal-char-title">
+    <div class="tp-modal__content tp-stack" style="--tp-stack-gap:16px;">
+      <button class="tp-modal__close" id="modal-close-btn" aria-label="關閉詳情">✕</button>
+      
+      <div style="display:flex;align-items:center;gap:18px;">
+        <div id="modal-char-wrap"></div>
+        <div>
+          <h3 id="modal-char-title" style="font-size:1.3rem;font-weight:900;font-family:var(--tp-font-serif);"></h3>
+          <div style="display:flex;gap:12px;margin-top:6px;font-size:0.9rem;color:var(--tp-ink-soft);">
+            <span>部首：<strong id="modal-char-rad" style="color:var(--tp-ink);"></strong></span>
+            <span>總筆畫：<strong id="modal-char-strokes" style="color:var(--tp-ink);"></strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 筆順圖 -->
+      <div id="modal-char-stroke-img" style="display:none;text-align:center;"></div>
+
+      <!-- 釋義 -->
+      <div style="background:var(--tp-paper);padding:14px;border-radius:10px;border:1px solid var(--tp-line);">
+        <h4 style="font-size:0.88rem;color:var(--tp-ink-soft);margin-bottom:6px;">辭典常用釋義：</h4>
+        <p id="modal-char-def" style="font-size:0.95rem;line-height:1.6;color:var(--tp-ink);"></p>
+      </div>
+
+      <!-- 官方教育部三合一可靠連結 -->
+      <div>
+        <h4 style="font-size:0.85rem;color:var(--tp-ink-soft);margin-bottom:8px;">教育部官方權威學習資源連結：</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <a id="modal-link-dict" href="#" target="_blank" rel="noopener noreferrer" class="tp-btn tp-btn--secondary" style="font-size:0.82rem;padding:6px 12px;">
+            📖 教育部國語辭典簡編本 ↗
+          </a>
+          <a id="modal-link-stroke" href="#" target="_blank" rel="noopener noreferrer" class="tp-btn tp-btn--secondary" style="font-size:0.82rem;padding:6px 12px;">
+            ✍️ 常用國字標準字體筆順網 ↗
+          </a>
+          <a id="modal-link-pedia" href="#" target="_blank" rel="noopener noreferrer" class="tp-btn tp-btn--secondary" style="font-size:0.82rem;padding:6px 12px;">
+            ☁️ 教育部教育雲線上字典 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- 熟悉度切換 -->
+      <button id="modal-toggle-mastered" class="tp-btn tp-btn--primary tp-btn--block" style="margin-top:10px;">
+        ★ 標記為【精熟】
+      </button>
+    </div>
+  </div>
+
+  <footer class="tp-no-print" style="text-align:center;padding:24px 16px;border-top:1px solid var(--tp-line);font-size:0.82rem;color:var(--tp-ink-soft);background:#fff;">
+    「字在」國語生字學習系統 © 2026・專為國小二年級學童與家長手作・完全免費免登入・歡迎分享使用
+  </footer>
+
+  <script src="src/zhuyin.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

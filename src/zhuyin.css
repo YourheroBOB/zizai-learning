@@ -1,0 +1,211 @@
+/* ============================================================
+   zhuyin.css — 台灣標準注音字格樣式系統
+   排版規則：
+   1. 田字格外框 + 米字輔助線（虛線）
+   2. 注音直排於格子右側，由上到下
+   3. 二、三、四聲調號放在「最後一個注音符號」的右上方
+   4. 輕聲點（˙）放在整欄最上方中央
+   5. 詞語多格（.tpz-group）原子塊排版
+   ============================================================ */
+
+:root {
+  --tpz-size: 56px;
+  --tpz-cell-border: #C9D6E5;
+  --tpz-grid: #E8DFCE;
+  --tpz-lh: 1.15;
+}
+
+/* ---------- 詞語多格容器（word() 產生） ---------- */
+.tpz-group {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--tpz-size) * 0.14);
+  vertical-align: middle;
+  margin: 2px 4px;
+}
+
+/* ---------- 單字＋注音 容器（cell() 產生） ---------- */
+.tpz-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--tpz-size) * 0.08);
+  vertical-align: middle;
+  position: relative;
+}
+
+/* ---------- 田字格（含米字輔助線） ---------- */
+.tpz-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--tpz-size);
+  height: var(--tpz-size);
+  background: #FFFFFF;
+  border: 1.5px solid var(--tpz-cell-border);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.tpz-cell__grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tpz-cell__char {
+  position: relative;
+  z-index: 1;
+  font-family: "LXGW WenKai TC", "DFKai-SB", "BiauKai", "Noto Serif TC", serif;
+  font-size: calc(var(--tpz-size) * 0.58);
+  line-height: 1;
+  color: #1E3A5F;
+  user-select: none;
+  font-weight: 600;
+}
+
+/* 狀態樣式 */
+.tpz-cell--current {
+  --tpz-cell-border: #F0A860;
+  box-shadow: 0 0 0 2px rgba(240, 168, 96, 0.25);
+}
+.tpz-cell--current .tpz-cell__char {
+  color: #C05B4B;
+}
+
+.tpz-cell--upcoming {
+  --tpz-cell-border: #E8DFCE;
+  background: #FAF8F5;
+}
+.tpz-cell--upcoming .tpz-cell__char {
+  color: #A0AAB5;
+}
+
+/* 學生卷空白格：只有淡淡的 □ 提示與輔助線，方便學生鉛筆書寫 */
+.tpz-cell--blank {
+  --tpz-cell-border: #8A94A3;
+  background: #FFFFFF;
+}
+.tpz-cell--blank .tpz-cell__char {
+  color: #C9D6E5;
+  opacity: 0.25;
+  font-size: calc(var(--tpz-size) * 0.4);
+}
+
+/* 答案卷顯示：朱砂紅字解答 */
+.tpz-cell--answer {
+  --tpz-cell-border: #E8DFCE;
+  background: #FFFDF9;
+}
+.tpz-cell--answer .tpz-cell__char {
+  color: #C05B4B !important;
+  font-weight: 700;
+}
+
+/* 孩子已熟練標記 */
+.tpz-cell--mastered {
+  --tpz-cell-border: #7C8B6F;
+  background: #F4F7F2;
+}
+
+/* ---------- 直排注音欄（字格右側） ---------- */
+.tpz-col {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  font-family: "LXGW WenKai TC", "DFKai-SB", "BiauKai", "Noto Sans TC", sans-serif;
+  font-size: calc(var(--tpz-size) * 0.28);
+  line-height: var(--tpz-lh);
+  letter-spacing: 0;
+  color: #1E3A5F;
+  user-select: none;
+  flex-shrink: 0;
+  min-width: 1.1em;
+}
+
+.tpz-col--cinnabar { color: #C05B4B; }
+.tpz-col--faint    { color: #8A94A3; }
+
+.tpz-col__sym {
+  position: relative;
+  display: block;
+  line-height: var(--tpz-lh);
+  text-align: center;
+}
+
+/* 二、三、四聲調號：位於最後一個符號的右上方 */
+.tpz-col__tone {
+  position: absolute;
+  right: -0.62em;
+  top: -0.28em;
+  font-size: 0.95em;
+  line-height: 1;
+}
+
+/* 輕聲點（˙）：位於整欄注音最上方中央 */
+.tpz-col__tone--light {
+  position: absolute;
+  top: -0.75em;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+/* ---------- 尺寸系統 ---------- */
+.tpz--sm { --tpz-size: 40px; }
+.tpz--md { --tpz-size: 56px; }
+.tpz--lg { --tpz-size: 72px; }
+.tpz--xl { --tpz-size: 88px; }
+
+/* 考卷專用列印尺寸（14mm 實體字格，適合小學二年級標準鉛筆書寫） */
+.tpz--print {
+  --tpz-size: 14mm;
+}
+
+/* ---------- 句子與行內混排 ---------- */
+.tpz-sentence {
+  font-size: 1.15rem;
+  line-height: 2.8;
+  color: #1E3A5F;
+  display: inline-block;
+}
+
+/* 橫排 Ruby 標記 */
+.tpz-ruby-wrap {
+  display: inline-flex;
+  gap: 2px;
+}
+.tpz-ruby {
+  ruby-position: over;
+  font-family: inherit;
+}
+.tpz-ruby rt {
+  font-size: 0.6em;
+  color: #41618A;
+  letter-spacing: 0;
+}
+
+/* ---------- 列印媒體查詢強化 ---------- */
+@media print {
+  .tpz-cell {
+    background: transparent !important;
+    border-color: #333333 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .tpz-cell--blank .tpz-cell__char {
+    display: none !important; /* 學生卷嚴禁透露答案 */
+  }
+  .tpz-cell--answer .tpz-cell__char {
+    display: block !important;
+    color: #A94A3C !important;
+  }
+  .tpz-col {
+    color: #111111 !important;
+  }
+}

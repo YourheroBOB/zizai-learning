@@ -1,0 +1,1128 @@
+/* ============================================================
+   components.css — 全站元件
+   所有 class 以 tp- 前綴。用法見 DESIGN.md。
+   觸控目標：一般 ≥48px、孩子操作 ≥56px（--tp-touch-kid）。
+   ============================================================ */
+
+/* ============================================================
+   1. 頁首 tp-site-header
+   <header class="tp-site-header">
+     <div class="tp-container tp-site-header__inner">
+       <a class="tp-brand">…</a>
+       <nav class="tp-grade-nav" aria-label="年級切換">…</nav>
+       <div class="tp-header-tools">（版本選單）</div>
+     </div>
+   </div>
+   ============================================================ */
+.tp-site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--tp-z-header);
+  background: rgba(250, 246, 238, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--tp-line);
+}
+
+.tp-site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-3);
+  min-height: var(--tp-header-h);
+}
+
+/* 品牌 */
+.tp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tp-space-2);
+  min-height: var(--tp-touch-min);
+  text-decoration: none;
+  color: var(--tp-ink);
+  flex-shrink: 0;
+}
+
+.tp-brand__logo {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
+.tp-brand__name {
+  font-family: var(--tp-font-serif);
+  font-weight: var(--tp-fw-black);
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.tp-brand__name small {
+  display: block;
+  font-family: var(--tp-font-sans);
+  font-weight: var(--tp-fw-medium);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--tp-ink-faint);
+}
+
+/* 年級切換（手機：橫向捲動膠囊；桌面：置中導航） */
+.tp-grade-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-block: var(--tp-space-2);
+}
+
+.tp-grade-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.tp-grade-nav a {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 var(--tp-space-3);
+  border-radius: var(--tp-radius-pill);
+  font-size: var(--tp-fs-small);
+  font-weight: var(--tp-fw-medium);
+  color: var(--tp-ink-soft);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background-color var(--tp-time-fast) var(--tp-ease-out),
+              color var(--tp-time-fast) var(--tp-ease-out);
+}
+
+.tp-grade-nav a:hover {
+  background: var(--tp-paper-deep);
+  color: var(--tp-ink);
+}
+
+.tp-grade-nav a[aria-current="page"] {
+  background: var(--tp-cinnabar);
+  color: var(--tp-paper);
+  font-weight: var(--tp-fw-bold);
+}
+
+/* 頁首右側工具列（版本選單等） */
+.tp-header-tools {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-2);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   2. 按鈕 tp-btn（主 / 次 / 文字）
+   <button class="tp-btn tp-btn--primary">主要</button>
+   <a class="tp-btn tp-btn--secondary">次要</a>
+   <button class="tp-btn tp-btn--ghost">文字按鈕</button>
+   尺寸：--sm（表單內）、預設、--lg（孩子操作）、--xl（練習作答）
+   狀態：[disabled]、.tp-btn--block（滿寬）
+   ============================================================ */
+.tp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tp-space-2);
+  min-height: var(--tp-touch-min);
+  padding: 0 var(--tp-space-5);
+  border-radius: var(--tp-radius-m);
+  font-size: var(--tp-fs-body);
+  font-weight: var(--tp-fw-bold);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  transition: transform var(--tp-time-fast) var(--tp-ease-out),
+              box-shadow var(--tp-time-fast) var(--tp-ease-out),
+              background-color var(--tp-time-fast) var(--tp-ease-out),
+              border-color var(--tp-time-fast) var(--tp-ease-out);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tp-btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.tp-btn[disabled],
+.tp-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 主按鈕：朱砂深底、紙色字（對比 5.6:1） */
+.tp-btn--primary {
+  background: var(--tp-cinnabar-dark);
+  color: var(--tp-paper);
+  box-shadow: var(--tp-shadow-1);
+}
+
+.tp-btn--primary:hover:not([disabled]) {
+  background: var(--tp-cinnabar);
+  box-shadow: var(--tp-shadow-2);
+  color: var(--tp-paper);
+}
+
+/* 次按鈕：白底、墨線 */
+.tp-btn--secondary {
+  background: var(--tp-surface);
+  color: var(--tp-ink);
+  border-color: var(--tp-ink-soft);
+}
+
+.tp-btn--secondary:hover:not([disabled]) {
+  border-color: var(--tp-cinnabar);
+  color: var(--tp-cinnabar-dark);
+}
+
+/* 文字按鈕：無框，朱砂字 */
+.tp-btn--ghost {
+  color: var(--tp-cinnabar-dark);
+  padding-inline: var(--tp-space-3);
+}
+
+.tp-btn--ghost:hover:not([disabled]) {
+  background: var(--tp-cinnabar-soft);
+}
+
+/* 危險／清除用途（少用） */
+.tp-btn--danger {
+  background: var(--tp-surface);
+  color: var(--tp-error);
+  border-color: var(--tp-error);
+}
+
+/* 尺寸 */
+.tp-btn--sm {
+  min-height: 40px;
+  padding-inline: var(--tp-space-4);
+  font-size: var(--tp-fs-small);
+  border-radius: var(--tp-radius-s);
+}
+
+.tp-btn--lg {
+  min-height: var(--tp-touch-kid);
+  padding-inline: var(--tp-space-6);
+  font-size: var(--tp-fs-lead);
+}
+
+.tp-btn--xl {
+  min-height: 64px;
+  padding-inline: var(--tp-space-8);
+  font-size: 1.25rem;
+  border-radius: var(--tp-radius-l);
+}
+
+.tp-btn--block {
+  display: flex;
+  width: 100%;
+}
+
+.tp-btn__icon {
+  width: 1.25em;
+  height: 1.25em;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   3. Chip tp-chip（篩選、範圍選取）
+   <button class="tp-chip" aria-pressed="false">第一課</button>
+   選取：aria-pressed="true" 或 .tp-chip--active
+   ============================================================ */
+.tp-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tp-space-1);
+  min-height: var(--tp-touch-min);
+  padding: 0 var(--tp-space-4);
+  border-radius: var(--tp-radius-pill);
+  background: var(--tp-surface);
+  border: 1.5px solid var(--tp-line);
+  color: var(--tp-ink-soft);
+  font-size: var(--tp-fs-small);
+  font-weight: var(--tp-fw-medium);
+  white-space: nowrap;
+  transition: all var(--tp-time-fast) var(--tp-ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tp-chip:hover {
+  border-color: var(--tp-cinnabar);
+  color: var(--tp-cinnabar-dark);
+}
+
+.tp-chip[aria-pressed="true"],
+.tp-chip--active {
+  background: var(--tp-cinnabar-soft);
+  border-color: var(--tp-cinnabar);
+  color: var(--tp-cinnabar-dark);
+  font-weight: var(--tp-fw-bold);
+}
+
+/* 綠色 chip（狀態篩選用，例如「已學會」） */
+.tp-chip--sage[aria-pressed="true"],
+.tp-chip--sage.tp-chip--active {
+  background: var(--tp-sage-soft);
+  border-color: var(--tp-sage);
+  color: var(--tp-sage-deep);
+}
+
+/* ============================================================
+   4. 卡片 tp-card
+   <article class="tp-card tp-card--hoverable">
+     <div class="tp-card__icon">（SVG）</div>
+     <h3 class="tp-card__title">…</h3>
+     <p class="tp-card__desc">…</p>
+     <div class="tp-card__foot">…</div>
+   </article>
+   專科目識別：tp-card--zh / tp-card--math / tp-card--life
+   ============================================================ */
+.tp-card {
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-line);
+  border-radius: var(--tp-radius-l);
+  box-shadow: var(--tp-shadow-1);
+  padding: var(--tp-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-2);
+}
+
+.tp-card--hoverable {
+  transition: transform var(--tp-time-base) var(--tp-ease-out),
+              box-shadow var(--tp-time-base) var(--tp-ease-out);
+}
+
+.tp-card--hoverable:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--tp-shadow-lift);
+}
+
+/* 整張可點的卡片連結 */
+a.tp-card {
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+
+.tp-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--tp-radius-m);
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--tp-space-1);
+}
+
+.tp-card__icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.tp-card--zh .tp-card__icon   { background: var(--tp-subject-zh-soft);   color: var(--tp-subject-zh); }
+.tp-card--math .tp-card__icon { background: var(--tp-subject-math-soft); color: var(--tp-subject-math); }
+.tp-card--life .tp-card__icon { background: var(--tp-subject-life-soft); color: var(--tp-subject-life); }
+
+.tp-card__title {
+  font-family: var(--tp-font-serif);
+  font-weight: var(--tp-fw-bold);
+  font-size: var(--tp-fs-h3);
+  line-height: var(--tp-lh-tight);
+}
+
+.tp-card__desc {
+  font-size: var(--tp-fs-small);
+  color: var(--tp-ink-soft);
+  line-height: 1.8;
+}
+
+.tp-card__foot {
+  margin-top: auto;
+  padding-top: var(--tp-space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-2);
+}
+
+/* 卡片工具列（右上小按鈕群） */
+.tp-card__tools {
+  display: flex;
+  gap: var(--tp-space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--tp-space-2);
+}
+
+/* 卡片格線容器 */
+.tp-card-grid {
+  display: grid;
+  gap: var(--tp-space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 480px) {
+  .tp-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .tp-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ============================================================
+   5. 分段控制 tp-segmented（單選群組）
+   <div class="tp-segmented" role="radiogroup" aria-label="欄數">
+     <label><input type="radio" name="cols" checked><span>2 欄</span></label>
+     <label><input type="radio" name="cols"><span>3 欄</span></label>
+   </div>
+   ============================================================ */
+.tp-segmented {
+  display: inline-flex;
+  padding: 4px;
+  gap: 4px;
+  background: var(--tp-paper-deep);
+  border-radius: var(--tp-radius-pill);
+  border: 1px solid var(--tp-line);
+}
+
+.tp-segmented label {
+  position: relative;
+  flex: 1 1 0;
+}
+
+.tp-segmented input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.tp-segmented span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tp-touch-min);
+  padding: 0 var(--tp-space-4);
+  border-radius: var(--tp-radius-pill);
+  font-size: var(--tp-fs-small);
+  font-weight: var(--tp-fw-medium);
+  color: var(--tp-ink-soft);
+  white-space: nowrap;
+  transition: all var(--tp-time-fast) var(--tp-ease-out);
+}
+
+.tp-segmented input:checked + span {
+  background: var(--tp-surface);
+  color: var(--tp-cinnabar-dark);
+  font-weight: var(--tp-fw-bold);
+  box-shadow: var(--tp-shadow-1);
+}
+
+.tp-segmented input:focus-visible + span {
+  outline: 3px solid var(--tp-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   6. 滑桿 tp-range
+   <label class="tp-range">
+     <span class="tp-range__label">出題數 <output>10</output> 題</span>
+     <input type="range" min="5" max="30" value="10">
+   </label>
+   ============================================================ */
+.tp-range {
+  display: block;
+}
+
+.tp-range__label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--tp-fs-small);
+  font-weight: var(--tp-fw-medium);
+  color: var(--tp-ink);
+  margin-bottom: var(--tp-space-2);
+}
+
+.tp-range__label output {
+  font-family: var(--tp-font-serif);
+  font-weight: var(--tp-fw-black);
+  color: var(--tp-cinnabar-dark);
+  font-size: var(--tp-fs-body);
+}
+
+.tp-range input[type="range"] {
+  width: 100%;
+  height: 32px;              /* 觸控熱區 */
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.tp-range input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: var(--tp-radius-pill);
+  background: linear-gradient(90deg, var(--tp-cinnabar) var(--tp-range-fill, 50%), var(--tp-paper-deep) var(--tp-range-fill, 50%));
+  border: 1px solid var(--tp-line);
+}
+
+.tp-range input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -11px;
+  border-radius: 50%;
+  background: var(--tp-surface);
+  border: 2.5px solid var(--tp-cinnabar-dark);
+  box-shadow: var(--tp-shadow-1);
+  transition: transform var(--tp-time-fast) var(--tp-ease-spring);
+}
+
+.tp-range input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+
+.tp-range input[type="range"]::-moz-range-track {
+  height: 8px;
+  border-radius: var(--tp-radius-pill);
+  background: var(--tp-paper-deep);
+  border: 1px solid var(--tp-line);
+}
+
+.tp-range input[type="range"]::-moz-range-progress {
+  height: 8px;
+  border-radius: var(--tp-radius-pill);
+  background: var(--tp-cinnabar);
+}
+
+.tp-range input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--tp-surface);
+  border: 2.5px solid var(--tp-cinnabar-dark);
+}
+
+/* ============================================================
+   7. 開關 tp-switch
+   <label class="tp-switch">
+     <input type="checkbox" role="switch" checked>
+     <span class="tp-switch__track" aria-hidden="true"><span class="tp-switch__thumb"></span></span>
+     <span class="tp-switch__text">題目附注音</span>
+   </label>
+   ============================================================ */
+.tp-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-3);
+  min-height: var(--tp-touch-min);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tp-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.tp-switch__track {
+  flex-shrink: 0;
+  width: 52px;
+  height: 32px;
+  border-radius: var(--tp-radius-pill);
+  background: var(--tp-paper-deep);
+  border: 1.5px solid var(--tp-line);
+  padding: 3px;
+  transition: background-color var(--tp-time-fast) var(--tp-ease-out),
+              border-color var(--tp-time-fast) var(--tp-ease-out);
+}
+
+.tp-switch__thumb {
+  display: block;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: var(--tp-surface);
+  border: 1.5px solid var(--tp-line);
+  box-shadow: var(--tp-shadow-1);
+  transition: transform var(--tp-time-fast) var(--tp-ease-spring);
+}
+
+.tp-switch input:checked ~ .tp-switch__track {
+  background: var(--tp-sage);
+  border-color: var(--tp-sage-deep);
+}
+
+.tp-switch input:checked ~ .tp-switch__track .tp-switch__thumb {
+  transform: translateX(20px);
+  border-color: var(--tp-sage-deep);
+}
+
+.tp-switch input:focus-visible ~ .tp-switch__track {
+  outline: 3px solid var(--tp-focus-ring);
+  outline-offset: 2px;
+}
+
+.tp-switch__text {
+  font-size: var(--tp-fs-small);
+  font-weight: var(--tp-fw-medium);
+  color: var(--tp-ink);
+}
+
+/* ============================================================
+   8. 表單欄位 tp-field / tp-input / tp-select
+   <div class="tp-field">
+     <label class="tp-field__label" for="q-title">卷首標題</label>
+     <input class="tp-input" id="q-title" value="國語生字小考">
+     <p class="tp-field__hint">最多 20 字</p>
+   </div>
+   ============================================================ */
+.tp-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-2);
+}
+
+.tp-field__label {
+  font-size: var(--tp-fs-small);
+  font-weight: var(--tp-fw-bold);
+  color: var(--tp-ink);
+}
+
+.tp-field__hint {
+  font-size: var(--tp-fs-caption);
+  color: var(--tp-ink-faint);
+}
+
+.tp-field__error {
+  font-size: var(--tp-fs-caption);
+  color: var(--tp-error);
+  font-weight: var(--tp-fw-medium);
+}
+
+.tp-input,
+.tp-select,
+.tp-textarea {
+  width: 100%;
+  min-height: var(--tp-touch-min);
+  padding: var(--tp-space-2) var(--tp-space-3);
+  background: var(--tp-surface);
+  border: 1.5px solid var(--tp-line);
+  border-radius: var(--tp-radius-m);
+  font-size: var(--tp-fs-body);
+  color: var(--tp-ink);
+  transition: border-color var(--tp-time-fast) var(--tp-ease-out),
+              box-shadow var(--tp-time-fast) var(--tp-ease-out);
+}
+
+.tp-input::placeholder,
+.tp-textarea::placeholder {
+  color: var(--tp-ink-faint);
+}
+
+.tp-input:focus,
+.tp-select:focus,
+.tp-textarea:focus {
+  outline: none;
+  border-color: var(--tp-cinnabar);
+  box-shadow: 0 0 0 3px var(--tp-focus-ring-soft);
+}
+
+.tp-input[aria-invalid="true"] {
+  border-color: var(--tp-error);
+}
+
+.tp-textarea {
+  resize: vertical;
+  min-height: 96px;
+  line-height: 1.8;
+}
+
+/* 自訂下拉箭頭 */
+.tp-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1.5 L7 7.5 L13 1.5' fill='none' stroke='%236E6558' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  cursor: pointer;
+}
+
+/* ============================================================
+   9. 分頁籤 tp-tabs（按鈕群組，JS 切換 aria-selected）
+   <div class="tp-tabs" role="tablist" aria-label="科目">
+     <button class="tp-tab" role="tab" aria-selected="true"  id="tab-zh" aria-controls="panel-zh">國語</button>
+     <button class="tp-tab" role="tab" aria-selected="false" id="tab-math" aria-controls="panel-math">數學</button>
+   </div>
+   ============================================================ */
+.tp-tabs {
+  display: flex;
+  gap: var(--tp-space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 2px solid var(--tp-line);
+}
+
+.tp-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tp-tab {
+  flex-shrink: 0;
+  position: relative;
+  min-height: var(--tp-touch-min);
+  padding: 0 var(--tp-space-4);
+  font-size: var(--tp-fs-body);
+  font-weight: var(--tp-fw-medium);
+  color: var(--tp-ink-soft);
+  border-radius: var(--tp-radius-m) var(--tp-radius-m) 0 0;
+  transition: color var(--tp-time-fast) var(--tp-ease-out),
+              background-color var(--tp-time-fast) var(--tp-ease-out);
+}
+
+.tp-tab:hover {
+  color: var(--tp-cinnabar-dark);
+  background: var(--tp-cinnabar-soft);
+}
+
+.tp-tab[aria-selected="true"] {
+  color: var(--tp-cinnabar-dark);
+  font-weight: var(--tp-fw-bold);
+}
+
+.tp-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: var(--tp-space-2);
+  right: var(--tp-space-2);
+  bottom: -2px;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--tp-cinnabar);
+}
+
+.tp-tab:focus-visible {
+  outline-offset: -3px;
+}
+
+/* ============================================================
+   10. 對話框 tp-dialog（原生 <dialog>）
+   <dialog class="tp-dialog" id="char-card">
+     <button class="tp-dialog__close" data-close aria-label="關閉">×</button>
+     …內容…
+   </dialog>
+   JS：dialog.showModal() / show()；關閉按鈕加 [data-close]。
+   ============================================================ */
+.tp-dialog {
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: min(92vw, 26rem);
+  max-height: 88vh;
+  overflow: visible;
+}
+
+.tp-dialog::backdrop {
+  background: rgba(59, 53, 44, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.tp-dialog[open] {
+  animation: tp-dialog-in var(--tp-time-base) var(--tp-ease-spring);
+}
+
+@keyframes tp-dialog-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.tp-dialog__panel {
+  background: var(--tp-paper);
+  border: 1px solid var(--tp-line);
+  border-radius: var(--tp-radius-xl);
+  box-shadow: var(--tp-shadow-pop);
+  padding: var(--tp-space-6);
+  max-height: 88vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.tp-dialog__close {
+  position: absolute;
+  top: var(--tp-space-3);
+  right: var(--tp-space-3);
+  width: var(--tp-touch-min);
+  height: var(--tp-touch-min);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--tp-ink-soft);
+  background: var(--tp-paper-deep);
+  transition: background-color var(--tp-time-fast) var(--tp-ease-out),
+              color var(--tp-time-fast) var(--tp-ease-out);
+}
+
+.tp-dialog__close:hover {
+  background: var(--tp-cinnabar-soft);
+  color: var(--tp-cinnabar-dark);
+}
+
+/* ============================================================
+   11. Toast tp-toast（畫面下方浮出通知）
+   <div class="tp-toast-region" aria-live="polite" aria-atomic="false"></div>
+   JS 動態插入：
+   <div class="tp-toast tp-toast--success">已產生考卷</div>
+   ============================================================ */
+.tp-toast-region {
+  position: fixed;
+  left: 50%;
+  bottom: var(--tp-space-5);
+  transform: translateX(-50%);
+  z-index: var(--tp-z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tp-space-2);
+  width: min(92vw, 26rem);
+  pointer-events: none;
+}
+
+.tp-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-2);
+  min-height: var(--tp-touch-min);
+  padding: var(--tp-space-2) var(--tp-space-5);
+  border-radius: var(--tp-radius-pill);
+  background: var(--tp-ink);
+  color: var(--tp-paper);
+  font-size: var(--tp-fs-small);
+  font-weight: var(--tp-fw-medium);
+  box-shadow: var(--tp-shadow-2);
+  animation: tp-toast-in var(--tp-time-base) var(--tp-ease-spring);
+}
+
+.tp-toast--success { background: var(--tp-sage-deep); }
+.tp-toast--error   { background: var(--tp-cinnabar-dark); }
+.tp-toast--info    { background: var(--tp-ink-blue); }
+
+.tp-toast.tp-toast--leaving {
+  animation: tp-toast-out var(--tp-time-fast) var(--tp-ease-in-out) forwards;
+}
+
+@keyframes tp-toast-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes tp-toast-out {
+  to { opacity: 0; transform: translateY(8px) scale(0.97); }
+}
+
+/* ============================================================
+   12. 進度條 tp-progress
+   <div class="tp-progress" role="progressbar" aria-valuenow="6" aria-valuemin="0" aria-valuemax="21">
+     <div class="tp-progress__bar" style="width:28.5%"></div>
+   </div>
+   課次條（一格一課）：tp-progress--lessons + .tp-progress__cell
+   ============================================================ */
+.tp-progress {
+  height: 12px;
+  background: var(--tp-paper-deep);
+  border: 1px solid var(--tp-line);
+  border-radius: var(--tp-radius-pill);
+  overflow: hidden;
+}
+
+.tp-progress__bar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--tp-sage), var(--tp-sage-deep));
+  transition: width var(--tp-time-slow) var(--tp-ease-out);
+}
+
+.tp-progress--lessons {
+  display: flex;
+  gap: 3px;
+  height: 26px;
+  padding: 3px;
+  overflow: visible;
+}
+
+.tp-progress--lessons .tp-progress__cell {
+  flex: 1;
+  border-radius: 4px;
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-line);
+  display: grid;
+  place-items: center;
+  font-size: 0.62rem;
+  color: var(--tp-ink-faint);
+  line-height: 1;
+}
+
+.tp-progress--lessons .tp-progress__cell--done {
+  background: var(--tp-sage-soft);
+  border-color: var(--tp-sage);
+  color: var(--tp-sage-deep);
+  font-weight: var(--tp-fw-bold);
+}
+
+.tp-progress--lessons .tp-progress__cell--current {
+  background: var(--tp-amber-soft);
+  border-color: var(--tp-amber);
+  color: var(--tp-amber-deep);
+  font-weight: var(--tp-fw-bold);
+  box-shadow: 0 0 0 2px var(--tp-amber-soft);
+  transform: scale(1.12);
+}
+
+/* ============================================================
+   13. 星星評分 tp-stars（回合結算、難易標記）
+   <div class="tp-stars" role="img" aria-label="3 顆星">
+     <span class="tp-star tp-star--on"></span> ×5
+   </div>
+   尺寸：--lg（結算畫面用）
+   ============================================================ */
+.tp-stars {
+  display: inline-flex;
+  gap: var(--tp-space-1);
+}
+
+.tp-star {
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.6 L14.9 8.7 L21.5 9.6 L16.7 14.2 L17.9 20.8 L12 17.6 L6.1 20.8 L7.3 14.2 L2.5 9.6 L9.1 8.7 Z' fill='none' stroke='%23E0D4BE' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.tp-star--on {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.6 L14.9 8.7 L21.5 9.6 L16.7 14.2 L17.9 20.8 L12 17.6 L6.1 20.8 L7.3 14.2 L2.5 9.6 L9.1 8.7 Z' fill='%23C99A4B' stroke='%23A87A2E' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.tp-stars--lg .tp-star {
+  width: 44px;
+  height: 44px;
+}
+
+/* 結算星星彈入動畫（加 .tp-stars--pop，JS 依序加 .tp-star--on） */
+.tp-stars--pop .tp-star--on {
+  animation: tp-star-pop 420ms var(--tp-ease-spring) backwards;
+}
+
+@keyframes tp-star-pop {
+  0%   { transform: scale(0) rotate(-40deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* ============================================================
+   14. 空狀態 tp-empty
+   <div class="tp-empty">
+     <div class="tp-empty__art">（插圖 SVG）</div>
+     <p class="tp-empty__title">還沒有資料</p>
+     <p class="tp-empty__desc">…</p>
+     <div class="tp-empty__action"><button class="tp-btn tp-btn--primary">…</button></div>
+   </div>
+   ============================================================ */
+.tp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--tp-space-2);
+  padding: var(--tp-space-12) var(--tp-space-4);
+  background: var(--tp-surface);
+  border: 1.5px dashed var(--tp-line);
+  border-radius: var(--tp-radius-xl);
+}
+
+.tp-empty__art {
+  width: 120px;
+  margin-bottom: var(--tp-space-2);
+  color: var(--tp-ink-faint);
+}
+
+.tp-empty__title {
+  font-family: var(--tp-font-serif);
+  font-weight: var(--tp-fw-bold);
+  font-size: var(--tp-fs-h3);
+}
+
+.tp-empty__desc {
+  font-size: var(--tp-fs-small);
+  color: var(--tp-ink-soft);
+  max-width: 34ch;
+}
+
+.tp-empty__action {
+  margin-top: var(--tp-space-4);
+}
+
+/* ============================================================
+   15. 頁尾 tp-site-footer
+   ============================================================ */
+.tp-site-footer {
+  margin-top: var(--tp-space-16);
+  border-top: 1px solid var(--tp-line);
+  background: var(--tp-paper-deep);
+  padding: var(--tp-space-10) 0 var(--tp-space-8);
+}
+
+.tp-site-footer__grid {
+  display: grid;
+  gap: var(--tp-space-6);
+}
+
+@media (min-width: 640px) {
+  .tp-site-footer__grid {
+    grid-template-columns: 1.4fr 1fr 1fr;
+  }
+}
+
+.tp-site-footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-2);
+}
+
+.tp-site-footer__title {
+  font-family: var(--tp-font-serif);
+  font-weight: var(--tp-fw-black);
+  font-size: var(--tp-fs-h4);
+}
+
+.tp-site-footer__note {
+  font-size: var(--tp-fs-caption);
+  color: var(--tp-ink-soft);
+  line-height: 1.9;
+  max-width: 40ch;
+}
+
+.tp-site-footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-1);
+}
+
+.tp-site-footer__links h4 {
+  font-size: var(--tp-fs-small);
+  font-weight: var(--tp-fw-bold);
+  color: var(--tp-ink);
+  margin-bottom: var(--tp-space-1);
+}
+
+.tp-site-footer__links a {
+  font-size: var(--tp-fs-small);
+  color: var(--tp-ink-soft);
+  text-decoration: none;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tp-site-footer__links a:hover {
+  color: var(--tp-cinnabar-dark);
+}
+
+.tp-site-footer__bottom {
+  margin-top: var(--tp-space-8);
+  padding-top: var(--tp-space-4);
+  border-top: 1px solid var(--tp-line);
+  font-size: var(--tp-fs-caption);
+  color: var(--tp-ink-faint);
+  text-align: center;
+}
+
+/* ============================================================
+   16. 通用工具
+   ============================================================ */
+.tp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tp-space-1);
+  min-height: 28px;
+  padding: 0 var(--tp-space-3);
+  border-radius: var(--tp-radius-pill);
+  font-size: var(--tp-fs-caption);
+  font-weight: var(--tp-fw-bold);
+  background: var(--tp-paper-deep);
+  color: var(--tp-ink-soft);
+}
+
+.tp-badge--cinnabar { background: var(--tp-cinnabar-soft); color: var(--tp-cinnabar-dark); }
+.tp-badge--sage     { background: var(--tp-sage-soft);     color: var(--tp-sage-deep); }
+.tp-badge--amber    { background: var(--tp-amber-soft);    color: var(--tp-amber-deep); }
+.tp-badge--blue     { background: var(--tp-subject-math-soft); color: var(--tp-ink-blue); }
+
+.tp-divider {
+  border: none;
+  border-top: 1px solid var(--tp-line);
+  margin-block: var(--tp-space-6);
+}
+
+.tp-icon {
+  width: 1.25em;
+  height: 1.25em;
+  flex-shrink: 0;
+  vertical-align: -0.25em;
+}
+
+/* 並排設定面板（出卷頁：左設定右預覽） */
+.tp-workspace {
+  display: grid;
+  gap: var(--tp-space-6);
+}
+
+@media (min-width: 1024px) {
+  .tp-workspace {
+    grid-template-columns: minmax(300px, 380px) 1fr;
+    align-items: start;
+  }
+}
+
+.tp-panel {
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-line);
+  border-radius: var(--tp-radius-l);
+  box-shadow: var(--tp-shadow-1);
+  padding: var(--tp-space-5);
+}
+
+.tp-panel__title {
+  font-family: var(--tp-font-serif);
+  font-weight: var(--tp-fw-bold);
+  font-size: var(--tp-fs-h4);
+  margin-bottom: var(--tp-space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-2);
+}
+
+.tp-panel__section {
+  padding-block: var(--tp-space-4);
+  border-top: 1px solid var(--tp-line);
+}
+
+.tp-panel__section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
