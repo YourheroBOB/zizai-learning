@@ -369,6 +369,35 @@ it('115-1 詞語與例句的逐字注音陣列長度必須等於字數且不得�
   assert.strictEqual(bad.length, 0, `共 ${bad.length} 筆注音陣列被截斷：${bad.slice(0, 5).join('；')}`);
 });
 
+it('官方連結不得使用已失效（404）的舊網址前綴，且生字須採官方 SearchAction 新格式', () => {
+  const OLD_DICT = 'https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=';
+  const OLD_STROKE = 'https://stroke-order.learningweb.moe.edu.tw/characterSearchResult.do?lang=zh_TW&searchType=1&word=';
+  const NEW_DICT = 'https://dict.concised.moe.edu.tw/search.jsp?md=1&word=';
+  const NEW_STROKE = 'https://stroke-order.learningweb.moe.edu.tw/searchW.jsp?WORD=';
+
+  const files = ['../data/curriculum-115-1.json', '../data/curriculum-110.json', '../src/app.js'];
+  files.forEach((rel) => {
+    const txt = fs.readFileSync(path.join(__dirname, rel), 'utf-8');
+    assert(!txt.includes(OLD_DICT), `${rel} 仍含失效的國語辭典舊網址前綴`);
+    assert(!txt.includes(OLD_STROKE), `${rel} 仍含失效的筆順學習網舊網址前綴`);
+  });
+
+  const d = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/curriculum-115-1.json'), 'utf-8'));
+  const bad = [];
+  let total = 0;
+  Object.keys(d.publishers).forEach((pub) => {
+    d.publishers[pub].lessons.forEach((l) => {
+      l.characters.forEach((c) => {
+        total++;
+        if (!c.moeDictUrl.startsWith(NEW_DICT)) bad.push(`${pub} L${l.lessonNo} 「${c.char}」moeDictUrl=${c.moeDictUrl}`);
+        if (!c.moeStrokeUrl.startsWith(NEW_STROKE)) bad.push(`${pub} L${l.lessonNo} 「${c.char}」moeStrokeUrl=${c.moeStrokeUrl}`);
+      });
+    });
+  });
+  assert(total > 0, '115-1 必須有生字資料可供檢查');
+  assert.strictEqual(bad.length, 0, `共 ${bad.length} 筆生字連結未採新前綴：${bad.slice(0, 3).join('；')}`);
+});
+
 // -------------------------------------------------------------
 // 結算
 // -------------------------------------------------------------

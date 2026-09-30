@@ -303,8 +303,8 @@
     }
 
     // 官方連結
-    const moeDict = c.moeDictUrl || `https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=${encodeURIComponent(c.char)}`;
-    const moeStroke = c.moeStrokeUrl || `https://stroke-order.learningweb.moe.edu.tw/characterSearchResult.do?lang=zh_TW&searchType=1&word=${encodeURIComponent(c.char)}`;
+    const moeDict = c.moeDictUrl || `https://dict.concised.moe.edu.tw/search.jsp?md=1&word=${encodeURIComponent(c.char)}`;
+    const moeStroke = c.moeStrokeUrl || `https://stroke-order.learningweb.moe.edu.tw/searchW.jsp?WORD=${encodeURIComponent(c.char)}`;
     const pedia = `https://pedia.cloud.edu.tw/Entry/Detail/?title=${encodeURIComponent(c.char)}`;
 
     $('modal-link-dict').href = moeDict;

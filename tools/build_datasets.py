@@ -14,8 +14,8 @@ import os
 OUTPUT_DIR = "/Users/bob/OpenClawWork/zi-zai-web/data"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-MOE_DICT_TMPL = "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word={word}"
-MOE_STROKE_TMPL = "https://stroke-order.learningweb.moe.edu.tw/characterSearchResult.do?lang=zh_TW&searchType=1&word={word}"
+MOE_DICT_TMPL = "https://dict.concised.moe.edu.tw/search.jsp?md=1&word={word}"
+MOE_STROKE_TMPL = "https://stroke-order.learningweb.moe.edu.tw/searchW.jsp?WORD={word}"
 EDU_CLOUD_TMPL = "https://pedia.cloud.edu.tw/Entry/Detail/?title={word}"
 
 # -------------------------------------------------------------

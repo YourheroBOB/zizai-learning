@@ -7,7 +7,7 @@
     "sourceType": "historical_curriculum",
     "editionNote": "110學年度完整版教材（含康軒、翰林、南一 二上/二下 全部逐課生字與情境句子）",
     "licenseNotes": "保留作歷史教材對照與多學期跨年度練習題庫；例句皆為完整語境練習。",
-    "moeDictUrlTemplate": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word={word}"
+    "moeDictUrlTemplate": "https://dict.concised.moe.edu.tw/search.jsp?md=1&word={word}"
   },
   "blocks": [
     {
