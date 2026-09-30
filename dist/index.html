@@ -3633,6 +3633,9 @@ a.tp-card {
     $('btn-generate-ws').onclick = renderWorksheet;
     $('btn-print-ws').onclick = () => window.print();
 
+    // 首次載入即渲染進度與生字清單（否則要等使用者切換選單才會出現）
+    renderProgressView();
+
     // 支援網址 Hash 切換（例如 #worksheet 直接開考卷預覽）
     if (window.location.hash === '#worksheet') {
       $$('.tp-nav-btn').forEach((b) => b.classList.remove('on'));
