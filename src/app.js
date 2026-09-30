@@ -160,7 +160,8 @@
     const curData = getCurrentLessonsData();
 
     // 更新頂部標籤與來源宣告
-    $('curriculum-title-badge').textContent = `${curData.name}・${state.currentCurriculumType === 'demo' ? '體驗自編' : '115學年度上學期'}`;
+    const curriculumBadgeLabels = { 'demo': '體驗自編', '110': '110學年度（歷史完整版）', '115-1': '115學年度上學期' };
+    $('curriculum-title-badge').textContent = `${curData.name}・${curriculumBadgeLabels[state.currentCurriculumType] || '115學年度上學期'}`;
     $('source-license-note').textContent = curData.licenseNotes || '';
 
     // 週次與進度資訊

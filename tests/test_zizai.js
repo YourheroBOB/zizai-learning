@@ -398,6 +398,54 @@ it('官方連結不得使用已失效（404）的舊網址前綴，且生字須�
   assert.strictEqual(bad.length, 0, `共 ${bad.length} 筆生字連結未採新前綴：${bad.slice(0, 3).join('；')}`);
 });
 
+it('115-1 所有 words／characters 的 def 不得前後半重複（同一段解釋貼兩次）', () => {
+  const d = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/curriculum-115-1.json'), 'utf-8'));
+  // 去頭尾空白後，若能在某個半形或全形空白處切成完全相同的兩半，即視為重複
+  const isDoubled = (def) => {
+    const t = String(def).trim();
+    for (let i = 1; i < t.length - 1; i++) {
+      if (t[i] === ' ' || t[i] === '　') {
+        const a = t.slice(0, i).trim();
+        const b = t.slice(i + 1).trim();
+        if (a.length > 0 && a === b) return true;
+      }
+    }
+    return false;
+  };
+  const bad = [];
+  let total = 0;
+  Object.keys(d.publishers).forEach((pub) => {
+    d.publishers[pub].lessons.forEach((l) => {
+      l.words.forEach((w) => {
+        total++;
+        if (isDoubled(w.def)) bad.push(`${pub} L${l.lessonNo} 詞「${w.word}」`);
+      });
+      l.characters.forEach((c) => {
+        total++;
+        if (isDoubled(c.def)) bad.push(`${pub} L${l.lessonNo} 字「${c.char}」`);
+      });
+    });
+  });
+  assert(total > 0, '115-1 必須有詞語與生字資料可供檢查');
+  assert.strictEqual(bad.length, 0, `共 ${bad.length} 筆 def 前後半重複：${bad.slice(0, 3).join('；')}`);
+});
+
+it('115-1 所有 words 的整串注音 bopomofo 必須等於 bopomofoArray 以空白連接', () => {
+  const d = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/curriculum-115-1.json'), 'utf-8'));
+  const bad = [];
+  let total = 0;
+  Object.keys(d.publishers).forEach((pub) => {
+    d.publishers[pub].lessons.forEach((l) => {
+      l.words.forEach((w) => {
+        total++;
+        if (w.bopomofo !== w.bopomofoArray.join(' ')) bad.push(`${pub} L${l.lessonNo} 詞「${w.word}」bopomofo=「${w.bopomofo}」`);
+      });
+    });
+  });
+  assert(total > 0, '115-1 必須有詞語資料可供檢查');
+  assert.strictEqual(bad.length, 0, `共 ${bad.length} 筆整串注音與逐字注音陣列不一致：${bad.slice(0, 3).join('；')}`);
+});
+
 // -------------------------------------------------------------
 // 結算
 // -------------------------------------------------------------
