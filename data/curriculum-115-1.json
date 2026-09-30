@@ -258,9 +258,10 @@
             },
             {
               "word": "課本",
-              "bopomofo": "ㄎㄜˋ",
+              "bopomofo": "ㄎㄜˋ ㄅㄣˇ",
               "bopomofoArray": [
-                "ㄎㄜˋ"
+                "ㄎㄜˋ",
+                "ㄅㄣˇ"
               ],
               "def": "教科書。【例】老師要同學打開課本，準備上課。 教科書。【例】老師要同學打開課本，準備上課。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=課本"
@@ -327,9 +328,10 @@
             },
             {
               "word": "故事",
-              "bopomofo": "ㄍㄨˋ",
+              "bopomofo": "ㄍㄨˋ ㄕˋ",
               "bopomofoArray": [
-                "ㄍㄨˋ"
+                "ㄍㄨˋ",
+                "ㄕˋ"
               ],
               "def": "傳說或杜撰的事物。【例】小朋友團團圍住老師，要求再說一個故事。 傳說或杜撰的事物。【例】小朋友團團圍住老師，要求再說一個故事。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=故事"
@@ -665,9 +667,10 @@
             },
             {
               "word": "接著",
-              "bopomofo": "ㄐㄧㄝ",
+              "bopomofo": "ㄐㄧㄝ ˙ㄓㄜ",
               "bopomofoArray": [
-                "ㄐㄧㄝ"
+                "ㄐㄧㄝ",
+                "˙ㄓㄜ"
               ],
               "def": "1.接住。如：「小心接著，別弄壞了！」《鏡花緣》第三十五回：「宮娥拾過，又斟一杯。林之洋接著，心中更覺發慌，登時又把酒灑了。」 1.接住。如：「小心接著，別弄壞了！」《鏡花緣》第三十五回：「宮娥拾過，又斟一杯。林之洋接著，心中更覺發慌，登時又把酒灑了。」 2.緊跟著。如：「看戰友一個個衝向前去，他接著也興起了鬥志」《二十年目睹之怪現狀》第一六回：「這一聲響不打緊，偏又接著外面人聲鼎沸起來，嚇得我吃了一大驚！」 2.緊跟著。如：「看戰友一個個衝向前去，他接著也興起了鬥志」《二十年目睹之怪現狀》第一六回：「這一聲響不打緊，偏又接著外面人聲鼎沸起來，嚇得我吃了一大驚！」",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=接著"
@@ -1281,9 +1284,10 @@
             },
             {
               "word": "比賽",
-              "bopomofo": "ㄅㄧˇ",
+              "bopomofo": "ㄅㄧˇ ㄙㄞˋ",
               "bopomofoArray": [
-                "ㄅㄧˇ"
+                "ㄅㄧˇ",
+                "ㄙㄞˋ"
               ],
               "def": "比較本領、技能的高低或優劣。【例】他正和同學在比賽下圍棋。 比較本領、技能的高低或優劣。【例】他正和同學在比賽下圍棋。 指競技、較量的事情。【例】籃球比賽、合唱比賽、繪畫比賽 指競技、較量的事情。【例】籃球比賽、合唱比賽、繪畫比賽",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=比賽"
@@ -1924,9 +1928,9 @@
           "words": [
             {
               "word": "小鎮",
-              "bopomofo": "",
+              "bopomofo": "ㄒㄧㄠˇ ㄓㄣˋ",
               "bopomofoArray": [
-                "",
+                "ㄒㄧㄠˇ",
                 "ㄓㄣˋ"
               ],
               "def": "音讀：sió-tìn詞條來源：教育部臺灣台語常用詞辭典_小鎮授權資訊：資料採「創用CC-姓名標示-禁止改作臺灣3.0版授權條款」釋出",
@@ -2021,7 +2025,7 @@
               "text": "小鎮的柿餅節吸引了許多遊客來參加活動。",
               "target": "小鎮",
               "bopomofoArray": [
-                "",
+                "ㄒㄧㄠˇ",
                 "ㄓㄣˋ"
               ]
             },
@@ -2304,9 +2308,10 @@
             },
             {
               "word": "慌張",
-              "bopomofo": "ㄏㄨㄤ",
+              "bopomofo": "ㄏㄨㄤ ㄓㄤ",
               "bopomofoArray": [
-                "ㄏㄨㄤ"
+                "ㄏㄨㄤ",
+                "ㄓㄤ"
               ],
               "def": "慌忙緊張的樣子。【例】他頭腦不夠冷靜，一旦遇到緊急事故，便慌張得不知所措。 慌忙緊張的樣子。【例】他頭腦不夠冷靜，一旦遇到緊急事故，便慌張得不知所措。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=慌張"
@@ -3386,9 +3391,10 @@
             },
             {
               "word": "期待",
-              "bopomofo": "ㄑㄧˊ",
+              "bopomofo": "ㄑㄧˊ ㄉㄞˋ",
               "bopomofoArray": [
-                "ㄑㄧˊ"
+                "ㄑㄧˊ",
+                "ㄉㄞˋ"
               ],
               "def": "期望等待。【例】這名新秀深具潛力，備受期待。 期望等待。【例】這名新秀深具潛力，備受期待。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=期待"
@@ -4343,9 +4349,11 @@
           "words": [
             {
               "word": "打招呼",
-              "bopomofo": "ㄉㄚˇ",
+              "bopomofo": "ㄉㄚˇ ㄓㄠ ㄏㄨ",
               "bopomofoArray": [
-                "ㄉㄚˇ"
+                "ㄉㄚˇ",
+                "ㄓㄠ",
+                "ㄏㄨ"
               ],
               "def": "人與人之間，以寒暄問候或打手勢來互相致意。【例】她見到熟人，總是不忘打招呼。 人與人之間，以寒暄問候或打手勢來互相致意。【例】她見到熟人，總是不忘打招呼。 事情進行前，先通知或接洽相關的人，以求順利成功。【例】這件事我已經和他打招呼了相信一定沒問題。 事情進行前，先通知或接洽相關的人，以求順利成功。【例】這件事我已經和他打招呼了相信一定沒問題。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=打招呼"
@@ -4362,9 +4370,10 @@
             },
             {
               "word": "向前",
-              "bopomofo": "ㄒㄧㄤˋ",
+              "bopomofo": "ㄒㄧㄤˋ ㄑㄧㄢˊ",
               "bopomofoArray": [
-                "ㄒㄧㄤˋ"
+                "ㄒㄧㄤˋ",
+                "ㄑㄧㄢˊ"
               ],
               "def": "1.往前。《三國演義》第一一回：「曹操見兩路軍到，亦分了軍勢，不敢向前攻城。」 1.往前。《三國演義》第一一回：「曹操見兩路軍到，亦分了軍勢，不敢向前攻城。」 2.以前、先前。唐．白居易〈琵琶行〉：「淒淒不似向前聲，滿坐重聞皆掩泣。」 2.以前、先前。唐．白居易〈琵琶行〉：「淒淒不似向前聲，滿坐重聞皆掩泣。」 3.努力上進。元．秦𥳑夫《東堂老》第二折：「那做買賣的有一等人肯向前，敢當賭，湯風冒雪。」 3.努力上進。元．秦𥳑夫《東堂老》第二折：「那做買賣的有一等人肯向前，敢當賭，湯風冒雪。」",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=向前"
@@ -4437,7 +4446,9 @@
               "text": "噴水柱的白鯨向前游，好像在和大家打招呼。",
               "target": "打招呼",
               "bopomofoArray": [
-                "ㄉㄚˇ"
+                "ㄉㄚˇ",
+                "ㄓㄠ",
+                "ㄏㄨ"
               ]
             },
             {
@@ -5029,9 +5040,10 @@
             },
             {
               "word": "故事",
-              "bopomofo": "ㄍㄨˋ",
+              "bopomofo": "ㄍㄨˋ ㄕˋ",
               "bopomofoArray": [
-                "ㄍㄨˋ"
+                "ㄍㄨˋ",
+                "ㄕˋ"
               ],
               "def": "傳說或杜撰的事物。【例】小朋友團團圍住老師，要求再說一個故事。 傳說或杜撰的事物。【例】小朋友團團圍住老師，要求再說一個故事。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=故事"
@@ -5618,9 +5630,10 @@
             },
             {
               "word": "大王",
-              "bopomofo": "ㄉㄚˋ",
+              "bopomofo": "ㄉㄚˋ ㄨㄤˊ",
               "bopomofoArray": [
-                "ㄉㄚˋ"
+                "ㄉㄚˋ",
+                "ㄨㄤˊ"
               ],
               "def": "古代對君主或諸侯王的尊稱。【例】大王很賞識他，將委以重任。 古代對君主或諸侯王的尊稱。【例】大王很賞識他，將委以重任。 俗稱盜匪的首領。【例】山下的官兵攻上來了，快去通報大王！ 俗稱盜匪的首領。【例】山下的官兵攻上來了，快去通報大王！ 指某方面非常專精或擅長的人。【例】發明大王、汽車大王、吹牛大王 指某方面非常專精或擅長的人。【例】發明大王、汽車大王、吹牛大王",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=大王"
@@ -5647,9 +5660,11 @@
             },
             {
               "word": "圖書館",
-              "bopomofo": "ㄊㄨˊ",
+              "bopomofo": "ㄊㄨˊ ㄕㄨ ㄍㄨㄢˇ",
               "bopomofoArray": [
-                "ㄊㄨˊ"
+                "ㄊㄨˊ",
+                "ㄕㄨ",
+                "ㄍㄨㄢˇ"
               ],
               "def": "將各種圖書、資料加以蒐集、分類、保存，供群眾閱覽參考的專門機構。【例】為了寫報告，他每天都到圖書館蒐集資料。 將各種圖書、資料加以蒐集、分類、保存，供群眾閱覽參考的專門機構。【例】為了寫報告，他每天都到圖書館蒐集資料。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=圖書館"
@@ -5678,18 +5693,20 @@
             },
             {
               "word": "從此",
-              "bopomofo": "ㄘㄨㄥˊ",
+              "bopomofo": "ㄘㄨㄥˊ ㄘˇ",
               "bopomofoArray": [
-                "ㄘㄨㄥˊ"
+                "ㄘㄨㄥˊ",
+                "ㄘˇ"
               ],
               "def": "從這個時候起。【例】他離開家鄉謀求發展後，從此再也沒有人知道他的下落了。 從這個時候起。【例】他離開家鄉謀求發展後，從此再也沒有人知道他的下落了。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=從此"
             },
             {
               "word": "不管",
-              "bopomofo": "ㄅㄨˋ",
+              "bopomofo": "ㄅㄨˋ ㄍㄨㄢˇ",
               "bopomofoArray": [
-                "ㄅㄨˋ"
+                "ㄅㄨˋ",
+                "ㄍㄨㄢˇ"
               ],
               "def": "不看顧。【例】為人子女拋下年邁的父母不管，這種行為實在令人髮指。 不看顧。【例】為人子女拋下年邁的父母不管，這種行為實在令人髮指。 不理會。【例】他不管大家的勸告，仍一意孤行。 不理會。【例】他不管大家的勸告，仍一意孤行。 不論。【例】不管遇到什麼挫折，不要輕言放棄理想。 不論。【例】不管遇到什麼挫折，不要輕言放棄理想。 不顧忌、不理會。【例】瞧他也不管令尊還站在一旁，竟然就教訓起你來了。 不顧忌、不理會。【例】瞧他也不管令尊還站在一旁，竟然就教訓起你來了。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=不管"
@@ -5724,7 +5741,8 @@
               "text": "這一次的學習中，我們認識了「大王」這個詞語。",
               "target": "大王",
               "bopomofoArray": [
-                "ㄉㄚˋ"
+                "ㄉㄚˋ",
+                "ㄨㄤˊ"
               ]
             }
           ]
@@ -5958,9 +5976,10 @@
             },
             {
               "word": "垃圾",
-              "bopomofo": "ㄌㄜˋ",
+              "bopomofo": "ㄌㄜˋ ㄙㄜˋ",
               "bopomofoArray": [
-                "ㄌㄜˋ"
+                "ㄌㄜˋ",
+                "ㄙㄜˋ"
               ],
               "def": "各種廢棄物的統稱。【例】隨意傾倒垃圾是沒有公德心且不合法的行為。 各種廢棄物的統稱。【例】隨意傾倒垃圾是沒有公德心且不合法的行為。 比喻沒用或會產生不良影響的人、事、物。【例】適度傾吐，把心裡的垃圾倒出來，有助於改善心情。 比喻沒用或會產生不良影響的人、事、物。【例】適度傾吐，把心裡的垃圾倒出來，有助於改善心情。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=垃圾"
@@ -6027,9 +6046,10 @@
             },
             {
               "word": "減少",
-              "bopomofo": "ㄐㄧㄢˇ",
+              "bopomofo": "ㄐㄧㄢˇ ㄕㄠˇ",
               "bopomofoArray": [
-                "ㄐㄧㄢˇ"
+                "ㄐㄧㄢˇ",
+                "ㄕㄠˇ"
               ],
               "def": "縮減降低、少於原來的數量。【例】報導指出，多運動可減少心血管疾病的發生。 縮減降低、少於原來的數量。【例】報導指出，多運動可減少心血管疾病的發生。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=減少"
@@ -6056,7 +6076,8 @@
               "text": "這一次的學習中，我們認識了「垃圾」這個詞語。",
               "target": "垃圾",
               "bopomofoArray": [
-                "ㄌㄜˋ"
+                "ㄌㄜˋ",
+                "ㄙㄜˋ"
               ]
             },
             {
@@ -6915,9 +6936,10 @@
             },
             {
               "word": "國王",
-              "bopomofo": "ㄍㄨㄛˊ",
+              "bopomofo": "ㄍㄨㄛˊ ㄨㄤˊ",
               "bopomofoArray": [
-                "ㄍㄨㄛˊ"
+                "ㄍㄨㄛˊ",
+                "ㄨㄤˊ"
               ],
               "def": "君主制國家的最高領袖。【例】今天有一些國家的最高領導者仍是國王，像中東的約旦、和鄰近的泰國。 君主制國家的最高領袖。【例】今天有一些國家的最高領導者仍是國王，像中東的約旦、和鄰近的泰國。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=國王"
@@ -6964,9 +6986,10 @@
             },
             {
               "word": "馬車",
-              "bopomofo": "ㄇㄚˇ",
+              "bopomofo": "ㄇㄚˇ ㄔㄜ",
               "bopomofoArray": [
-                "ㄇㄚˇ"
+                "ㄇㄚˇ",
+                "ㄔㄜ"
               ],
               "def": "用馬來拉動行駛的車子。【例】只見魔杖一指，南瓜就變成了一輛裝飾華麗的四輪馬車。◎ 用馬來拉動行駛的車子。【例】只見魔杖一指，南瓜就變成了一輛裝飾華麗的四輪馬車。◎",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=馬車"
@@ -6983,9 +7006,10 @@
             },
             {
               "word": "一定",
-              "bopomofo": "ㄧ",
+              "bopomofo": "ㄧ ㄉㄧㄥˋ",
               "bopomofoArray": [
-                "ㄧ"
+                "ㄧ",
+                "ㄉㄧㄥˋ"
               ],
               "def": "肯定、必然。【例】明天上午我一定會準時出席。 肯定、必然。【例】明天上午我一定會準時出席。 相當的。【例】只要努力，必有一定的成效。 相當的。【例】只要努力，必有一定的成效。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=一定"
@@ -7023,9 +7047,10 @@
             },
             {
               "word": "想法",
-              "bopomofo": "ㄒㄧㄤˇ",
+              "bopomofo": "ㄒㄧㄤˇ ㄈㄚˇ",
               "bopomofoArray": [
-                "ㄒㄧㄤˇ"
+                "ㄒㄧㄤˇ",
+                "ㄈㄚˇ"
               ],
               "def": "對事物的看法、意見。【例】他缺少主見，每當面臨抉擇時，老是要問問旁人的想法。 對事物的看法、意見。【例】他缺少主見，每當面臨抉擇時，老是要問問旁人的想法。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=想法"
@@ -7042,9 +7067,10 @@
             },
             {
               "word": "舒服",
-              "bopomofo": "ㄕㄨ",
+              "bopomofo": "ㄕㄨ ㄈㄨˊ",
               "bopomofoArray": [
-                "ㄕㄨ"
+                "ㄕㄨ",
+                "ㄈㄨˊ"
               ],
               "def": "身心感到輕鬆愉快。【例】她昨天感冒，身體不舒服。 身心感到輕鬆愉快。【例】她昨天感冒，身體不舒服。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=舒服"
@@ -7063,7 +7089,8 @@
               "text": "這一次的學習中，我們認識了「國王」這個詞語。",
               "target": "國王",
               "bopomofoArray": [
-                "ㄍㄨㄛˊ"
+                "ㄍㄨㄛˊ",
+                "ㄨㄤˊ"
               ]
             },
             {
@@ -7315,9 +7342,10 @@
             },
             {
               "word": "棉花",
-              "bopomofo": "ㄇㄧㄢˊ",
+              "bopomofo": "ㄇㄧㄢˊ ㄏㄨㄚ",
               "bopomofoArray": [
-                "ㄇㄧㄢˊ"
+                "ㄇㄧㄢˊ",
+                "ㄏㄨㄚ"
               ],
               "def": "棉的果實成熟後，種子表面著生的纖毛。可供紡織用。【例】棉花的纖維柔韌纖長，是重要的紡織原料。 棉的果實成熟後，種子表面著生的纖毛。可供紡織用。【例】棉花的纖維柔韌纖長，是重要的紡織原料。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=棉花"
@@ -7345,9 +7373,10 @@
             },
             {
               "word": "聽見",
-              "bopomofo": "ㄊㄧㄥ",
+              "bopomofo": "ㄊㄧㄥ ㄐㄧㄢˋ",
               "bopomofoArray": [
-                "ㄊㄧㄥ"
+                "ㄊㄧㄥ",
+                "ㄐㄧㄢˋ"
               ],
               "def": "聽到。《文明小史》第二七回：「他母親道：『你還要瞞我？我都聽見了。』」 聽到。《文明小史》第二七回：「他母親道：『你還要瞞我？我都聽見了。』」",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=聽見"
@@ -7675,27 +7704,30 @@
             },
             {
               "word": "期待",
-              "bopomofo": "ㄑㄧˊ",
+              "bopomofo": "ㄑㄧˊ ㄉㄞˋ",
               "bopomofoArray": [
-                "ㄑㄧˊ"
+                "ㄑㄧˊ",
+                "ㄉㄞˋ"
               ],
               "def": "期望等待。【例】這名新秀深具潛力，備受期待。 期望等待。【例】這名新秀深具潛力，備受期待。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=期待"
             },
             {
               "word": "變成",
-              "bopomofo": "ㄅㄧㄢˋ",
+              "bopomofo": "ㄅㄧㄢˋ ㄔㄥˊ",
               "bopomofoArray": [
-                "ㄅㄧㄢˋ"
+                "ㄅㄧㄢˋ",
+                "ㄔㄥˊ"
               ],
               "def": "由某一種形態轉換成另一種形態。【例】深秋時節，楓葉變成了紅色。 由某一種形態轉換成另一種形態。【例】深秋時節，楓葉變成了紅色。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=變成"
             },
             {
               "word": "黃色",
-              "bopomofo": "ㄏㄨㄤˊ",
+              "bopomofo": "ㄏㄨㄤˊ ㄙㄜˋ",
               "bopomofoArray": [
-                "ㄏㄨㄤˊ"
+                "ㄏㄨㄤˊ",
+                "ㄙㄜˋ"
               ],
               "def": "像金子或向日葵的顏色。【例】她穿了一件黃色的碎花洋裝，顯得非常耀眼奪目。 像金子或向日葵的顏色。【例】她穿了一件黃色的碎花洋裝，顯得非常耀眼奪目。 指與色情有關的。【例】黃色笑話、黃色書刊 指與色情有關的。【例】黃色笑話、黃色書刊",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=黃色"
@@ -7723,9 +7755,10 @@
             },
             {
               "word": "接著",
-              "bopomofo": "ㄐㄧㄝ",
+              "bopomofo": "ㄐㄧㄝ ˙ㄓㄜ",
               "bopomofoArray": [
-                "ㄐㄧㄝ"
+                "ㄐㄧㄝ",
+                "˙ㄓㄜ"
               ],
               "def": "1.接住。如：「小心接著，別弄壞了！」《鏡花緣》第三十五回：「宮娥拾過，又斟一杯。林之洋接著，心中更覺發慌，登時又把酒灑了。」 1.接住。如：「小心接著，別弄壞了！」《鏡花緣》第三十五回：「宮娥拾過，又斟一杯。林之洋接著，心中更覺發慌，登時又把酒灑了。」 2.緊跟著。如：「看戰友一個個衝向前去，他接著也興起了鬥志」《二十年目睹之怪現狀》第一六回：「這一聲響不打緊，偏又接著外面人聲鼎沸起來，嚇得我吃了一大驚！」 2.緊跟著。如：「看戰友一個個衝向前去，他接著也興起了鬥志」《二十年目睹之怪現狀》第一六回：「這一聲響不打緊，偏又接著外面人聲鼎沸起來，嚇得我吃了一大驚！」",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=接著"
@@ -7976,18 +8009,20 @@
             },
             {
               "word": "課本",
-              "bopomofo": "ㄎㄜˋ",
+              "bopomofo": "ㄎㄜˋ ㄅㄣˇ",
               "bopomofoArray": [
-                "ㄎㄜˋ"
+                "ㄎㄜˋ",
+                "ㄅㄣˇ"
               ],
               "def": "教科書。【例】老師要同學打開課本，準備上課。 教科書。【例】老師要同學打開課本，準備上課。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=課本"
             },
             {
               "word": "模型",
-              "bopomofo": "ㄇㄛˊ",
+              "bopomofo": "ㄇㄛˊ ㄒㄧㄥˊ",
               "bopomofoArray": [
-                "ㄇㄛˊ"
+                "ㄇㄛˊ",
+                "ㄒㄧㄥˊ"
               ],
               "def": "模仿實物的原形，縮小製成的樣品。通常用於展示或實驗。【例】飛機模型、汽車模型 模仿實物的原形，縮小製成的樣品。通常用於展示或實驗。【例】飛機模型、汽車模型",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=模型"
@@ -8025,9 +8060,10 @@
             },
             {
               "word": "圖片",
-              "bopomofo": "ㄊㄨˊ",
+              "bopomofo": "ㄊㄨˊ ㄆㄧㄢˋ",
               "bopomofoArray": [
-                "ㄊㄨˊ"
+                "ㄊㄨˊ",
+                "ㄆㄧㄢˋ"
               ],
               "def": "圖畫、照片、拓片等的統稱。【例】這本雜誌時常刊登各國的旅遊圖片，即使讀者不出遊也能飽覽各國風光。 圖畫、照片、拓片等的統稱。【例】這本雜誌時常刊登各國的旅遊圖片，即使讀者不出遊也能飽覽各國風光。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=圖片"
@@ -8087,14 +8123,16 @@
               "text": "這一次的學習中，我們認識了「課本」這個詞語。",
               "target": "課本",
               "bopomofoArray": [
-                "ㄎㄜˋ"
+                "ㄎㄜˋ",
+                "ㄅㄣˇ"
               ]
             },
             {
               "text": "這一次的學習中，我們認識了「模型」這個詞語。",
               "target": "模型",
               "bopomofoArray": [
-                "ㄇㄛˊ"
+                "ㄇㄛˊ",
+                "ㄒㄧㄥˊ"
               ]
             },
             {
@@ -9055,9 +9093,10 @@
           "words": [
             {
               "word": "國王",
-              "bopomofo": "ㄍㄨㄛˊ",
+              "bopomofo": "ㄍㄨㄛˊ ㄨㄤˊ",
               "bopomofoArray": [
-                "ㄍㄨㄛˊ"
+                "ㄍㄨㄛˊ",
+                "ㄨㄤˊ"
               ],
               "def": "君主制國家的最高領袖。【例】今天有一些國家的最高領導者仍是國王，像中東的約旦、和鄰近的泰國。 君主制國家的最高領袖。【例】今天有一些國家的最高領導者仍是國王，像中東的約旦、和鄰近的泰國。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=國王"
@@ -9430,9 +9469,10 @@
             },
             {
               "word": "擔心",
-              "bopomofo": "ㄉㄢ",
+              "bopomofo": "ㄉㄢ ㄒㄧㄣ",
               "bopomofoArray": [
-                "ㄉㄢ"
+                "ㄉㄢ",
+                "ㄒㄧㄣ"
               ],
               "def": "掛念、不放心。【例】外出時要記得告訴父母親，免得他們擔心。 掛念、不放心。【例】外出時要記得告訴父母親，免得他們擔心。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=擔心"
@@ -10734,9 +10774,10 @@
             },
             {
               "word": "青菜",
-              "bopomofo": "ㄑㄧㄥ",
+              "bopomofo": "ㄑㄧㄥ ㄘㄞˋ",
               "bopomofoArray": [
-                "ㄑㄧㄥ"
+                "ㄑㄧㄥ",
+                "ㄘㄞˋ"
               ],
               "def": "泛指蔬菜。【例】你光吃肉不吃青菜的偏食習慣，是會影響健康的。 泛指蔬菜。【例】你光吃肉不吃青菜的偏食習慣，是會影響健康的。",
               "moeDictUrl": "https://dict.concised.moe.edu.tw/searchResult/searchResult.jsp?dt=Q&word=青菜"

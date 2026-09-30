@@ -346,6 +346,29 @@ it('自編體驗資料集必須明確標註為 demo_exercise，嚴禁混充正�
   assert.strictEqual(d.themes.length, 12, '體驗版應有 12 個主題');
 });
 
+it('115-1 詞語與例句的逐字注音陣列長度必須等於字數且不得有空白音節（不得截斷）', () => {
+  const p = path.join(__dirname, '../data/curriculum-115-1.json');
+  const d = JSON.parse(fs.readFileSync(p, 'utf-8'));
+  const bad = [];
+  Object.keys(d.publishers).forEach((pub) => {
+    d.publishers[pub].lessons.forEach((l) => {
+      l.words.forEach((w) => {
+        const n = Array.from(w.word).length;
+        if (w.bopomofoArray.length !== n || w.bopomofoArray.some((z) => !z.trim())) {
+          bad.push(`${pub} L${l.lessonNo} 詞「${w.word}」字數 ${n} 注音 ${w.bopomofoArray.length}`);
+        }
+      });
+      (l.sentences || []).forEach((s) => {
+        const n = Array.from(s.target).length;
+        if (s.bopomofoArray.length !== n || s.bopomofoArray.some((z) => !z.trim())) {
+          bad.push(`${pub} L${l.lessonNo} 例句目標「${s.target}」字數 ${n} 注音 ${s.bopomofoArray.length}`);
+        }
+      });
+    });
+  });
+  assert.strictEqual(bad.length, 0, `共 ${bad.length} 筆注音陣列被截斷：${bad.slice(0, 5).join('；')}`);
+});
+
 // -------------------------------------------------------------
 // 結算
 // -------------------------------------------------------------
