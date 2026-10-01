@@ -1,0 +1,136 @@
+====================================================
+   「字在」國語生字學習系統 — 全量邏輯驗證套件
+====================================================
+
+【模組 1】週次計算邏輯（開學日與日期推算）
+  ✅ [PASS] 開學第一天應為第 1 週
+  ✅ [PASS] 開學第 7 天（9/7）應進入第 2 週
+  ✅ [PASS] 開學第 21 天（9/21）應為第 4 週
+  ✅ [PASS] 開學前日期應回報 before-start
+
+【模組 2】手動覆寫機制（家長指定進度優先）
+  ✅ [PASS] 家長手動設定第 3 課時，無論日期為何皆應回傳第 3 課
+  ✅ [PASS] 未手動設定時，應根據週次自動推算預估課次
+  ✅ [PASS] 手動設定超出邊界時應正確 clamp 在 [1, totalLessons]
+
+【模組 3】抽題邊界驗證（抽題不越界）
+  ✅ [PASS] 指定進度第 2 課時，抽出的題目課次絕對不能大於 2
+
+【模組 4】不重複抽題驗證
+  ✅ [PASS] 抽出的題目清單目標詞/字不得有重複項
+
+【模組 5】完整詞語多格填空結構驗證
+  ✅ [PASS] 多字詞語（如「航行」）應產出對應數量的字格與各自右側直式注音
+
+【模組 6】注音符號與調號定位精確性
+  ✅ [PASS] 輕聲調號（˙）必須置於整欄注音最上方中央
+  ✅ [PASS] 二聲、三聲、四聲調號必須位於最後一個注音符號右上方
+  ✅ [PASS] 一聲（陰平）無調號標記
+
+【模組 7】學生卷空白作答 vs 答案卷朱砂紅字
+  ✅ [PASS] 學生卷句子挖空時，國字格必須為 blank 狀態，且不透露國字答案
+  ✅ [PASS] 答案卷渲染時，字格必須為 answer 狀態並正確顯示國字解答
+
+【模組 8】教材資料 Schema 與合規查核
+  ✅ [PASS] 115-1 官方教材資料集必須通過欄位與來源合規查驗（二年級）
+  ✅ [PASS] 一年級（curriculum-115-1-g1.json）官方教材資料集合規查驗
+  ✅ [PASS] 三年級（curriculum-115-1-g3.json）官方教材資料集合規查驗
+  ✅ [PASS] 四年級（curriculum-115-1-g4.json）官方教材資料集合規查驗
+  ✅ [PASS] 五年級（curriculum-115-1-g5.json）官方教材資料集合規查驗
+  ✅ [PASS] 六年級（curriculum-115-1-g6.json）官方教材資料集合規查驗
+  ✅ [PASS] 一年級 詞語注音 bopomofo 與 bopomofoArray 一致性
+  ✅ [PASS] 三年級 詞語注音 bopomofo 與 bopomofoArray 一致性
+  ✅ [PASS] 四年級 詞語注音 bopomofo 與 bopomofoArray 一致性
+  ✅ [PASS] 五年級 詞語注音 bopomofo 與 bopomofoArray 一致性
+  ✅ [PASS] 六年級 詞語注音 bopomofo 與 bopomofoArray 一致性
+  ✅ [PASS] 自編體驗資料集必須明確標註為 demo_exercise，嚴禁混充正式教材
+  ✅ [PASS] 115-1 詞語與例句的逐字注音陣列長度必須等於字數且不得有空白音節（不得截斷）
+  ✅ [PASS] 官方連結不得使用已失效（404）的舊網址前綴，且生字須採官方 SearchAction 新格式
+  ✅ [PASS] 115-1 所有 words／characters 的 def 不得前後半重複（同一段解釋貼兩次）
+  ✅ [PASS] 115-1 所有 words 的整串注音 bopomofo 必須等於 bopomofoArray 以空白連接
+
+【模組 9】顏國雄老師 CSV 快照逐課比對（生字集合完全相同）
+  ✅ [PASS] 康軒一年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 翰林一年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 南一一年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 康軒三年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 翰林三年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 南一三年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 康軒四年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 翰林四年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 南一四年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 康軒五年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 翰林五年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 南一五年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 康軒六年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 翰林六年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 南一六年級 — JSON 生字集合必須與 gsyan CSV 快照逐課完全相同
+  ✅ [PASS] 每個 CSV 快照列數必須等於對應 JSON 的單元數
+
+【模組 10】注音／部首／筆畫與辭典快照一致性抽查
+  ✅ [PASS] 各年級生字注音不得為空（辭典查無者除外）
+  ✅ [PASS] 各年級生字筆畫數必須大於 0
+  ✅ [PASS] 各年級生字部首不得為空
+
+【模組 11】讀音一致性檢查
+  ✅ [PASS] （A）字的注音與本課語詞音節一致（聲韻不同才算不一致）
+  ✅ [PASS] （B）字的注音等於辭典最常見讀音（最常見占六成以上才檢查）
+  ✅ [PASS] （C）字的完整注音（含聲調）等於辭典最常見完整讀音（不含輕聲、占六成以上才檢查）
+  ✅ [PASS] （D）字的完整注音（含聲調）與本課語詞音節一致（不含輕聲）
+
+【模組 12】UI 邏輯驗證（下拉選單與 A4 試卷）
+  ✅ [PASS] 下拉選單項目數等於每年級每版本的實際單元數
+  ✅ [PASS] 沒有例句的年級 A4 試卷不應有空大題（每年級應只有詞語題）
+
+【模組 13】多音字資料（readings／ambiguous）
+  ✅ [PASS] readings 全部來自辭典：依「完整音節含聲調」詞頻由高到低、最多 4 個、占比與辭典統計相符
+  ✅ [PASS] ambiguous＝辭典最常見完整讀音占比 <85%（逐字重算）；每字主讀音必在 readings 內
+  ✅ [PASS] ambiguous 字數與 GAPS.md「多音字待人工確認」一節一致（標題數字＝表格列數＝資料中不重複的字）
+  ✅ [PASS] 資料只新增 readings／ambiguous 兩個欄位，其他欄位（主讀音、部首、筆畫、語詞…）與第六輪（68ac46e）逐筆相同
+     （標「破音」：ambiguous 143 字＋次要讀音>=10% 35 字＝178 字；全部有第二讀音的字 581 字）
+  ✅ [PASS] 「破音」標記門檻：ambiguous 或次要讀音占比 >=10%（0.10 含、0.09 不含）；單一讀音不標
+
+【模組 14】自行輸入注音的格式驗證
+  ✅ [PASS] 合法輸入：各種聲調、輕聲前置／後置、前後空白，輕聲點正規化為前置
+  ✅ [PASS] 不合法輸入：一律 ok=false 且附說明（空白、英文、數字、漢字、錯誤聲調符號、聲調位置或個數錯、順序錯、只有聲調）
+  ✅ [PASS] 錯誤說明內容對應原因（字元集、聲調個數、聲調位置、順序、空白）
+  ✅ [PASS] 資料內所有辭典讀音（2703 筆主讀音與全部 readings）都能通過驗證且正規化後不變
+
+【模組 15】儲存、還原、套用到字卡／練習／考卷（含語詞音節替換）
+  ✅ [PASS] 儲存：鍵名 zizai:readingOverrides:v1、格式 {字:{bopomofo,note,ts,grade,publisher,lesson}}；重新建立 store 讀得回來
+  ✅ [PASS] 儲存會拒絕不合格資料：格式錯的讀音、非單一字的鍵；備註超過 100 字被截斷；換行與定位字元壓成空白
+  ✅ [PASS] 還原：移除紀錄與儲存；最後一筆還原後鍵被移除；還原不存在的字不出錯
+  ✅ [PASS] 現用讀音：有修改用修改，沒有用辭典；其他字不受影響
+  ✅ [PASS] 語詞音節替換：音節數等於字數才換；不含該字的語詞不變；沒變動時回傳原陣列
+  ✅ [PASS] 語詞音節替換的保護：該字在語詞中讀成別的音（≠修改當下的辭典讀音）不被誤換；紀錄沒有 dict 時一律替換
+     （143 字全改後，1002 個語詞中 90 個有音節被換）
+  ✅ [PASS] 全資料套用：對 143 個 ambiguous 字各自修改，所有語詞（1002 筆）的結果＝獨立算出的期望；沒有修改時完全不變
+  ✅ [PASS] 套用到字卡／線上練習／A4 卷與解答卷：用注音元件實際繪製，直排注音欄顯示新讀音
+
+【模組 16】回報 payload（對照 worker validateReport 的規則）
+  ✅ [PASS] payload 欄位與格式：app=zizai、kind=typo、message 範本、ref 格式、page 以 / 開頭、viewport、website 蜜罐為空字串，只有這 7 個欄位
+  ✅ [PASS] 沒有備註寫「備註：無」；各欄位長度夾限（備註 100 字、ref 100 字內、page 200 字內、viewport 20 字內）後仍通過驗證
+  ✅ [PASS] 全資料：143 個 ambiguous 字各產生一份 payload，全部通過 validateReport，且 message 長度在 5–1000
+  ✅ [PASS] 驗證器本身有牙（負向對照）：app、kind、message、page、ref、viewport 不合格都會被擋
+
+【模組 17】回報送出與失敗降級
+  ✅ [PASS] 來源白名單：只有 https://toopower.cc、https://www.toopower.cc 與本機 http://localhost、http://127.0.0.1 會送；file://、GitHub Pages、其他網域、http 的 toopower.cc 都不送
+  ✅ [PASS] 成功：呼叫一次、網址是相對路徑 /api/report、POST、JSON、same-origin；200 回報「已回報，謝謝」
+  ✅ [PASS] 失敗一律降級不丟錯：404、403、429、400、500、網路錯誤、同步丟錯、回傳 undefined
+  ✅ [PASS] 逾時：請求卡住時依 timeoutMs 放棄並降級（並呼叫 abort）
+  ✅ [PASS] 非白名單環境（file://、GitHub Pages）或沒有 fetch：完全不發出請求就降級
+
+【模組 18】localStorage 不可用的降級
+  ✅ [PASS] 取得 Storage 時就丟錯或回傳 null：不丟錯、資料留在記憶體、isPersistent=false、套用仍有效
+  ✅ [PASS] getItem 丟錯、setItem 丟 QuotaExceededError、removeItem 丟錯：都不丟錯，儲存失敗時 persisted=false
+  ✅ [PASS] 儲存內容損毀：壞 JSON、陣列、字串、含不合格紀錄 → 略過壞的、保留好的、不丟錯
+
+【模組 19】匯出我的修改（複製文字與下載 JSON）
+  ✅ [PASS] 匯出文字：標題含字數、匯出時間、每字一行（字、年級版本課、辭典讀音、我改成、備註）、依修改時間排序
+  ✅ [PASS] 匯出 JSON：app、format、exportedAt、count、items 欄位；沒有修改時 count=0；一般與前導單元的課次文字
+
+----------------------------------------------------
+測試結果：87 項通過，0 項失敗。
+----------------------------------------------------
+🎉 所有邏輯與資料合規測試全數通過！
+

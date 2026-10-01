@@ -11,17 +11,31 @@ import json
 import re
 import os
 
-OUTPUT_DIR = "/Users/bob/OpenClawWork/zi-zai-web/data"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUTPUT_DIR = os.path.join(ROOT, "data")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+
+def require_input(env_name, what):
+    """二年級／110 學年度資料的原始輸入不在本倉庫內，路徑由環境變數指定；缺少時明確說明而不是崩潰。"""
+    path = os.environ.get(env_name)
+    if not path or not os.path.isfile(path):
+        raise SystemExit(
+            f"找不到輸入檔：{what}\n"
+            f"請設定環境變數 {env_name}=<檔案路徑> 後重跑。\n"
+            "說明：本腳本只用於重建二年級（115-1）、110 學年度與體驗版資料；"
+            "一、三～六年級請改用 tools/build_grades_from_sources.py（資料來源見 data/SOURCES.md）。"
+        )
+    return path
 
 MOE_DICT_TMPL = "https://dict.concised.moe.edu.tw/search.jsp?md=1&word={word}"
 MOE_STROKE_TMPL = "https://stroke-order.learningweb.moe.edu.tw/searchW.jsp?WORD={word}"
 EDU_CLOUD_TMPL = "https://pedia.cloud.edu.tw/Entry/Detail/?title={word}"
 
 # -------------------------------------------------------------
-# 1. Build curriculum-115-1.json from ~/Downloads/yizi-yiri-115-1-g2.html
+# 1. Build curriculum-115-1.json from yizi-yiri-115-1-g2.html（路徑由 ZIZAI_G2_HTML 指定）
 # -------------------------------------------------------------
-with open('/Users/bob/Downloads/yizi-yiri-115-1-g2.html', 'r', encoding='utf-8') as f:
+with open(require_input('ZIZAI_G2_HTML', '二年級 115 學年度生字清單頁（yizi-yiri-115-1-g2.html）'), 'r', encoding='utf-8') as f:
     yizi_text = f.read()
 
 m_data = re.search(r'const DATA = (\{.*?\});\n', yizi_text, re.DOTALL)
@@ -31,7 +45,7 @@ if not m_data:
 raw_115 = json.loads(m_data.group(1))
 
 # Also read sentences from index-BvVP0R4p.js to enrich 115-1 lessons with sentence quiz blanks
-with open('/Users/bob/OpenClawWork/toopower-k6-1150921/_ref/kimi-page/index-BvVP0R4p.js', 'r', encoding='utf-8') as f:
+with open(require_input('ZIZAI_KIMI_JS', '句子與語詞參考資料頁面腳本（index-BvVP0R4p.js）'), 'r', encoding='utf-8') as f:
     kimi_js = f.read()
 
 # Let's extract jq from index-BvVP0R4p.js

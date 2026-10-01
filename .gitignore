@@ -1,3 +1,7 @@
 .DS_Store
 *.log
 _temp*
+# 教育部辭典（CC BY-ND 3.0 TW）不隨倉庫散布，需自行下載，見 README.md「如何重建資料」
+data/sources/moedict/
+# 顏國雄老師試算表（授權條款未載明；原作者聲明僅供教學自學與非商業性使用）的 CSV 快照不隨倉庫散布，需自行下載，見 README.md「如何重建資料」
+data/sources/gsyan/

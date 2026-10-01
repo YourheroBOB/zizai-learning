@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "TaiwanGrade2CurriculumSchema",
+  "title": "TaiwanElementaryCurriculumSchema",
   "type": "object",
   "required": ["meta", "publishers"],
   "properties": {

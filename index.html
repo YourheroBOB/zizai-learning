@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>字在｜國小二年級國語生字學習與測驗系統</title>
-  <meta name="description" content="專為台灣國小二年級學生與家長設計：支援康軒、南一、翰林教科書逐課進度、直式注音田字格、官方教育部辭典與筆順連結、線上互動練習與A4測驗卷列印。">
+  <title>字在｜國小國語生字學習與測驗系統</title>
+  <meta name="description" content="專為台灣國小一到六年級學生與家長設計：支援康軒、南一、翰林教科書逐課進度、直式注音田字格、官方教育部辭典與筆順連結、線上互動練習與A4測驗卷列印。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
@@ -82,6 +82,8 @@
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
+      min-width: 0;
+      max-width: 100%;
     }
     .tp-nav-tabs {
       display: flex;
@@ -90,6 +92,7 @@
       padding: 4px;
       border-radius: 30px;
       overflow-x: auto;
+      max-width: 100%;
     }
     .tp-nav-btn {
       border: none;
@@ -291,6 +294,87 @@
         margin-bottom: -150mm;
       }
     }
+
+    /* ============================================================
+       第七輪：多音字標注與「修改讀音」（元件與樣式一律 zz- 前綴，只寫在本頁）
+       顏色一律走語意權杖，深淺色跟著主題；沒有主題權杖時退回 v1 色票。
+       ============================================================ */
+    .zz {
+      --zz-text: var(--tp-text, var(--tp-ink, #3B352C));
+      --zz-soft: var(--tp-text-soft, var(--tp-ink-soft, #6E6558));
+      --zz-surface: var(--tp-surface, #FFFFFF);
+      --zz-deep: var(--tp-bg-deep, var(--tp-paper-deep, #F3EDE0));
+      --zz-line: var(--tp-line, #E7DECD);
+      --zz-accent: var(--tp-accent-text, var(--tp-cinnabar-dark, #A94A3C));
+      --zz-accent-soft: var(--tp-accent-soft, var(--tp-cinnabar-soft, #F6E4DF));
+      --zz-ok: var(--tp-success, var(--tp-sage-deep, #5E6E52));
+      --zz-ok-soft: var(--tp-success-soft, var(--tp-sage-soft, #E9EDE2));
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .zz[hidden], .zz [hidden], .zz-tag[hidden] { display: none !important; }
+    .zz-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      line-height: 1.4;
+      padding: 1px 7px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid var(--zz-soft);
+      background: var(--zz-deep);
+      color: var(--zz-text);
+      white-space: nowrap;
+    }
+    .zz-tag--ambiguous { background: var(--zz-accent-soft); color: var(--zz-text); border: 1.5px solid var(--zz-accent); font-weight: 900; }
+    .zz-tag--modified { background: var(--zz-ok-soft); color: var(--zz-text); border-color: var(--zz-ok); }
+    /* 生字卡上的標記列 */
+    .zz-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 100%; }
+    .zz-tags__note { width: 100%; text-align: center; font-size: 0.7rem; line-height: 1.3; font-weight: 700; color: var(--zz-accent); }
+    /* 詳情彈窗的讀音區 */
+    .zz-reading { border: 1px solid var(--zz-line); border-radius: 12px; padding: 12px 14px; background: var(--zz-deep); color: var(--zz-text); }
+    .zz-reading__head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+    .zz-reading__title { font-size: 0.9rem; font-weight: 700; color: var(--zz-text); margin: 0; }
+    .zz-note { font-size: 0.85rem; line-height: 1.6; margin-top: 8px; color: var(--zz-text); }
+    .zz-rlist { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .zz-ritem { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding: 6px 10px; border: 1px solid var(--zz-line); border-radius: 10px; background: var(--zz-surface); color: var(--zz-text); }
+    .zz-ritem.is-current { border-color: var(--zz-accent); box-shadow: inset 4px 0 0 var(--zz-accent); background: var(--zz-accent-soft); }
+    .zz-ritem__bp { font-family: var(--tp-font-kai, serif); font-size: 1.15rem; font-weight: 700; }
+    .zz-ritem__ratio { font-size: 0.82rem; color: var(--zz-soft); }
+    .zz-ritem__flag { margin-left: auto; font-size: 0.78rem; font-weight: 700; line-height: 1.5; padding: 0 8px; border: 1px solid var(--zz-accent); border-radius: 999px; background: var(--zz-surface); color: var(--zz-text); }
+    .zz-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .zz-btn { max-width: 100%; white-space: normal; }
+    .zz .zz-btn--quiet { background: transparent; color: var(--zz-text); border: 1.5px solid var(--zz-soft); }
+    .zz .zz-btn--quiet:hover { background: var(--zz-deep); }
+    .zz-form { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--zz-line); display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .zz-fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    .zz-fieldset legend { font-size: 0.85rem; font-weight: 700; padding: 0; margin-bottom: 6px; color: var(--zz-text); }
+    .zz-opts { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .zz-opt { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; min-height: 44px; padding: 8px 10px; border: 1px solid var(--zz-line); border-radius: 10px; background: var(--zz-surface); color: var(--zz-text); cursor: pointer; }
+    .zz-opt input[type="radio"] { width: 20px; height: 20px; flex: none; accent-color: var(--zz-accent); }
+    .zz-opt__bp { font-family: var(--tp-font-kai, serif); font-size: 1.1rem; font-weight: 700; }
+    .zz-opt__ratio { font-size: 0.82rem; color: var(--zz-soft); }
+    .zz-input { display: block; width: 100%; max-width: 100%; min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--zz-soft); border-radius: 10px; background: var(--zz-surface); color: var(--zz-text); font-size: 1rem; }
+    .zz-input[aria-invalid="true"] { border-color: var(--zz-accent); box-shadow: 0 0 0 2px var(--zz-accent-soft); }
+    .zz-textarea { resize: vertical; line-height: 1.5; }
+    .zz-field label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; color: var(--zz-text); }
+    .zz-check { display: flex; align-items: flex-start; gap: 10px; font-size: 0.88rem; line-height: 1.5; color: var(--zz-text); cursor: pointer; }
+    .zz-check input { width: 20px; height: 20px; flex: none; margin-top: 1px; accent-color: var(--zz-accent); }
+    .zz-msg { font-size: 0.88rem; line-height: 1.5; margin: 8px 0 0; color: var(--zz-text); }
+    .zz-msg:empty { display: none; }
+    .zz-msg[data-kind="err"] { color: var(--zz-accent); font-weight: 700; }
+    .zz-msg[data-kind="ok"] { color: var(--zz-ok); font-weight: 700; }
+    /* 匯出（進度頁下方列與詳情彈窗內各一份） */
+    .zz-export { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 12px; color: var(--zz-text); font-size: 0.88rem; }
+    .zz-exportbar { padding: 10px 12px; border: 1px solid var(--zz-line); border-radius: 12px; background: var(--zz-deep); }
+    .zz-export-msg { flex: 1 1 100%; margin: 0; }
+    .zz-export-box { flex: 1 1 100%; min-height: 96px; font-size: 0.85rem; }
+    @media (max-width: 600px) {
+      .zz-tags__note { font-size: 0.68rem; }
+      .zz-reading { padding: 10px 10px; }
+    }
+    @media print {
+      .zz, .zz-no-print, .zz-tag, .zz-tags { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -302,12 +386,21 @@
         <div class="tp-brand-logo">字</div>
         <div>
           <h1 class="tp-brand-title">字在</h1>
-          <span class="tp-brand-sub">國小二年級國語生字學習小幫手</span>
+          <span class="tp-brand-sub">國小國語生字學習小幫手（一～六年級）</span>
         </div>
       </div>
 
       <!-- 教材版本與學期選單 -->
       <div class="tp-header-controls">
+        <select id="grade-select" class="tp-select" style="min-height:38px;padding:4px 10px;font-size:0.88rem;">
+          <option value="1">一年級</option>
+          <option value="2" selected>二年級</option>
+          <option value="3">三年級</option>
+          <option value="4">四年級</option>
+          <option value="5">五年級</option>
+          <option value="6">六年級</option>
+        </select>
+
         <select id="curriculum-type-select" class="tp-select" style="min-height:38px;padding:4px 10px;font-size:0.88rem;">
           <option value="115-1" selected>115 學年度（最新課綱）</option>
           <option value="110">110 學年度（歷史完整版）</option>
@@ -391,6 +484,16 @@
           <button class="tp-filter-chip" data-filter="current">本週目標字</button>
           <button class="tp-filter-chip" data-filter="unfamiliar">⚠️ 待加強複習（未熟）</button>
           <button class="tp-filter-chip" data-filter="mastered">⭐ 已精熟</button>
+        </div>
+
+        <!-- 我的讀音修改匯出列（有修改才顯示；第七輪） -->
+        <div class="zz zz-export zz-exportbar zz-no-print" id="zz-exportbar" hidden>
+          <span id="zz-exportbar-text">你修改過 0 個字的讀音</span>
+          <button type="button" class="tp-btn tp-btn--secondary tp-btn--sm zz-btn zz-js-copy">匯出我的修改（複製文字）</button>
+          <button type="button" class="tp-btn tp-btn--secondary tp-btn--sm zz-btn zz-js-download">下載 JSON 檔</button>
+          <span class="zz-msg zz-export-msg" role="status" aria-live="polite" data-kind=""></span>
+          <span class="zz-msg" id="zz-exportbar-warn" hidden></span>
+          <textarea class="zz-input zz-textarea zz-export-box" readonly hidden aria-label="我的修改（可全選複製）"></textarea>
         </div>
       </div>
 
@@ -483,7 +586,7 @@
         <div class="tp-sheet-viewer" aria-label="考卷與答案卷雙頁預覽">
           <!-- 頁 1：學生試題卷 -->
           <section class="tp-sheet" aria-label="學生測驗卷">
-            <div class="tp-sheet__serial">字在學習・二年級國語<br>卷號：<span id="ws-serial">2A-L01</span></div>
+            <div class="tp-sheet__serial">字在學習・<span id="ws-grade-label">二年級</span>國語<br>卷號：<span id="ws-serial">2A-L01</span></div>
             <header class="tp-sheet__head">
               <h2 class="tp-sheet__title" id="sheet-title">國語生字小考</h2>
               <p class="tp-sheet__subtitle" id="sheet-sub">康軒版・第 1 課測驗</p>
@@ -505,7 +608,7 @@
             </section>
 
             <footer class="tp-sheet__foot">
-              <span>「字在」台灣國小二年級國語生字學習站・免費教學分享</span>
+              <span>「字在」台灣國小國語生字學習站・免費教學分享</span>
               <span>寫完請仔細檢查筆畫喔！</span>
             </footer>
           </section>
@@ -554,6 +657,47 @@
         </div>
       </div>
 
+
+      <!-- 讀音：辭典全部讀音與占比、修改讀音（第七輪） -->
+      <section class="zz zz-reading zz-no-print" id="zz-reading" aria-labelledby="zz-reading-title">
+        <div class="zz-reading__head">
+          <h4 class="zz-reading__title" id="zz-reading-title">讀音（依教育部國語辭典詞頻）</h4>
+          <span class="zz-tag zz-tag--multi" id="zz-tag-hetero" hidden>破音</span>
+          <span class="zz-tag zz-tag--modified" id="zz-tag-mod" hidden>已修改</span>
+        </div>
+        <p class="zz-note" id="zz-ambig-note" hidden>辭典裡這個字有好幾種常見讀音，課本讀音可能不同。和課本不一樣的話，請按「修改讀音」。</p>
+        <p class="zz-note" id="zz-nostats" hidden>這個年級的資料版本還沒有辭典詞頻統計，只能自行輸入注音。</p>
+        <ul class="zz-rlist" id="zz-rlist"></ul>
+        <div class="zz-actions">
+          <button type="button" class="tp-btn tp-btn--secondary zz-btn" id="zz-edit-open" aria-expanded="false" aria-controls="zz-form">修改讀音</button>
+          <button type="button" class="tp-btn zz-btn zz-btn--quiet" id="zz-restore" hidden>還原</button>
+        </div>
+        <form class="zz-form" id="zz-form" hidden novalidate aria-label="修改讀音">
+          <fieldset class="zz-fieldset">
+            <legend>選一個讀音，或自行輸入</legend>
+            <div class="zz-opts" id="zz-opts"></div>
+          </fieldset>
+          <div class="zz-field">
+            <label for="zz-note">備註（可不填，最多 100 字）</label>
+            <textarea class="zz-input zz-textarea" id="zz-note" maxlength="100" rows="2" placeholder="例：課本這一課標的是這個音"></textarea>
+          </div>
+          <label class="zz-check"><input type="checkbox" id="zz-report"><span>同時回報給維護者（不勾選就只存在你的瀏覽器，不會送出任何資料）</span></label>
+          <p class="zz-msg" id="zz-error" role="alert" data-kind=""></p>
+          <div class="zz-actions">
+            <button type="submit" class="tp-btn tp-btn--primary zz-btn" id="zz-save">儲存</button>
+            <button type="button" class="tp-btn zz-btn zz-btn--quiet" id="zz-cancel">取消</button>
+          </div>
+        </form>
+        <p class="zz-msg" id="zz-msg" role="status" aria-live="polite" data-kind=""></p>
+        <p class="zz-msg" id="zz-report-msg" role="status" aria-live="polite" data-kind=""></p>
+        <div class="zz-export" id="zz-m-export" hidden>
+          <button type="button" class="tp-btn tp-btn--secondary tp-btn--sm zz-btn zz-js-copy">匯出我的修改（複製文字）</button>
+          <button type="button" class="tp-btn tp-btn--secondary tp-btn--sm zz-btn zz-js-download">下載 JSON 檔</button>
+          <span class="zz-msg zz-export-msg" role="status" aria-live="polite" data-kind=""></span>
+          <textarea class="zz-input zz-textarea zz-export-box" readonly hidden aria-label="我的修改（可全選複製）"></textarea>
+        </div>
+      </section>
+
       <!-- 筆順圖 -->
       <div id="modal-char-stroke-img" style="display:none;text-align:center;"></div>
 
@@ -587,10 +731,11 @@
   </div>
 
   <footer class="tp-no-print" style="text-align:center;padding:24px 16px;border-top:1px solid var(--tp-line);font-size:0.82rem;color:var(--tp-ink-soft);background:#fff;">
-    「字在」國語生字學習系統 © 2026・專為國小二年級學童與家長手作・完全免費免登入・歡迎分享使用
+    「字在」國語生字學習系統 © 2026・專為國小一到六年級學童與家長手作・完全免費免登入・歡迎分享使用
   </footer>
 
   <script src="src/zhuyin.js"></script>
+  <script src="src/readings.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>

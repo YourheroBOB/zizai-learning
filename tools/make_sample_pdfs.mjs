@@ -15,7 +15,7 @@
  * 也會關掉自己啟動的那個 Chrome（不會動到其他 Chrome 行程）。
  *
  * 前置：先跑 `python3 tools/bundle.py` 讓 dist/zi-zai.html 是最新版。
- * 注意：頁面會向 Google Fonts 載入字型，需要能連網才會與線上版外觀一致。
+ * 注意：打包後的 dist/zi-zai.html 已移除 Google Fonts，字型走系統備援；若要與舊版範例 PDF 外觀一致，需自行確認字型。
  *
  * 用法：
  *   node tools/make_sample_pdfs.mjs
