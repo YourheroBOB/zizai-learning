@@ -1473,7 +1473,45 @@ it('練習回饋與提示不得把 q.target 直接拼進 innerHTML', () => {
   assert(!appSrc.includes("feedback.innerHTML ="), 'quiz feedback 不得使用 innerHTML');
   assert(!appSrc.includes("quiz-feedback').innerHTML"), 'quiz 提示不得使用 innerHTML');
   assert(appSrc.includes('function setQuizFeedback'), '應有 setQuizFeedback');
-  assert(appSrc.includes('saveMistakes();'), '答錯後必須持久化錯題');
+  assert(/const MISTAKES_KEY\s*=/.test(appSrc), 'MISTAKES_KEY 必須宣告');
+  assert(appSrc.includes('localStorage.setItem(MISTAKES_KEY'), '答錯後須以 MISTAKES_KEY 寫入 localStorage');
+});
+
+it('已教課次判定：前導手動 -3 與開學前自動預估', () => {
+  assert.strictEqual(ZP.taughtLessonCutoff(-3, true), -3);
+  assert(ZP.isLessonTaught(-3, -3, true));
+  assert(ZP.isLessonTaught(-5, -3, true));
+  assert(!ZP.isLessonTaught(1, -3, true));
+  assert.strictEqual(ZP.taughtLessonCutoff(0, false), -Infinity);
+  assert(!ZP.isLessonTaught(1, 0, false));
+  assert(!ZP.isLessonTaught(-1, -3, true));
+});
+
+it('開學日週次不受本機時區影響（Asia/Tokyo 仍為第 1 週）', () => {
+  const out = execSync(
+    "node -e \"const Z=require('./src/progress.js');console.log(JSON.stringify(Z.calculateWeek('2026-08-31',new Date('2026-08-31T12:00:00'))))\"",
+    { cwd: path.join(__dirname, '..'), encoding: 'utf-8', env: { ...process.env, TZ: 'Asia/Tokyo' } }
+  ).trim();
+  const res = JSON.parse(out);
+  assert.strictEqual(res.week, 1);
+  assert.strictEqual(res.state, 'in-semester');
+});
+
+it('index.html 字卡按鈕樣式不得覆寫狀態底色', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf-8');
+  const block = html.match(/button\.tp-char-card\s*\{[^}]+\}/);
+  assert(block, '應有 button.tp-char-card 規則');
+  assert(!/background:\s*inherit/.test(block[0]), '不得用 background:inherit 蓋掉狀態 class');
+  assert(!/border:\s*none/.test(block[0]), '不得用 border:none 蓋掉狀態 class');
+});
+
+it('components.css 須定義 tp-dialog 彈窗樣式', () => {
+  const css = fs.readFileSync(path.join(__dirname, '../src/components.css'), 'utf-8');
+  assert(css.includes('.tp-dialog'), '須有 .tp-dialog');
+  assert(css.includes('.tp-dialog__panel'), '須有 .tp-dialog__panel');
+  assert(css.includes('.tp-dialog__close'), '須有 .tp-dialog__close');
+  const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf-8');
+  assert(html.includes('href="src/components.css"'), 'index 須載入 components.css');
 });
 
 it('110 學年度選區塊須同時比對出版社與學期', () => {
@@ -1491,11 +1529,18 @@ it('非二年級不得停留在 110 或體驗版教材', () => {
 it('五個 115 年級檔 semesterCode 與產物一致', () => {
   gradeFiles.forEach(({ file, code }) => {
     const p = path.join(__dirname, `../data/${file}`);
-    if (!fs.existsSync(p)) return;
+    assert(fs.existsSync(p), `${file} 必須存在`);
     const d = JSON.parse(fs.readFileSync(p, 'utf-8'));
     assert.strictEqual(d.meta.semesterCode, code);
     assert(d.meta.licenseNotes.includes('授權條款未載明'), `${file} licenseNotes 應保留授權聲明`);
   });
+});
+
+it('二年級 115-1 仍標 official_curriculum（與其他年級 publisher_char_index 區隔）', () => {
+  const p = path.join(__dirname, '../data/curriculum-115-1.json');
+  assert(fs.existsSync(p));
+  const d = JSON.parse(fs.readFileSync(p, 'utf-8'));
+  assert.strictEqual(d.meta.sourceType, 'official_curriculum');
 });
 
 it('index.html 使用原生 dialog 作生字彈窗', () => {

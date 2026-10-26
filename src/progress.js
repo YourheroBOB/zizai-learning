@@ -4,10 +4,32 @@
 (function () {
   'use strict';
 
+  function taiwanCalendarMidnight(targetDate) {
+    const now = targetDate instanceof Date ? targetDate : new Date(targetDate);
+    const ymd = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Taipei',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(now);
+    return new Date(ymd + 'T00:00:00+08:00');
+  }
+
+  /**
+   * 與進度頁、練習「已教範圍」共用的課次上界（含前導負數課號；開學前自動預估為尚未開教）。
+   */
+  function taughtLessonCutoff(currentLesson, isManual) {
+    if (currentLesson === 0 && !isManual) return -Infinity;
+    return currentLesson;
+  }
+
+  function isLessonTaught(lessonNo, currentLesson, isManual) {
+    return lessonNo <= taughtLessonCutoff(currentLesson, isManual);
+  }
+
   function calculateWeek(semesterStart, targetDate) {
     const start = new Date(semesterStart + 'T00:00:00+08:00');
-    const now = targetDate instanceof Date ? targetDate : new Date(targetDate);
-    const local = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const local = taiwanCalendarMidnight(targetDate);
     const msDiff = local.getTime() - start.getTime();
     if (msDiff < 0) return { week: 0, state: 'before-start' };
     const week = Math.floor(msDiff / (7 * 24 * 60 * 60 * 1000)) + 1;
@@ -42,7 +64,13 @@
     };
   }
 
-  const ZizaiProgress = { calculateWeek, resolveLessonProgress };
+  const ZizaiProgress = {
+    calculateWeek,
+    resolveLessonProgress,
+    taughtLessonCutoff,
+    isLessonTaught,
+    taiwanCalendarMidnight
+  };
 
   if (typeof window !== 'undefined') {
     window.ZizaiProgress = ZizaiProgress;

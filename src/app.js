@@ -117,7 +117,10 @@
     if (!rawUrl || typeof rawUrl !== 'string') return null;
     try {
       const u = new URL(rawUrl, window.location.href);
-      if (u.protocol === 'https:' || u.protocol === 'http:') return u.href;
+      if (u.protocol === 'https:') return u.href;
+      if (u.protocol !== 'http:' && u.protocol !== 'javascript:' && u.protocol !== 'data:') {
+        return u.href;
+      }
       return null;
     } catch (e) {
       return null;
@@ -640,10 +643,10 @@
     let masteredCount = 0;
     let unfamiliarCount = 0;
 
-    const taughtCutoff = prog.currentLesson > 0 ? prog.currentLesson : -Infinity;
+    const taughtCutoff = ZP.taughtLessonCutoff(prog.currentLesson, prog.isManual);
     curData.lessons.forEach((l) => {
       const isTaught = l.lessonNo <= taughtCutoff;
-      const isCurrent = prog.currentLesson > 0 && l.lessonNo === prog.currentLesson;
+      const isCurrent = l.lessonNo === prog.currentLesson;
 
       (l.characters || []).forEach((c) => {
         const charStr = c.char;
@@ -719,15 +722,21 @@
       if (zzTags) card.appendChild(zzTags);
 
       // 熟悉度切換按鈕（愛心/星星）
-      const starBtn = document.createElement('button');
-      starBtn.type = 'button';
+      const starBtn = document.createElement('span');
       starBtn.className = `tp-btn-star ${c.isMastered ? 'is-active' : ''}`;
+      starBtn.setAttribute('role', 'button');
+      starBtn.tabIndex = 0;
       starBtn.setAttribute('aria-label', c.isMastered ? '標記為待加強' : '標記為已精熟');
-      starBtn.innerHTML = c.isMastered ? '★ 已精熟' : '☆ 待加強';
-      starBtn.onclick = (e) => {
+      starBtn.textContent = c.isMastered ? '★ 已精熟' : '☆ 待加強';
+      const onStarActivate = (e) => {
         e.stopPropagation();
+        e.preventDefault();
         toggleMastered(c.char);
       };
+      starBtn.addEventListener('click', onStarActivate);
+      starBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') onStarActivate(e);
+      });
       card.appendChild(starBtn);
 
       card.onclick = () => showCharDetailModal(c, card);
@@ -805,7 +814,7 @@
     mBtn.className = isM ? 'tp-btn tp-btn--secondary tp-btn--block' : 'tp-btn tp-btn--primary tp-btn--block';
     mBtn.onclick = () => {
       toggleMastered(c.char);
-      showCharDetailModal({ ...c, isMastered: !isM });
+      showCharDetailModal({ ...c, isMastered: !isM }, state.lastModalTrigger);
     };
 
     if (!modal.open) modal.showModal();
@@ -822,10 +831,10 @@
 
     // 收集題庫
     let pool = [];
-    const lessonCap = prog.currentLesson > 0 ? prog.currentLesson : -1;
+    const taughtCutoff = ZP.taughtLessonCutoff(prog.currentLesson, prog.isManual);
     curData.lessons.forEach((l) => {
       if (scope === 'current' && l.lessonNo !== prog.currentLesson) return;
-      if ((scope === 'all-taught' || scope === 'unfamiliar') && l.lessonNo > lessonCap) return;
+      if (scope === 'all-taught' && l.lessonNo > taughtCutoff) return;
 
       // 優先從情境句子抽取
       (l.sentences || []).forEach((s) => {
