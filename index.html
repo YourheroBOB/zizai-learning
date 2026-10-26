@@ -271,8 +271,17 @@
       border-color: var(--tp-ink);
     }
 
+    button.tp-char-card {
+      border: none;
+      background: inherit;
+      font: inherit;
+      text-align: inherit;
+      cursor: pointer;
+      width: 100%;
+    }
+
     /* 手機寬度適應 */
-    @media (max-width: 600px) {
+    @media screen and (max-width: 600px) {
       .tp-app-header__inner {
         flex-direction: column;
         align-items: flex-start;
@@ -412,6 +421,14 @@
           <option value="hanlin">翰林版</option>
           <option value="nanyi">南一版</option>
         </select>
+
+        <span id="semester-select-row" hidden>
+          <label for="semester-select" class="tp-caption" style="margin-right:4px;">學期</label>
+          <select id="semester-select" class="tp-select" style="min-height:38px;padding:4px 10px;font-size:0.88rem;">
+            <option value="2a">二上</option>
+            <option value="2b">二下</option>
+          </select>
+        </span>
 
         <!-- 導覽切換分頁 -->
         <nav class="tp-nav-tabs" aria-label="功能分頁切換">
@@ -641,10 +658,10 @@
 
   </main>
 
-  <!-- 生字詳情彈窗 Modal -->
-  <div class="tp-modal" id="char-modal" role="dialog" aria-modal="true" aria-labelledby="modal-char-title">
-    <div class="tp-modal__content tp-stack" style="--tp-stack-gap:16px;">
-      <button class="tp-modal__close" id="modal-close-btn" aria-label="關閉詳情">✕</button>
+  <!-- 生字詳情彈窗（原生 dialog） -->
+  <dialog class="tp-dialog" id="char-modal" aria-labelledby="modal-char-title">
+    <div class="tp-dialog__panel tp-stack" style="--tp-stack-gap:16px;">
+      <button type="button" class="tp-dialog__close" id="modal-close-btn" data-close aria-label="關閉詳情">✕</button>
       
       <div style="display:flex;align-items:center;gap:18px;">
         <div id="modal-char-wrap"></div>
@@ -728,7 +745,7 @@
         ★ 標記為【精熟】
       </button>
     </div>
-  </div>
+  </dialog>
 
   <footer class="tp-no-print" style="text-align:center;padding:24px 16px;border-top:1px solid var(--tp-line);font-size:0.82rem;color:var(--tp-ink-soft);background:#fff;">
     「字在」國語生字學習系統 © 2026・專為國小一到六年級學童與家長手作・完全免費免登入・歡迎分享使用
@@ -736,6 +753,7 @@
 
   <script src="src/zhuyin.js"></script>
   <script src="src/readings.js"></script>
+  <script src="src/progress.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>

@@ -487,8 +487,8 @@ def build_grade_json(grade, char_db, word_db, gaps, all_grade_chars, freq_toned)
             "semester": "上學期",
             "semesterCode": semester_code,
             "semesterStart": "2026-08-31",
-            "sourceType": "official_curriculum",
-            "editionNote": "115學年度官方課次生字索引",
+            "sourceType": "publisher_char_index",
+            "editionNote": "115學年度上學期康軒／翰林／南一課次生字索引（取材自顏國雄老師試算表）",
             "licenseNotes": (
                 "生字清單取材自顏國雄老師公開試算表（授權條款未載明；原作者聲明僅供教學自學與非商業性使用），"
                 "其生字清單原始出處為中研院語言學研究所『生字表字詞資料庫』等；"

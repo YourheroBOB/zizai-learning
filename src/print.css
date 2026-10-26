@@ -253,6 +253,8 @@
   .tp-sheet {
     width: 210mm;
     min-height: 297mm;
+    transform: none !important;
+    margin-bottom: 0 !important;
   }
 
   /* 直排注音在列印時維持相同版位 */

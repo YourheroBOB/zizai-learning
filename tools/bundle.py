@@ -59,6 +59,7 @@ html = rd("index.html")
 app_js = rd("src", "app.js")
 zhuyin_js = rd("src", "zhuyin.js")
 readings_js = rd("src", "readings.js")
+progress_js = rd("src", "progress.js")
 
 # --- 1. 移除 Google Fonts（三行）---
 for g in (
@@ -114,7 +115,7 @@ if "fetch(" in app_js:
     fail("app.js 仍有 fetch(")
 
 # --- 2b. 內聯 JS 的網路面釘死 ---
-all_js = zhuyin_js + "\n" + readings_js + "\n" + app_js
+all_js = zhuyin_js + "\n" + readings_js + "\n" + progress_js + "\n" + app_js
 if readings_js.count("fetchImpl(REPORT_PATH, init)") != 1:
     fail(f"readings.js 的 fetchImpl(REPORT_PATH, init) 應恰好 1 處，實際 {readings_js.count('fetchImpl(REPORT_PATH, init)')}")
 if readings_js.count("const REPORT_PATH = '/api/report';") != 1:
@@ -178,10 +179,14 @@ html = sub_once(html, "</head>", f"<style>\n{css}\n</style>\n</head>", "</head>"
 
 script_re = re.compile(r'[ \t]*<script\s+src="src/([^"]+)"></script>\n?')
 found_js = script_re.findall(html)
-if found_js != ["zhuyin.js", "readings.js", "app.js"]:
+if found_js != ["zhuyin.js", "readings.js", "progress.js", "app.js"]:
     fail(f"index.html 的 script 順序與預期不同：{found_js}")
 html = script_re.sub("", html)
-tail = embedded + f"<script>\n{zhuyin_js}\n</script>\n<script>\n{readings_js}\n</script>\n<script>\n{app_js}\n</script>\n"
+tail = (
+    embedded
+    + f"<script>\n{zhuyin_js}\n</script>\n<script>\n{readings_js}\n</script>\n"
+    + f"<script>\n{progress_js}\n</script>\n<script>\n{app_js}\n</script>\n"
+)
 html = sub_once(html, "</body>", tail + "</body>", "</body>")
 
 # --- 5. 殘留檢查：不應再有外部資源參照（<a href> 的外部連結不算） ---

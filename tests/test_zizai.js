@@ -17,8 +17,9 @@ const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
 
-// 載入注音模組
+// 載入注音模組與進度模組
 const TPZhuyin = require('../src/zhuyin.js');
+const ZP = require('../src/progress.js');
 
 let passedTests = 0;
 let failedTests = 0;
@@ -59,14 +60,7 @@ console.log('====================================================\n');
 console.log('【模組 1】週次計算邏輯（開學日與日期推算）');
 
 function calcWeek(semesterStartStr, targetDateStr) {
-  const start = new Date(semesterStartStr + 'T00:00:00+08:00');
-  const cur = new Date(targetDateStr + 'T00:00:00+08:00');
-  const msDiff = cur.getTime() - start.getTime();
-  if (msDiff < 0) return { week: 0, state: 'before-start' };
-  const week = Math.floor(msDiff / (7 * 24 * 60 * 60 * 1000)) + 1;
-  const maxWeeks = 20;
-  if (week > maxWeeks) return { week: maxWeeks + 1, state: 'after-end' };
-  return { week, state: 'in-semester' };
+  return ZP.calculateWeek(semesterStartStr, new Date(targetDateStr + 'T12:00:00'));
 }
 
 it('開學第一天應為第 1 週', () => {
@@ -98,21 +92,11 @@ it('開學前日期應回報 before-start', () => {
 console.log('\n【模組 2】手動覆寫機制（家長指定進度優先）');
 
 function resolveLessonProgress(estimatedWeek, manualLesson, totalLessons = 12) {
-  if (manualLesson !== null && manualLesson !== undefined) {
-    const clamped = Math.max(1, Math.min(totalLessons, manualLesson));
-    return {
-      currentLesson: clamped,
-      isManual: true,
-      completedLessons: clamped - 1
-    };
-  }
-  // 預估進度：約每 1.5 週一課
-  const estimated = Math.max(1, Math.min(totalLessons, Math.round(estimatedWeek / 1.5)));
-  return {
-    currentLesson: estimated,
-    isManual: false,
-    completedLessons: Math.max(0, estimated - 1)
-  };
+  const weekInfo =
+    estimatedWeek <= 0
+      ? { week: 0, state: 'before-start' }
+      : { week: estimatedWeek, state: 'in-semester' };
+  return ZP.resolveLessonProgress(weekInfo, manualLesson, totalLessons);
 }
 
 it('家長手動設定第 3 課時，無論日期為何皆應回傳第 3 課', () => {
@@ -128,11 +112,17 @@ it('未手動設定時，應根據週次自動推算預估課次', () => {
   assert.strictEqual(res.isManual, false);
 });
 
-it('手動設定超出邊界時應正確 clamp 在 [1, totalLessons]', () => {
+it('手動設定超出邊界時正課次 clamp，前導負數課號保留', () => {
   const resTooHigh = resolveLessonProgress(1, 99, 12);
   assert.strictEqual(resTooHigh.currentLesson, 12);
   const resTooLow = resolveLessonProgress(1, -5, 12);
-  assert.strictEqual(resTooLow.currentLesson, 1);
+  assert.strictEqual(resTooLow.currentLesson, -5);
+});
+
+it('開學前自動預估課次應為 0（尚未開學）', () => {
+  const res = resolveLessonProgress(0, null, 12);
+  assert.strictEqual(res.currentLesson, 0);
+  assert.strictEqual(res.isManual, false);
 });
 
 // -------------------------------------------------------------
@@ -371,7 +361,8 @@ gradeFiles.forEach(({ grade, file, code, label }) => {
 
     assert.strictEqual(d.meta.academicYear, 115, `${label} academicYear 應為 115`);
     assert.strictEqual(d.meta.semesterCode, code, `${label} semesterCode 應為 ${code}`);
-    assert.strictEqual(d.meta.sourceType, 'official_curriculum');
+    assert.strictEqual(d.meta.sourceType, 'publisher_char_index');
+    assert(!d.meta.editionNote.includes('官方'), 'editionNote 不得含「官方」');
     assert(d.meta.grade.includes(label.replace('年級', '')), `${label} meta.grade 應包含年級文字`);
 
     const pubs = ['kangxuan', 'nanyi', 'hanlin'];
@@ -1471,6 +1462,47 @@ const readingsDone = (async function runReadingsModules() {
     assert.doesNotThrow(() => JSON.stringify(j));
   });
 })();
+
+// =============================================================
+// 模組 20：best practice 1151026 回歸
+// =============================================================
+console.log('\n【模組 20】best practice 1151026 回歸');
+
+it('練習回饋與提示不得把 q.target 直接拼進 innerHTML', () => {
+  const appSrc = fs.readFileSync(path.join(__dirname, '../src/app.js'), 'utf-8');
+  assert(!appSrc.includes("feedback.innerHTML ="), 'quiz feedback 不得使用 innerHTML');
+  assert(!appSrc.includes("quiz-feedback').innerHTML"), 'quiz 提示不得使用 innerHTML');
+  assert(appSrc.includes('function setQuizFeedback'), '應有 setQuizFeedback');
+  assert(appSrc.includes('saveMistakes();'), '答錯後必須持久化錯題');
+});
+
+it('110 學年度選區塊須同時比對出版社與學期', () => {
+  const appSrc = fs.readFileSync(path.join(__dirname, '../src/app.js'), 'utf-8');
+  assert(appSrc.includes('b.semester === sem'), '110 區塊須比對 semester');
+  assert(appSrc.includes('semesterLabelFor110'), '須有學期標籤函式');
+});
+
+it('非二年級不得停留在 110 或體驗版教材', () => {
+  const appSrc = fs.readFileSync(path.join(__dirname, '../src/app.js'), 'utf-8');
+  assert(appSrc.includes('function applyCurriculumTypeChange'), '須有版本切換矯正');
+  assert(appSrc.includes("nextType = '115-1'"), '非二年級應回到 115-1');
+});
+
+it('五個 115 年級檔 semesterCode 與產物一致', () => {
+  gradeFiles.forEach(({ file, code }) => {
+    const p = path.join(__dirname, `../data/${file}`);
+    if (!fs.existsSync(p)) return;
+    const d = JSON.parse(fs.readFileSync(p, 'utf-8'));
+    assert.strictEqual(d.meta.semesterCode, code);
+    assert(d.meta.licenseNotes.includes('授權條款未載明'), `${file} licenseNotes 應保留授權聲明`);
+  });
+});
+
+it('index.html 使用原生 dialog 作生字彈窗', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf-8');
+  assert(html.includes('<dialog class="tp-dialog" id="char-modal"'), 'char-modal 應為 dialog');
+  assert(html.includes('src/progress.js'), '須載入 progress.js');
+});
 
 // -------------------------------------------------------------
 // 結算
