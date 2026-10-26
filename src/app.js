@@ -113,14 +113,21 @@
     feedback.appendChild(span);
   }
 
-  function sanitizeImageUrl(rawUrl) {
+  function sanitizeImageUrl(rawUrl, baseHref) {
     if (!rawUrl || typeof rawUrl !== 'string') return null;
     try {
-      const u = new URL(rawUrl, window.location.href);
-      if (u.protocol === 'https:') return u.href;
-      if (u.protocol !== 'http:' && u.protocol !== 'javascript:' && u.protocol !== 'data:') {
-        return u.href;
+      const trimmed = rawUrl.trim();
+      if (/^(javascript|data|vbscript):/i.test(trimmed)) return null;
+      if (trimmed.startsWith('//')) return null;
+      const base = baseHref || (typeof window !== 'undefined' && window.location && window.location.href) || '';
+      const u = base ? new URL(trimmed, base) : new URL(trimmed);
+      if (u.protocol !== 'https:' && u.protocol !== 'http:') return null;
+      if (/^https?:\/\//i.test(trimmed)) {
+        return u.protocol === 'https:' ? u.href : null;
       }
+      if (!base) return null;
+      const b = new URL(base);
+      if (u.protocol === b.protocol && u.host === b.host) return u.href;
       return null;
     } catch (e) {
       return null;
@@ -643,10 +650,8 @@
     let masteredCount = 0;
     let unfamiliarCount = 0;
 
-    const taughtCutoff = ZP.taughtLessonCutoff(prog.currentLesson, prog.isManual);
     curData.lessons.forEach((l) => {
-      const isTaught = l.lessonNo <= taughtCutoff;
-      const isCurrent = l.lessonNo === prog.currentLesson;
+      const { isTaught, isCurrent } = ZP.classifyLesson(l.lessonNo, prog.currentLesson, prog.isManual);
 
       (l.characters || []).forEach((c) => {
         const charStr = c.char;
@@ -831,10 +836,8 @@
 
     // 收集題庫
     let pool = [];
-    const taughtCutoff = ZP.taughtLessonCutoff(prog.currentLesson, prog.isManual);
     curData.lessons.forEach((l) => {
-      if (scope === 'current' && l.lessonNo !== prog.currentLesson) return;
-      if (scope === 'all-taught' && l.lessonNo > taughtCutoff) return;
+      if (!ZP.includeLessonInQuizScope(scope, l.lessonNo, prog.currentLesson, prog.isManual)) return;
 
       // 優先從情境句子抽取
       (l.sentences || []).forEach((s) => {
@@ -1203,13 +1206,11 @@
 
     // 110 學年度與體驗版目前只支援二年級
     const typeSelect = $('curriculum-type-select');
-    if (grade !== 2) {
-      // 如果目前選的是 110 或 demo，自動切回 115-1
-      if (state.currentCurriculumType !== '115-1') {
-        state.currentCurriculumType = '115-1';
-        typeSelect.value = '115-1';
-        savePrefs();
-      }
+    const clampedType = ZP.clampCurriculumType(grade, state.currentCurriculumType);
+    if (clampedType !== state.currentCurriculumType) {
+      state.currentCurriculumType = clampedType;
+      if (typeSelect) typeSelect.value = clampedType;
+      savePrefs();
     }
 
     // 更新年級標籤
@@ -1220,11 +1221,12 @@
   }
 
   function applyCurriculumTypeChange(nextType) {
-    if (state.currentGrade !== 2 && (nextType === '110' || nextType === 'demo')) {
-      nextType = '115-1';
-      $('curriculum-type-select').value = '115-1';
+    const clamped = ZP.clampCurriculumType(state.currentGrade, nextType);
+    if (clamped !== nextType) {
+      const typeSelect = $('curriculum-type-select');
+      if (typeSelect) typeSelect.value = clamped;
     }
-    state.currentCurriculumType = nextType;
+    state.currentCurriculumType = clamped;
     updateSemesterSelectVisibility();
     savePrefs();
     refreshViewsAfterContextChange();

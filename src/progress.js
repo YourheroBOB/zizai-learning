@@ -17,6 +17,7 @@
 
   /**
    * 與進度頁、練習「已教範圍」共用的課次上界（含前導負數課號；開學前自動預估為尚未開教）。
+   * 手動選 0／負數時保留 lessonNo <= currentLesson 的原語意。
    */
   function taughtLessonCutoff(currentLesson, isManual) {
     if (currentLesson === 0 && !isManual) return -Infinity;
@@ -25,6 +26,45 @@
 
   function isLessonTaught(lessonNo, currentLesson, isManual) {
     return lessonNo <= taughtLessonCutoff(currentLesson, isManual);
+  }
+
+  function isLessonCurrent(lessonNo, currentLesson, isManual) {
+    if (currentLesson === 0 && !isManual) return false;
+    return lessonNo === currentLesson;
+  }
+
+  function classifyLesson(lessonNo, currentLesson, isManual) {
+    return {
+      isTaught: isLessonTaught(lessonNo, currentLesson, isManual),
+      isCurrent: isLessonCurrent(lessonNo, currentLesson, isManual)
+    };
+  }
+
+  function classifyLessons(lessons, currentLesson, isManual) {
+    return (lessons || []).map((l) => {
+      const flags = classifyLesson(l.lessonNo, currentLesson, isManual);
+      return {
+        lessonNo: l.lessonNo,
+        title: l.title,
+        isTaught: flags.isTaught,
+        isCurrent: flags.isCurrent
+      };
+    });
+  }
+
+  /**
+   * 練習出題範圍是否納入該課。
+   * all-taught 與進度頁共用 taughtCutoff；unfamiliar（錯題／不熟）不另限課次。
+   */
+  function includeLessonInQuizScope(scope, lessonNo, currentLesson, isManual) {
+    if (scope === 'current') return isLessonCurrent(lessonNo, currentLesson, isManual);
+    if (scope === 'all-taught') return isLessonTaught(lessonNo, currentLesson, isManual);
+    return true;
+  }
+
+  function clampCurriculumType(grade, nextType) {
+    if (grade !== 2 && (nextType === '110' || nextType === 'demo')) return '115-1';
+    return nextType;
   }
 
   function calculateWeek(semesterStart, targetDate) {
@@ -69,6 +109,11 @@
     resolveLessonProgress,
     taughtLessonCutoff,
     isLessonTaught,
+    isLessonCurrent,
+    classifyLesson,
+    classifyLessons,
+    includeLessonInQuizScope,
+    clampCurriculumType,
     taiwanCalendarMidnight
   };
 

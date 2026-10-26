@@ -65,7 +65,17 @@
                       "strokeImg": { "type": "string" },
                       "moeDictUrl": { "type": "string" },
                       "moeStrokeUrl": { "type": "string" },
-                      "readings": { "type": "array" },
+                      "readings": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": ["reading"],
+                          "properties": {
+                            "reading": { "type": "string" },
+                            "ratio": { "type": "number", "minimum": 0, "maximum": 1 }
+                          }
+                        }
+                      },
                       "ambiguous": { "type": "boolean" }
                     }
                   }

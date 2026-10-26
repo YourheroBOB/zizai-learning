@@ -2323,6 +2323,10 @@ a.tp-card {
     display: none !important;
   }
 
+  .tp-dialog {
+    display: none !important;
+  }
+
   /* 主容器在螢幕上有上 20px／左右 16px／下 60px 內距（index.html）。
      列印時若保留，A4 紙張(297mm)會從 20px 處才開始，整張下移約 5.3mm 而溢出一頁，
      多印出一張空白頁；左右內距也讓 210mm 寬的紙張擠不進版心。全部歸零。
@@ -3545,6 +3549,7 @@ a.tp-card {
 
   /**
    * 與進度頁、練習「已教範圍」共用的課次上界（含前導負數課號；開學前自動預估為尚未開教）。
+   * 手動選 0／負數時保留 lessonNo <= currentLesson 的原語意。
    */
   function taughtLessonCutoff(currentLesson, isManual) {
     if (currentLesson === 0 && !isManual) return -Infinity;
@@ -3553,6 +3558,45 @@ a.tp-card {
 
   function isLessonTaught(lessonNo, currentLesson, isManual) {
     return lessonNo <= taughtLessonCutoff(currentLesson, isManual);
+  }
+
+  function isLessonCurrent(lessonNo, currentLesson, isManual) {
+    if (currentLesson === 0 && !isManual) return false;
+    return lessonNo === currentLesson;
+  }
+
+  function classifyLesson(lessonNo, currentLesson, isManual) {
+    return {
+      isTaught: isLessonTaught(lessonNo, currentLesson, isManual),
+      isCurrent: isLessonCurrent(lessonNo, currentLesson, isManual)
+    };
+  }
+
+  function classifyLessons(lessons, currentLesson, isManual) {
+    return (lessons || []).map((l) => {
+      const flags = classifyLesson(l.lessonNo, currentLesson, isManual);
+      return {
+        lessonNo: l.lessonNo,
+        title: l.title,
+        isTaught: flags.isTaught,
+        isCurrent: flags.isCurrent
+      };
+    });
+  }
+
+  /**
+   * 練習出題範圍是否納入該課。
+   * all-taught 與進度頁共用 taughtCutoff；unfamiliar（錯題／不熟）不另限課次。
+   */
+  function includeLessonInQuizScope(scope, lessonNo, currentLesson, isManual) {
+    if (scope === 'current') return isLessonCurrent(lessonNo, currentLesson, isManual);
+    if (scope === 'all-taught') return isLessonTaught(lessonNo, currentLesson, isManual);
+    return true;
+  }
+
+  function clampCurriculumType(grade, nextType) {
+    if (grade !== 2 && (nextType === '110' || nextType === 'demo')) return '115-1';
+    return nextType;
   }
 
   function calculateWeek(semesterStart, targetDate) {
@@ -3597,6 +3641,11 @@ a.tp-card {
     resolveLessonProgress,
     taughtLessonCutoff,
     isLessonTaught,
+    isLessonCurrent,
+    classifyLesson,
+    classifyLessons,
+    includeLessonInQuizScope,
+    clampCurriculumType,
     taiwanCalendarMidnight
   };
 
@@ -3725,14 +3774,21 @@ a.tp-card {
     feedback.appendChild(span);
   }
 
-  function sanitizeImageUrl(rawUrl) {
+  function sanitizeImageUrl(rawUrl, baseHref) {
     if (!rawUrl || typeof rawUrl !== 'string') return null;
     try {
-      const u = new URL(rawUrl, window.location.href);
-      if (u.protocol === 'https:') return u.href;
-      if (u.protocol !== 'http:' && u.protocol !== 'javascript:' && u.protocol !== 'data:') {
-        return u.href;
+      const trimmed = rawUrl.trim();
+      if (/^(javascript|data|vbscript):/i.test(trimmed)) return null;
+      if (trimmed.startsWith('//')) return null;
+      const base = baseHref || (typeof window !== 'undefined' && window.location && window.location.href) || '';
+      const u = base ? new URL(trimmed, base) : new URL(trimmed);
+      if (u.protocol !== 'https:' && u.protocol !== 'http:') return null;
+      if (/^https?:\/\//i.test(trimmed)) {
+        return u.protocol === 'https:' ? u.href : null;
       }
+      if (!base) return null;
+      const b = new URL(base);
+      if (u.protocol === b.protocol && u.host === b.host) return u.href;
       return null;
     } catch (e) {
       return null;
@@ -4255,10 +4311,8 @@ a.tp-card {
     let masteredCount = 0;
     let unfamiliarCount = 0;
 
-    const taughtCutoff = ZP.taughtLessonCutoff(prog.currentLesson, prog.isManual);
     curData.lessons.forEach((l) => {
-      const isTaught = l.lessonNo <= taughtCutoff;
-      const isCurrent = l.lessonNo === prog.currentLesson;
+      const { isTaught, isCurrent } = ZP.classifyLesson(l.lessonNo, prog.currentLesson, prog.isManual);
 
       (l.characters || []).forEach((c) => {
         const charStr = c.char;
@@ -4443,10 +4497,8 @@ a.tp-card {
 
     // 收集題庫
     let pool = [];
-    const taughtCutoff = ZP.taughtLessonCutoff(prog.currentLesson, prog.isManual);
     curData.lessons.forEach((l) => {
-      if (scope === 'current' && l.lessonNo !== prog.currentLesson) return;
-      if (scope === 'all-taught' && l.lessonNo > taughtCutoff) return;
+      if (!ZP.includeLessonInQuizScope(scope, l.lessonNo, prog.currentLesson, prog.isManual)) return;
 
       // 優先從情境句子抽取
       (l.sentences || []).forEach((s) => {
@@ -4805,13 +4857,11 @@ a.tp-card {
 
     // 110 學年度與體驗版目前只支援二年級
     const typeSelect = $('curriculum-type-select');
-    if (grade !== 2) {
-      // 如果目前選的是 110 或 demo，自動切回 115-1
-      if (state.currentCurriculumType !== '115-1') {
-        state.currentCurriculumType = '115-1';
-        typeSelect.value = '115-1';
-        savePrefs();
-      }
+    const clampedType = ZP.clampCurriculumType(grade, state.currentCurriculumType);
+    if (clampedType !== state.currentCurriculumType) {
+      state.currentCurriculumType = clampedType;
+      if (typeSelect) typeSelect.value = clampedType;
+      savePrefs();
     }
 
     // 更新年級標籤
@@ -4822,11 +4872,12 @@ a.tp-card {
   }
 
   function applyCurriculumTypeChange(nextType) {
-    if (state.currentGrade !== 2 && (nextType === '110' || nextType === 'demo')) {
-      nextType = '115-1';
-      $('curriculum-type-select').value = '115-1';
+    const clamped = ZP.clampCurriculumType(state.currentGrade, nextType);
+    if (clamped !== nextType) {
+      const typeSelect = $('curriculum-type-select');
+      if (typeSelect) typeSelect.value = clamped;
     }
-    state.currentCurriculumType = nextType;
+    state.currentCurriculumType = clamped;
     updateSemesterSelectVisibility();
     savePrefs();
     refreshViewsAfterContextChange();
