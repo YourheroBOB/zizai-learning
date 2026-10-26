@@ -41,8 +41,13 @@
     activeTab: 'progress',          // 'progress' | 'interactive' | 'worksheet'
     interactiveQuiz: null,          // 線上練習狀態
     worksheetData: null,            // 目前考卷題目
-    modalChar: null                 // 詳情彈窗目前的生字（修改讀音用）
+    modalChar: null,                // 詳情彈窗目前的生字（修改讀音用）
+    gradeLoadErrors: {},            // { grade: true } 年級 JSON 載入失敗
+    lastModalTrigger: null          // 關閉彈窗後焦點回到的字卡
   };
+
+  const NO_DEF_TEXT = '這個年級還沒有收錄釋義，請用下方連結看教育部簡編本';
+  const ZP = window.ZizaiProgress;
 
   // DOM 輔助
   const $ = (id) => document.getElementById(id);
@@ -90,6 +95,68 @@
     try {
       localStorage.setItem(MASTERED_KEY, JSON.stringify(state.masteredChars));
     } catch (e) {}
+  }
+
+  function saveMistakes() {
+    try {
+      localStorage.setItem(MISTAKES_KEY, JSON.stringify(state.mistakes));
+    } catch (e) {}
+  }
+
+  function setQuizFeedback(text, colorVar) {
+    const feedback = $('quiz-feedback');
+    if (!feedback) return;
+    feedback.textContent = '';
+    const span = document.createElement('span');
+    span.style.color = colorVar;
+    span.textContent = text;
+    feedback.appendChild(span);
+  }
+
+  function sanitizeImageUrl(rawUrl, baseHref) {
+    if (!rawUrl || typeof rawUrl !== 'string') return null;
+    try {
+      const trimmed = rawUrl.trim();
+      if (/^(javascript|data|vbscript):/i.test(trimmed)) return null;
+      if (trimmed.startsWith('//')) return null;
+      const base = baseHref || (typeof window !== 'undefined' && window.location && window.location.href) || '';
+      const u = base ? new URL(trimmed, base) : new URL(trimmed);
+      if (u.protocol !== 'https:' && u.protocol !== 'http:') return null;
+      if (/^https?:\/\//i.test(trimmed)) {
+        return u.protocol === 'https:' ? u.href : null;
+      }
+      if (!base) return null;
+      const b = new URL(base);
+      if (u.protocol === b.protocol && u.host === b.host) return u.href;
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function publisherLabelZh() {
+    if (state.currentPublisher === 'kangxuan') return '康軒';
+    if (state.currentPublisher === 'hanlin') return '翰林';
+    return '南一';
+  }
+
+  function semesterLabelFor110() {
+    return state.currentSemester === '2b' ? '二下' : '二上';
+  }
+
+  function updateSemesterSelectVisibility() {
+    const row = $('semester-select-row');
+    if (!row) return;
+    row.hidden = state.currentCurriculumType !== '110';
+  }
+
+  function refreshViewsAfterContextChange() {
+    renderProgressView();
+    if (state.activeTab === 'worksheet') renderWorksheet();
+    if (state.activeTab === 'interactive') {
+      state.interactiveQuiz = null;
+      startInteractiveQuiz();
+    }
   }
 
   // -----------------------------------------------------------
@@ -467,13 +534,7 @@
   }
 
   function calculateWeek(targetDate = new Date()) {
-    const start = new Date(getSemesterStart() + 'T00:00:00+08:00');
-    const now = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-    const msDiff = now.getTime() - start.getTime();
-    if (msDiff < 0) return { week: 0, state: 'before-start' };
-    const week = Math.floor(msDiff / (7 * 24 * 60 * 60 * 1000)) + 1;
-    if (week > 20) return { week: 21, state: 'after-end' };
-    return { week, state: 'in-semester' };
+    return ZP.calculateWeek(getSemesterStart(), targetDate);
   }
 
   function getCurrentLessonsData() {
@@ -490,11 +551,12 @@
     if (state.currentCurriculumType === '115-1') {
       const gradeData = state.gradeData[state.currentGrade];
       if (!gradeData || !gradeData.publishers || !gradeData.publishers[state.currentPublisher]) {
+        const err = state.gradeLoadErrors[state.currentGrade];
         return {
-          name: GRADE_LABELS[state.currentGrade] + '（資料載入中）',
+          name: GRADE_LABELS[state.currentGrade] + (err ? '（資料載入失敗）' : '（資料載入中）'),
           sourceType: 'official_curriculum',
           editionNote: '',
-          licenseNotes: '',
+          licenseNotes: err ? '請確認網路或重新整理頁面後再試。' : '',
           totalLessons: 0,
           lessons: []
         };
@@ -511,9 +573,12 @@
     }
     // 110 歷史版（目前只有二年級）
     if (state.curriculum110) {
-      const block = state.curriculum110.blocks.find(
-        (b) => b.publisher === (state.currentPublisher === 'kangxuan' ? '康軒' : state.currentPublisher === 'hanlin' ? '翰林' : '南一')
-      ) || state.curriculum110.blocks[0];
+      const pubZh = publisherLabelZh();
+      const sem = semesterLabelFor110();
+      const block =
+        state.curriculum110.blocks.find((b) => b.publisher === pubZh && b.semester === sem) ||
+        state.curriculum110.blocks.find((b) => b.publisher === pubZh) ||
+        state.curriculum110.blocks[0];
       return {
         name: block.publisher + '版',
         sourceType: 'historical_curriculum',
@@ -533,23 +598,10 @@
     const total = maxLessonNo || data.totalLessons || 1;
     const weekInfo = calculateWeek();
 
-    if (state.manualLesson !== null && state.manualLesson !== undefined) {
-      // Allow negative lessonNo for front units, but clamp positive ones
-      const clamped = state.manualLesson < 0 ? state.manualLesson : Math.max(0, Math.min(total, state.manualLesson));
-      return {
-        currentLesson: clamped,
-        isManual: true,
-        estimatedWeek: weekInfo.week,
-        weekState: weekInfo.state,
-        totalLessons: total
-      };
-    }
-
-    // 預估進度：約每 1.5 週一課
-    const est = Math.max(1, Math.min(total, Math.round(weekInfo.week / 1.5) || 1));
+    const core = ZP.resolveLessonProgress(weekInfo, state.manualLesson, total);
     return {
-      currentLesson: est,
-      isManual: false,
+      currentLesson: core.currentLesson,
+      isManual: core.isManual,
       estimatedWeek: weekInfo.week,
       weekState: weekInfo.state,
       totalLessons: total
@@ -570,7 +622,8 @@
 
     // 週次與進度資訊
     $('stat-week-val').textContent = prog.estimatedWeek > 0 ? `第 ${prog.estimatedWeek} 週` : '尚未開學';
-    $('stat-lesson-val').textContent = `第 ${prog.currentLesson} 課`;
+    $('stat-lesson-val').textContent =
+      prog.currentLesson <= 0 && !prog.isManual ? '尚未開學' : `第 ${prog.currentLesson} 課`;
     $('stat-lesson-badge').textContent = prog.isManual ? '家長手動覆寫' : '系統自動預估';
     $('stat-lesson-badge').className = prog.isManual ? 'tp-badge tp-badge--amber' : 'tp-badge tp-badge--green';
 
@@ -598,8 +651,7 @@
     let unfamiliarCount = 0;
 
     curData.lessons.forEach((l) => {
-      const isTaught = l.lessonNo <= prog.currentLesson;
-      const isCurrent = l.lessonNo === prog.currentLesson;
+      const { isTaught, isCurrent } = ZP.classifyLesson(l.lessonNo, prog.currentLesson, prog.isManual);
 
       (l.characters || []).forEach((c) => {
         const charStr = c.char;
@@ -645,7 +697,8 @@
     }
 
     filtered.forEach((c) => {
-      const card = document.createElement('div');
+      const card = document.createElement('button');
+      card.type = 'button';
       let statusCls = c.isMastered ? 'tp-char-card--mastered' : c.isCurrent ? 'tp-char-card--current' : c.isTaught ? 'tp-char-card--taught' : 'tp-char-card--upcoming';
       card.className = `tp-char-card ${statusCls}`;
 
@@ -659,7 +712,14 @@
       // 課次與部首筆畫小字標籤
       const meta = document.createElement('div');
       meta.className = 'tp-char-card__meta';
-      meta.innerHTML = `<span class="tp-caption">L${c.lessonNo}</span><span class="tp-caption">${c.radical ? c.radical + '部' : ''} ${c.strokes ? c.strokes + '畫' : ''}</span>`;
+      const m1 = document.createElement('span');
+      m1.className = 'tp-caption';
+      m1.textContent = `L${c.lessonNo}`;
+      const m2 = document.createElement('span');
+      m2.className = 'tp-caption';
+      m2.textContent = `${c.radical ? c.radical + '部' : ''} ${c.strokes ? c.strokes + '畫' : ''}`.trim();
+      meta.appendChild(m1);
+      meta.appendChild(m2);
       card.appendChild(meta);
 
       // 破音／已修改小標記
@@ -667,19 +727,24 @@
       if (zzTags) card.appendChild(zzTags);
 
       // 熟悉度切換按鈕（愛心/星星）
-      const starBtn = document.createElement('button');
-      starBtn.type = 'button';
+      const starBtn = document.createElement('span');
       starBtn.className = `tp-btn-star ${c.isMastered ? 'is-active' : ''}`;
+      starBtn.setAttribute('role', 'button');
+      starBtn.tabIndex = 0;
       starBtn.setAttribute('aria-label', c.isMastered ? '標記為待加強' : '標記為已精熟');
-      starBtn.innerHTML = c.isMastered ? '★ 已精熟' : '☆ 待加強';
-      starBtn.onclick = (e) => {
+      starBtn.textContent = c.isMastered ? '★ 已精熟' : '☆ 待加強';
+      const onStarActivate = (e) => {
         e.stopPropagation();
+        e.preventDefault();
         toggleMastered(c.char);
       };
+      starBtn.addEventListener('click', onStarActivate);
+      starBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') onStarActivate(e);
+      });
       card.appendChild(starBtn);
 
-      // 點擊卡片開啟詳情 Modal
-      card.onclick = () => showCharDetailModal(c);
+      card.onclick = () => showCharDetailModal(c, card);
       grid.appendChild(card);
     });
   }
@@ -697,8 +762,14 @@
   // -----------------------------------------------------------
   // 生字詳情彈窗（官方連結、筆順、釋義、例詞）
   // -----------------------------------------------------------
-  function showCharDetailModal(c) {
+  function closeCharModal() {
     const modal = $('char-modal');
+    if (modal && modal.open) modal.close();
+  }
+
+  function showCharDetailModal(c, triggerEl) {
+    const modal = $('char-modal');
+    state.lastModalTrigger = triggerEl || null;
     $('modal-char-wrap').innerHTML = '';
     state.modalChar = c;
     closeEditor();
@@ -711,15 +782,24 @@
     $('modal-char-title').textContent = `${c.char}（${c.lessonTitle}）`;
     $('modal-char-rad').textContent = c.radical ? `${c.radical} 部` : '—';
     $('modal-char-strokes').textContent = c.strokes ? `${c.strokes} 畫` : '—';
-    $('modal-char-def').textContent = c.def || '教育部簡編本提供基礎國小教學釋義。';
+    $('modal-char-def').textContent = c.def || NO_DEF_TEXT;
     renderReadingSection(c);
 
     // 筆順圖
     const strokeContainer = $('modal-char-stroke-img');
-    if (c.strokeImg) {
-      strokeContainer.innerHTML = `<img src="${c.strokeImg}" alt="${c.char} 筆順圖" style="max-height:100px;border-radius:6px;border:1px solid #E8DFCE;">`;
+    const safeStrokeImgUrl = sanitizeImageUrl(c.strokeImg);
+    if (safeStrokeImgUrl) {
+      strokeContainer.textContent = '';
+      const img = document.createElement('img');
+      img.src = safeStrokeImgUrl;
+      img.alt = `${c.char} 筆順圖`;
+      img.style.maxHeight = '100px';
+      img.style.borderRadius = '6px';
+      img.style.border = '1px solid #E8DFCE';
+      strokeContainer.appendChild(img);
       strokeContainer.style.display = 'block';
     } else {
+      strokeContainer.textContent = '';
       strokeContainer.style.display = 'none';
     }
 
@@ -739,10 +819,10 @@
     mBtn.className = isM ? 'tp-btn tp-btn--secondary tp-btn--block' : 'tp-btn tp-btn--primary tp-btn--block';
     mBtn.onclick = () => {
       toggleMastered(c.char);
-      showCharDetailModal({ ...c, isMastered: !isM });
+      showCharDetailModal({ ...c, isMastered: !isM }, state.lastModalTrigger);
     };
 
-    modal.classList.add('is-open');
+    if (!modal.open) modal.showModal();
   }
 
   // -----------------------------------------------------------
@@ -757,8 +837,7 @@
     // 收集題庫
     let pool = [];
     curData.lessons.forEach((l) => {
-      if (scope === 'current' && l.lessonNo !== prog.currentLesson) return;
-      if (scope === 'all-taught' && l.lessonNo > prog.currentLesson) return;
+      if (!ZP.includeLessonInQuizScope(scope, l.lessonNo, prog.currentLesson, prog.isManual)) return;
 
       // 優先從情境句子抽取
       (l.sentences || []).forEach((s) => {
@@ -784,9 +863,9 @@
     });
 
     if (scope === 'unfamiliar') {
-      pool = pool.filter((q) => {
-        return Array.from(q.target).some((ch) => !state.masteredChars[ch]);
-      });
+      pool = pool.filter((q) =>
+        Array.from(q.target).some((ch) => !state.masteredChars[ch])
+      );
     }
 
     if (pool.length === 0) {
@@ -893,12 +972,12 @@
       const userVal = input.value.trim();
       const feedback = $('quiz-feedback');
       if (!userVal) {
-        feedback.innerHTML = '<span style="color:var(--tp-cinnabar-dark);">請先輸入文字再核對喔！</span>';
+        setQuizFeedback('請先輸入文字再核對喔！', 'var(--tp-cinnabar-dark)');
         return;
       }
       if (userVal === q.target) {
         qState.score++;
-        feedback.innerHTML = '<span style="color:var(--tp-sage-deep);">🎉 答對了！非常棒！</span>';
+        setQuizFeedback('🎉 答對了！非常棒！', 'var(--tp-sage-deep)');
         input.disabled = true;
         $('btn-submit-ans').disabled = true;
         setTimeout(() => {
@@ -906,10 +985,9 @@
           renderQuizCard();
         }, 1200);
       } else {
-        feedback.innerHTML = `<span style="color:var(--tp-cinnabar-dark);">答錯囉！正確是「${q.target}」，已收錄至錯題加強。</span>`;
-        // 記錄錯題
-        state.mistakes.push(q.target);
-        saveMastered();
+        setQuizFeedback(`答錯囉！正確是「${q.target}」，已收錄至錯題加強。`, 'var(--tp-cinnabar-dark)');
+        if (!state.mistakes.includes(q.target)) state.mistakes.push(q.target);
+        saveMistakes();
         setTimeout(() => {
           qState.currentIndex++;
           renderQuizCard();
@@ -923,7 +1001,7 @@
     };
 
     $('btn-peek-ans').onclick = () => {
-      $('quiz-feedback').innerHTML = `<span style="color:var(--tp-amber-deep);">提示：目標國字為【${q.target}】</span>`;
+      setQuizFeedback(`提示：目標國字為【${q.target}】`, 'var(--tp-amber-deep)');
     };
   }
 
@@ -1103,13 +1181,16 @@
       const res = await fetch(file);
       if (!res.ok) {
         console.warn(`年級 ${grade} 資料檔 ${file} 載入失敗 (${res.status})`);
+        state.gradeLoadErrors[grade] = true;
         return null;
       }
       const data = await res.json();
       state.gradeData[grade] = data;
+      delete state.gradeLoadErrors[grade];
       return data;
     } catch (e) {
       console.warn(`年級 ${grade} 資料檔載入失敗`, e);
+      state.gradeLoadErrors[grade] = true;
       return null;
     }
   }
@@ -1121,24 +1202,34 @@
 
     // 載入該年級資料
     await loadGradeData(grade);
+    if (state.currentGrade !== grade) return;
 
     // 110 學年度與體驗版目前只支援二年級
     const typeSelect = $('curriculum-type-select');
-    if (grade !== 2) {
-      // 如果目前選的是 110 或 demo，自動切回 115-1
-      if (state.currentCurriculumType !== '115-1') {
-        state.currentCurriculumType = '115-1';
-        typeSelect.value = '115-1';
-        savePrefs();
-      }
+    const clampedType = ZP.clampCurriculumType(grade, state.currentCurriculumType);
+    if (clampedType !== state.currentCurriculumType) {
+      state.currentCurriculumType = clampedType;
+      if (typeSelect) typeSelect.value = clampedType;
+      savePrefs();
     }
 
     // 更新年級標籤
     const gradeLabel = $('ws-grade-label');
     if (gradeLabel) gradeLabel.textContent = GRADE_LABELS[grade] || grade + '年級';
 
-    renderProgressView();
-    if (state.activeTab === 'worksheet') renderWorksheet();
+    refreshViewsAfterContextChange();
+  }
+
+  function applyCurriculumTypeChange(nextType) {
+    const clamped = ZP.clampCurriculumType(state.currentGrade, nextType);
+    if (clamped !== nextType) {
+      const typeSelect = $('curriculum-type-select');
+      if (typeSelect) typeSelect.value = clamped;
+    }
+    state.currentCurriculumType = clamped;
+    updateSemesterSelectVisibility();
+    savePrefs();
+    refreshViewsAfterContextChange();
   }
 
   // -----------------------------------------------------------
@@ -1151,8 +1242,14 @@
     try {
       const [gradeRes, res110, resDemo] = await Promise.all([
         loadGradeData(state.currentGrade),
-        fetch('data/curriculum-110.json').then((r) => r.json()),
-        fetch('data/curriculum-demo.json').then((r) => r.json())
+        fetch('data/curriculum-110.json').then(async (r) => {
+          if (!r.ok) throw new Error('curriculum-110');
+          return r.json();
+        }),
+        fetch('data/curriculum-demo.json').then(async (r) => {
+          if (!r.ok) throw new Error('curriculum-demo');
+          return r.json();
+        })
       ]);
       state.curriculum110 = res110;
       state.curriculumDemo = resDemo;
@@ -1176,24 +1273,30 @@
     $('pub-select').onchange = (e) => {
       state.currentPublisher = e.target.value;
       savePrefs();
-      renderProgressView();
-      if (state.activeTab === 'worksheet') renderWorksheet();
+      refreshViewsAfterContextChange();
     };
 
     $('curriculum-type-select').onchange = (e) => {
-      state.currentCurriculumType = e.target.value;
-      savePrefs();
-      renderProgressView();
-      if (state.activeTab === 'worksheet') renderWorksheet();
+      applyCurriculumTypeChange(e.target.value);
     };
+
+    const semesterSelect = $('semester-select');
+    if (semesterSelect) {
+      semesterSelect.value = state.currentSemester === '2b' ? '2b' : '2a';
+      semesterSelect.onchange = (e) => {
+        state.currentSemester = e.target.value === '2b' ? '2b' : '2a';
+        savePrefs();
+        refreshViewsAfterContextChange();
+      };
+    }
+    updateSemesterSelectVisibility();
 
     // 手動覆寫進度切換
     $('manual-lesson-select').onchange = (e) => {
       const val = e.target.value;
       state.manualLesson = val ? parseInt(val, 10) : null;
       savePrefs();
-      renderProgressView();
-      if (state.activeTab === 'worksheet') renderWorksheet();
+      refreshViewsAfterContextChange();
     };
 
     // 生字清單篩選按鈕
@@ -1215,6 +1318,9 @@
         state.activeTab = tab;
         $$('.tp-tab-page').forEach((p) => p.classList.remove('on'));
         $(`page-${tab}`).classList.add('on');
+        $$('.tp-nav-btn').forEach((b) => {
+          b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false');
+        });
 
         if (tab === 'interactive' && !state.interactiveQuiz) {
           startInteractiveQuiz();
@@ -1226,11 +1332,16 @@
       };
     });
 
-    // Modal 關閉
-    $('modal-close-btn').onclick = () => $('char-modal').classList.remove('is-open');
-    $('char-modal').onclick = (e) => {
-      if (e.target.id === 'char-modal') $('char-modal').classList.remove('is-open');
-    };
+    const charModal = $('char-modal');
+    $('modal-close-btn').onclick = () => closeCharModal();
+    charModal.addEventListener('click', (e) => {
+      if (e.target === charModal) closeCharModal();
+    });
+    charModal.addEventListener('close', () => {
+      if (state.lastModalTrigger && typeof state.lastModalTrigger.focus === 'function') {
+        state.lastModalTrigger.focus();
+      }
+    });
 
     // 互動練習控制
     $('btn-start-interactive').onclick = startInteractiveQuiz;
@@ -1251,6 +1362,7 @@
 
     // 支援網址 Hash 切換
     if (window.location.hash === '#worksheet') {
+      state.activeTab = 'worksheet';
       $$('.tp-nav-btn').forEach((b) => b.classList.remove('on'));
       const wsBtn = document.querySelector('[data-tab="worksheet"]');
       if (wsBtn) wsBtn.classList.add('on');
@@ -1258,6 +1370,7 @@
       $('page-worksheet').classList.add('on');
       renderWorksheet();
     } else if (window.location.hash === '#interactive') {
+      state.activeTab = 'interactive';
       $$('.tp-nav-btn').forEach((b) => b.classList.remove('on'));
       const qzBtn = document.querySelector('[data-tab="interactive"]');
       if (qzBtn) qzBtn.classList.add('on');
@@ -1265,6 +1378,12 @@
       $('page-interactive').classList.add('on');
       startInteractiveQuiz();
     }
+
+    $$('.tp-nav-btn').forEach((btn) => {
+      const tab = btn.dataset.tab;
+      const on = tab === state.activeTab;
+      btn.setAttribute('aria-current', on ? 'page' : 'false');
+    });
   }
 
   window.addEventListener('DOMContentLoaded', init);

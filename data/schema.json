@@ -13,9 +13,20 @@
         "academicYear": { "type": "integer" },
         "grade": { "type": "string" },
         "semester": { "type": "string" },
-        "semesterCode": { "type": "string", "enum": ["2a", "2b"] },
+        "semesterCode": {
+          "type": "string",
+          "pattern": "^[1-6][ab]$"
+        },
         "semesterStart": { "type": "string" },
-        "sourceType": { "type": "string", "enum": ["official_curriculum", "historical_curriculum", "demo_exercise"] },
+        "sourceType": {
+          "type": "string",
+          "enum": [
+            "official_curriculum",
+            "publisher_char_index",
+            "historical_curriculum",
+            "demo_exercise"
+          ]
+        },
         "editionNote": { "type": "string" },
         "licenseNotes": { "type": "string" },
         "moeDictUrlTemplate": { "type": "string" },
@@ -27,7 +38,7 @@
       "type": "object",
       "additionalProperties": {
         "type": "object",
-        "required": ["name", "totalLessons", "lessons"],
+        "required": ["name", "lessons"],
         "properties": {
           "name": { "type": "string" },
           "totalLessons": { "type": "integer" },
@@ -53,7 +64,19 @@
                       "def": { "type": "string" },
                       "strokeImg": { "type": "string" },
                       "moeDictUrl": { "type": "string" },
-                      "moeStrokeUrl": { "type": "string" }
+                      "moeStrokeUrl": { "type": "string" },
+                      "readings": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": ["reading"],
+                          "properties": {
+                            "reading": { "type": "string" },
+                            "ratio": { "type": "number", "minimum": 0, "maximum": 1 }
+                          }
+                        }
+                      },
+                      "ambiguous": { "type": "boolean" }
                     }
                   }
                 },
