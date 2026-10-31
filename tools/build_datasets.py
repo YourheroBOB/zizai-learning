@@ -49,8 +49,14 @@ with open(require_input('ZIZAI_KIMI_JS', '句子與語詞參考資料頁面腳�
     kimi_js = f.read()
 
 # Let's extract jq from index-BvVP0R4p.js
-pos_jq = kimi_js.find('const jq=[')
-end_jq = kimi_js.find('];function by(', pos_jq)
+jq_start_marker = 'const jq=['
+jq_end_marker = '];function by('
+pos_jq = kimi_js.find(jq_start_marker)
+if pos_jq < 0:
+    raise RuntimeError("Could not find the jq data array in index-BvVP0R4p.js")
+end_jq = kimi_js.find(jq_end_marker, pos_jq + len(jq_start_marker))
+if end_jq < 0:
+    raise RuntimeError("Could not find the end of the jq data array in index-BvVP0R4p.js")
 jq_raw_str = kimi_js[pos_jq + len('const jq='):end_jq + 1]
 
 # Convert JS object literal in jq_raw_str to valid JSON
