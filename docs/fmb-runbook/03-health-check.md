@@ -73,11 +73,22 @@ for (const f of files) {
     console.log("OK  " + f);
   } catch (e) { bad++; console.log("BAD " + f + " → " + e.message); }
 }
+// 契約檔 schema.json 單獨檢查：可 parse、為物件、且含結構描述必要欄位
+try {
+  const s = JSON.parse(fs.readFileSync("data/schema.json", "utf8"));
+  if (!s || typeof s !== "object" || Array.isArray(s)) throw new Error("schema 應為 JSON 物件");
+  if (!s.type || !s.properties) throw new Error("schema 必要欄位（type/properties）缺失");
+  console.log("OK  schema.json");
+} catch (e) { bad++; console.log("BAD schema.json → " + e.message); }
 process.exit(bad ? 1 : 0);
 '
 ```
 
-期望：`data/` 下 **9 個** JSON（`schema.json` 另由 `data/schema.json` 定義結構）皆可解析，每份課程資料都有 `meta` 與非空的 `publishers.lessons`。
+期望：`data/` 共 **9 個** JSON；其中 **8 個** `curriculum-*.json` 由本節腳本逐檔解析與驗欄位，`schema.json` 亦在本腳本末段以 `JSON.parse` 加必要欄位（`type`／`properties`）檢查，並在 L0 驗證 200 與內容開頭為 `{`。各課程檔的檢查分支如下：
+
+- `curriculum-115-1.json` 與 `curriculum-115-1-g{1,3,4,5,6}.json`（115-1 系列）：每份要有 `meta`（含 `id`、`licenseNotes`）與非空的 `publishers.<版>.lessons`。
+- `curriculum-110.json`：驗 `meta` 與非空 `blocks`（結構不同，無 `publishers.lessons`）。
+- `curriculum-demo.json`：驗非空 `themes`（結構不同，無 `meta`／`publishers`）。
 
 補充檢查：
 
