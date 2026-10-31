@@ -27,7 +27,7 @@
 
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync, existsSync, statSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -68,18 +68,42 @@ function findChrome() {
 
 // ---- 臨時靜態伺服器（只服務專案資料夾，只聽 127.0.0.1） ----
 function startServer() {
-  return new Promise((res) => {
+  return new Promise((res, rej) => {
     const server = createServer((req, resp) => {
-      const urlPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-      const file = resolve(join(ROOT, urlPath));
-      if (!file.startsWith(ROOT) || !existsSync(file) || !statSync(file).isFile()) {
+      let pathname;
+      try {
+        pathname = new URL(req.url || '/', 'http://localhost').pathname;
+      } catch {
+        resp.writeHead(400).end('bad request');
+        return;
+      }
+
+      if (req.method !== 'GET' && req.method !== 'HEAD') {
+        resp.writeHead(405, { Allow: 'GET, HEAD' }).end('method not allowed');
+        return;
+      }
+      // 只提供本工具需要的單檔頁面，不讓本機伺服器讀取倉庫中的其他路徑。
+      if (pathname !== PAGE_PATH) {
+        resp.writeHead(404).end('not found');
+        return;
+      }
+
+      const file = join(ROOT, 'dist', 'zi-zai.html');
+      let contents;
+      try {
+        contents = readFileSync(file);
+      } catch {
         resp.writeHead(404).end('not found');
         return;
       }
       resp.writeHead(200, { 'content-type': MIME[extname(file)] || 'application/octet-stream' });
-      resp.end(readFileSync(file));
+      resp.end(req.method === 'HEAD' ? undefined : contents);
     });
-    server.listen(0, '127.0.0.1', () => res(server));
+    server.once('error', rej);
+    server.listen(0, '127.0.0.1', () => {
+      server.removeListener('error', rej);
+      res(server);
+    });
   });
 }
 
@@ -114,6 +138,7 @@ function connect(wsUrl) {
 }
 
 async function main() {
+  const chromePath = findChrome();
   mkdirSync(OUT_DIR, { recursive: true });
   const server = await startServer();
   const port = server.address().port;
@@ -121,7 +146,7 @@ async function main() {
 
   const profile = mkdtempSync(join(tmpdir(), 'zizai-chrome-'));
   const chrome = spawn(
-    findChrome(),
+    chromePath,
     [
       '--headless=new',
       '--remote-debugging-port=0',
@@ -152,13 +177,21 @@ async function main() {
     // 從 stderr 取得 DevTools WebSocket 位址
     const wsUrl = await new Promise((res, rej) => {
       let buf = '';
-      const timer = setTimeout(() => rej(new Error('等不到 Chrome DevTools 位址')), 20000);
+      let settled = false;
+      const finish = (fn, value) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        fn(value);
+      };
+      const timer = setTimeout(() => finish(rej, new Error('等不到 Chrome DevTools 位址')), 20000);
       chrome.stderr.on('data', (d) => {
         buf += d.toString();
         const m = buf.match(/DevTools listening on (ws:\/\/\S+)/);
-        if (m) { clearTimeout(timer); res(m[1]); }
+        if (m) finish(res, m[1]);
       });
-      chrome.once('exit', () => rej(new Error('Chrome 提前結束')));
+      chrome.once('error', () => finish(rej, new Error('無法啟動 Chrome')));
+      chrome.once('exit', () => finish(rej, new Error('Chrome 提前結束')));
     });
 
     cdp = await connect(wsUrl);
