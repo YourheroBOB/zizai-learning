@@ -225,6 +225,10 @@
     display: none !important;
   }
 
+  .tp-dialog {
+    display: none !important;
+  }
+
   /* 主容器在螢幕上有上 20px／左右 16px／下 60px 內距（index.html）。
      列印時若保留，A4 紙張(297mm)會從 20px 處才開始，整張下移約 5.3mm 而溢出一頁，
      多印出一張空白頁；左右內距也讓 210mm 寬的紙張擠不進版心。全部歸零。
@@ -253,6 +257,8 @@
   .tp-sheet {
     width: 210mm;
     min-height: 297mm;
+    transform: none !important;
+    margin-bottom: 0 !important;
   }
 
   /* 直排注音在列印時維持相同版位 */

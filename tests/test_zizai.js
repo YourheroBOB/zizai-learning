@@ -17,8 +17,9 @@ const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
 
-// 載入注音模組
+// 載入注音模組與進度模組
 const TPZhuyin = require('../src/zhuyin.js');
+const ZP = require('../src/progress.js');
 
 let passedTests = 0;
 let failedTests = 0;
@@ -59,14 +60,7 @@ console.log('====================================================\n');
 console.log('【模組 1】週次計算邏輯（開學日與日期推算）');
 
 function calcWeek(semesterStartStr, targetDateStr) {
-  const start = new Date(semesterStartStr + 'T00:00:00+08:00');
-  const cur = new Date(targetDateStr + 'T00:00:00+08:00');
-  const msDiff = cur.getTime() - start.getTime();
-  if (msDiff < 0) return { week: 0, state: 'before-start' };
-  const week = Math.floor(msDiff / (7 * 24 * 60 * 60 * 1000)) + 1;
-  const maxWeeks = 20;
-  if (week > maxWeeks) return { week: maxWeeks + 1, state: 'after-end' };
-  return { week, state: 'in-semester' };
+  return ZP.calculateWeek(semesterStartStr, new Date(targetDateStr + 'T12:00:00'));
 }
 
 it('開學第一天應為第 1 週', () => {
@@ -98,21 +92,11 @@ it('開學前日期應回報 before-start', () => {
 console.log('\n【模組 2】手動覆寫機制（家長指定進度優先）');
 
 function resolveLessonProgress(estimatedWeek, manualLesson, totalLessons = 12) {
-  if (manualLesson !== null && manualLesson !== undefined) {
-    const clamped = Math.max(1, Math.min(totalLessons, manualLesson));
-    return {
-      currentLesson: clamped,
-      isManual: true,
-      completedLessons: clamped - 1
-    };
-  }
-  // 預估進度：約每 1.5 週一課
-  const estimated = Math.max(1, Math.min(totalLessons, Math.round(estimatedWeek / 1.5)));
-  return {
-    currentLesson: estimated,
-    isManual: false,
-    completedLessons: Math.max(0, estimated - 1)
-  };
+  const weekInfo =
+    estimatedWeek <= 0
+      ? { week: 0, state: 'before-start' }
+      : { week: estimatedWeek, state: 'in-semester' };
+  return ZP.resolveLessonProgress(weekInfo, manualLesson, totalLessons);
 }
 
 it('家長手動設定第 3 課時，無論日期為何皆應回傳第 3 課', () => {
@@ -128,11 +112,17 @@ it('未手動設定時，應根據週次自動推算預估課次', () => {
   assert.strictEqual(res.isManual, false);
 });
 
-it('手動設定超出邊界時應正確 clamp 在 [1, totalLessons]', () => {
+it('手動設定超出邊界時正課次 clamp，前導負數課號保留', () => {
   const resTooHigh = resolveLessonProgress(1, 99, 12);
   assert.strictEqual(resTooHigh.currentLesson, 12);
   const resTooLow = resolveLessonProgress(1, -5, 12);
-  assert.strictEqual(resTooLow.currentLesson, 1);
+  assert.strictEqual(resTooLow.currentLesson, -5);
+});
+
+it('開學前自動預估課次應為 0（尚未開學）', () => {
+  const res = resolveLessonProgress(0, null, 12);
+  assert.strictEqual(res.currentLesson, 0);
+  assert.strictEqual(res.isManual, false);
 });
 
 // -------------------------------------------------------------
@@ -371,7 +361,8 @@ gradeFiles.forEach(({ grade, file, code, label }) => {
 
     assert.strictEqual(d.meta.academicYear, 115, `${label} academicYear 應為 115`);
     assert.strictEqual(d.meta.semesterCode, code, `${label} semesterCode 應為 ${code}`);
-    assert.strictEqual(d.meta.sourceType, 'official_curriculum');
+    assert.strictEqual(d.meta.sourceType, 'publisher_char_index');
+    assert(!d.meta.editionNote.includes('官方'), 'editionNote 不得含「官方」');
     assert(d.meta.grade.includes(label.replace('年級', '')), `${label} meta.grade 應包含年級文字`);
 
     const pubs = ['kangxuan', 'nanyi', 'hanlin'];
@@ -1471,6 +1462,230 @@ const readingsDone = (async function runReadingsModules() {
     assert.doesNotThrow(() => JSON.stringify(j));
   });
 })();
+
+// =============================================================
+// 模組 20：best practice 1151026 回歸
+// =============================================================
+console.log('\n【模組 20】best practice 1151026 回歸');
+
+const APP_SRC = fs.readFileSync(path.join(__dirname, '../src/app.js'), 'utf-8');
+const INDEX_HTML = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf-8');
+const G1_PATH = path.join(__dirname, '../data/curriculum-115-1-g1.json');
+assert(fs.existsSync(G1_PATH), '一年級資料必須存在，才能跑前導單元反例');
+const G1 = JSON.parse(fs.readFileSync(G1_PATH, 'utf-8'));
+const G1_NANYI = G1.publishers.nanyi.lessons;
+const G1_KANGXUAN = G1.publishers.kangxuan.lessons;
+
+function extractNamedFunction(src, name) {
+  const marker = 'function ' + name + '(';
+  const idx = src.indexOf(marker);
+  if (idx < 0) throw new Error('找不到 function ' + name);
+  const brace = src.indexOf('{', idx);
+  let depth = 0;
+  for (let j = brace; j < src.length; j++) {
+    const ch = src[j];
+    if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) return src.slice(idx, j + 1);
+    }
+  }
+  throw new Error(name + ' 括號不配對');
+}
+
+function weekInTz(tz, isoLocal) {
+  const out = execSync(
+    "node -e \"const Z=require('./src/progress.js');console.log(JSON.stringify(Z.calculateWeek('2026-08-31',new Date('" + isoLocal + "'))))\"",
+    { cwd: path.join(__dirname, '..'), encoding: 'utf-8', env: { ...process.env, TZ: tz } }
+  ).trim();
+  return JSON.parse(out);
+}
+
+it('練習回饋與提示不得把 q.target 直接拼進 innerHTML', () => {
+  assert(!APP_SRC.includes("feedback.innerHTML ="), 'quiz feedback 不得使用 innerHTML');
+  assert(!APP_SRC.includes("quiz-feedback').innerHTML"), 'quiz 提示不得使用 innerHTML');
+  assert(APP_SRC.includes('function setQuizFeedback'), '應有 setQuizFeedback');
+});
+
+it('saveMistakes 以 stub localStorage 寫入 MISTAKES_KEY（反例：常數未宣告會靜默失敗）', () => {
+  const keyDecl = APP_SRC.match(/const MISTAKES_KEY = '([^']+)';/);
+  assert(keyDecl, 'MISTAKES_KEY 必須宣告');
+  const saveFn = extractNamedFunction(APP_SRC, 'saveMistakes');
+  const store = {};
+  const localStorage = {
+    setItem(k, v) { store[k] = String(v); },
+    getItem(k) { return Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null; }
+  };
+  const state = { mistakes: ['測'] };
+  const run = new Function('localStorage', 'state', `
+    ${keyDecl[0]}
+    ${saveFn}
+    saveMistakes();
+    return localStorage.getItem(MISTAKES_KEY);
+  `);
+  const written = run(localStorage, state);
+  assert.strictEqual(written, JSON.stringify(['測']));
+  assert.ok(store[keyDecl[1]], '必須寫入宣告的鍵名');
+});
+
+it('審查反例：resolveLessonProgress 手動 -3 後進度判定不得當成沒教過', () => {
+  const core = ZP.resolveLessonProgress({ week: 5, state: 'in-semester' }, -3, 12);
+  assert.strictEqual(core.currentLesson, -3);
+  assert.strictEqual(core.isManual, true);
+  assert.strictEqual(ZP.taughtLessonCutoff(core.currentLesson, core.isManual), -3);
+  assert(ZP.isLessonTaught(-3, core.currentLesson, core.isManual));
+  assert(ZP.isLessonTaught(-5, core.currentLesson, core.isManual));
+  assert(!ZP.isLessonTaught(1, core.currentLesson, core.isManual));
+  assert(ZP.isLessonCurrent(-3, core.currentLesson, core.isManual));
+  assert(!ZP.isLessonCurrent(1, core.currentLesson, core.isManual));
+});
+
+it('真實一年級南一前導單元：手動 -2 時進度頁判定（renderProgressView 同源 classifyLessons）', () => {
+  const nos = G1_NANYI.map((l) => l.lessonNo);
+  assert(nos.includes(-2) && nos.includes(-1) && nos.includes(1), '南一應有 -2/-1/1');
+  const rows = ZP.classifyLessons(G1_NANYI, -2, true);
+  const byNo = Object.fromEntries(rows.map((r) => [r.lessonNo, r]));
+  assert.strictEqual(byNo[-2].isTaught, true);
+  assert.strictEqual(byNo[-2].isCurrent, true);
+  assert.strictEqual(byNo[-1].isTaught, false);
+  assert.strictEqual(byNo[-1].isCurrent, false);
+  assert.strictEqual(byNo[1].isTaught, false);
+  assert(rows.some((r) => r.isTaught), '必須有已教課（審查反例：負數被當成沒教過）');
+  assert(APP_SRC.includes('ZP.classifyLesson('), '進度頁須呼叫共用 classifyLesson');
+});
+
+it('真實一年級康軒課號 0：開學前自動預估不得標成已教或目前課', () => {
+  const nos = G1_KANGXUAN.map((l) => l.lessonNo);
+  assert(nos.includes(0), '康軒應有第 0 課');
+  const auto = ZP.classifyLessons(G1_KANGXUAN, 0, false);
+  assert(auto.every((r) => !r.isTaught && !r.isCurrent), '開學前不得有已教／目前課');
+  const manual0 = ZP.classifyLessons(G1_KANGXUAN, 0, true);
+  const z = manual0.find((r) => r.lessonNo === 0);
+  assert.strictEqual(z.isTaught, true);
+  assert.strictEqual(z.isCurrent, true);
+  assert.strictEqual(manual0.find((r) => r.lessonNo === 1).isTaught, false);
+});
+
+it('練習 all-taught 與進度頁共用 cutoff；unfamiliar 不限課次', () => {
+  assert.strictEqual(ZP.includeLessonInQuizScope('all-taught', -2, -2, true), true);
+  assert.strictEqual(ZP.includeLessonInQuizScope('all-taught', 1, -2, true), false);
+  assert.strictEqual(ZP.includeLessonInQuizScope('all-taught', 0, 0, false), false);
+  assert.strictEqual(ZP.includeLessonInQuizScope('unfamiliar', 7, -2, true), true);
+  assert.strictEqual(ZP.includeLessonInQuizScope('current', 0, 0, false), false);
+  assert.strictEqual(ZP.includeLessonInQuizScope('current', -2, -2, true), true);
+  assert(APP_SRC.includes('ZP.includeLessonInQuizScope('), '練習頁須呼叫共用 includeLessonInQuizScope');
+  assert(!APP_SRC.includes('prog.currentLesson > 0 ? prog.currentLesson : -Infinity'), '不得再用會吞掉負數的 cutoff');
+  assert(!APP_SRC.includes('prog.currentLesson > 0 ? prog.currentLesson : -1'), '不得再用與進度頁不一致的 -1 cap');
+});
+
+it('開學日週次：Asia/Taipei 與東八區以東（Tokyo）皆為第 1 週', () => {
+  const taipei = weekInTz('Asia/Taipei', '2026-08-31T12:00:00');
+  const tokyo = weekInTz('Asia/Tokyo', '2026-08-31T12:00:00');
+  assert.strictEqual(taipei.week, 1);
+  assert.strictEqual(taipei.state, 'in-semester');
+  assert.strictEqual(tokyo.week, 1);
+  assert.strictEqual(tokyo.state, 'in-semester');
+});
+
+it('index.html 字卡按鈕樣式不得覆寫狀態底色與邊框', () => {
+  const block = INDEX_HTML.match(/button\.tp-char-card\s*\{[^}]+\}/);
+  assert(block, '應有 button.tp-char-card 規則');
+  assert(!/background\s*:/.test(block[0]), 'button.tp-char-card 不得設 background');
+  assert(!/border\s*:/.test(block[0]), 'button.tp-char-card 不得設 border');
+  assert(/appearance\s*:\s*none/.test(block[0]), '應以 appearance 重設按鈕外觀');
+  ['--current', '--mastered', '--taught'].forEach((suf) => {
+    const re = new RegExp('\\.tp-char-card' + suf + '\\s*\\{[^}]+\\}');
+    const st = INDEX_HTML.match(re);
+    assert(st, '應有 .tp-char-card' + suf);
+    assert(/background\s*:/.test(st[0]), '.tp-char-card' + suf + ' 須設定 background');
+    assert(/border-color\s*:/.test(st[0]), '.tp-char-card' + suf + ' 須設定 border-color');
+  });
+});
+
+it('components.css 須定義 tp-dialog 彈窗樣式（含 backdrop、panel 底色、關閉鈕定位）', () => {
+  const css = fs.readFileSync(path.join(__dirname, '../src/components.css'), 'utf-8');
+  const flat = css.replace(/\s+/g, ' ');
+  assert(flat.includes('.tp-dialog'), '須有 .tp-dialog');
+  assert(flat.includes('.tp-dialog::backdrop'), '須有 ::backdrop');
+  assert(/\.tp-dialog__panel\s*\{[^}]*background\s*:/.test(flat), 'panel 須有背景');
+  assert(/\.tp-dialog__close\s*\{[^}]*position\s*:\s*absolute/.test(flat), '關閉鈕須絕對定位於右上');
+  assert(INDEX_HTML.includes('href="src/components.css"'), 'index 須載入 components.css');
+  const printCss = fs.readFileSync(path.join(__dirname, '../src/print.css'), 'utf-8');
+  assert(/\.tp-dialog\s*\{[^}]*display\s*:\s*none/.test(printCss.replace(/\s+/g, ' ')), '列印時須隱藏 dialog');
+});
+
+it('110 學年度選區塊須同時比對出版社與學期，且學期會持久化', () => {
+  assert(APP_SRC.includes('b.semester === sem'), '110 區塊須比對 semester');
+  assert(APP_SRC.includes('semesterLabelFor110'), '須有學期標籤函式');
+  assert(APP_SRC.includes('semester: state.currentSemester'), 'savePrefs 須寫入 semester');
+  assert(APP_SRC.includes('state.currentSemester = prefs.semester'), 'loadPrefs 須讀回 semester');
+});
+
+it('非二年級不得停留在 110 或體驗版教材', () => {
+  assert.strictEqual(ZP.clampCurriculumType(1, '110'), '115-1');
+  assert.strictEqual(ZP.clampCurriculumType(3, 'demo'), '115-1');
+  assert.strictEqual(ZP.clampCurriculumType(2, '110'), '110');
+  assert.strictEqual(ZP.clampCurriculumType(2, 'demo'), 'demo');
+  assert(APP_SRC.includes('ZP.clampCurriculumType('), '切換版本須呼叫 clampCurriculumType');
+});
+
+it('五個 115 年級檔 semesterCode 與產物一致', () => {
+  gradeFiles.forEach(({ file, code }) => {
+    const p = path.join(__dirname, `../data/${file}`);
+    assert(fs.existsSync(p), `${file} 必須存在`);
+    const d = JSON.parse(fs.readFileSync(p, 'utf-8'));
+    assert.strictEqual(d.meta.semesterCode, code);
+    assert(d.meta.licenseNotes.includes('授權條款未載明'), `${file} licenseNotes 應保留授權聲明`);
+  });
+});
+
+it('二年級 115-1 仍標 official_curriculum（與其他年級 publisher_char_index 區隔）', () => {
+  const p = path.join(__dirname, '../data/curriculum-115-1.json');
+  assert(fs.existsSync(p), 'curriculum-115-1.json 必須存在');
+  const d = JSON.parse(fs.readFileSync(p, 'utf-8'));
+  assert.strictEqual(d.meta.sourceType, 'official_curriculum');
+});
+
+it('index.html 使用原生 dialog 作生字彈窗', () => {
+  assert(INDEX_HTML.includes('<dialog class="tp-dialog" id="char-modal"'), 'char-modal 應為 dialog');
+  assert(INDEX_HTML.includes('src/progress.js'), '須載入 progress.js');
+});
+
+it('字卡精熟控制不得巢狀 button', () => {
+  assert(APP_SRC.includes("document.createElement('span')"), '精熟控制應為 span');
+  assert(APP_SRC.includes("starBtn.setAttribute('role', 'button')"), 'span 須有 button 角色');
+  const starIdx = APP_SRC.indexOf('const starBtn = document.createElement');
+  assert(starIdx > 0);
+  const snippet = APP_SRC.slice(starIdx, starIdx + 80);
+  assert(snippet.includes("createElement('span')"), 'starBtn 必須是 span 而非 button');
+});
+
+it('標記精熟後須把 lastModalTrigger 傳回 showCharDetailModal', () => {
+  assert(APP_SRC.includes('showCharDetailModal({ ...c, isMastered: !isM }, state.lastModalTrigger)'),
+    '標記精熟後不得把 trigger 清成 null');
+});
+
+it('sanitizeImageUrl 只允許 https 與同源相對路徑（阻擋 http／javascript／data）', () => {
+  const fnSrc = extractNamedFunction(APP_SRC, 'sanitizeImageUrl');
+  const make = new Function('window', fnSrc + '\nreturn sanitizeImageUrl;');
+  const sanitize = make({ location: { href: 'https://toopower.cc/zizai/' } });
+  const base = 'https://toopower.cc/zizai/';
+  assert.ok(sanitize('https://dict.concised.moe.edu.tw/a.png', base).startsWith('https://'));
+  assert.strictEqual(sanitize('http://evil.example/a.png', base), null);
+  assert.strictEqual(sanitize('javascript:alert(1)', base), null);
+  assert.strictEqual(sanitize('data:image/gif;base64,xx', base), null);
+  assert.strictEqual(sanitize('//evil.example/a.png', base), null);
+  const rel = sanitize('img/stroke.png', base);
+  assert.strictEqual(rel, 'https://toopower.cc/zizai/img/stroke.png');
+});
+
+it('schema.json 的 readings 須有 items 物件約束', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/schema.json'), 'utf-8'));
+  const readings = schema.properties.publishers.additionalProperties.properties.lessons.items.properties.characters.items.properties.readings;
+  assert.strictEqual(readings.type, 'array');
+  assert.strictEqual(readings.items.type, 'object');
+  assert.ok(readings.items.required.includes('reading'));
+});
 
 // -------------------------------------------------------------
 // 結算
